@@ -7,10 +7,20 @@ const (
 	lineTerminators = "\n\r\u2028\u2029"  // Line Feed, Carriage Return, Line Separator, Paragraph Separator, https://262.ecma-international.org/11.0/#table-33
 )
 
+const (
+	TokenWhitespace parser.TokenType = iota
+)
+
 type rTokeniser struct {
 	tokenDepth []byte
 }
 
 func (r *rTokeniser) expression(t *parser.Tokeniser) (parser.Token, parser.TokenFunc) {
+	if t.Accept(whitespace) {
+		t.AcceptRun(whitespace)
+
+		return t.Return(TokenWhitespace, r.expression)
+	}
+
 	return t.Done()
 }
