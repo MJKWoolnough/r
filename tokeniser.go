@@ -10,6 +10,7 @@ const (
 const (
 	TokenWhitespace parser.TokenType = iota
 	TokenLineTerminator
+	TokenComment
 )
 
 type rTokeniser struct {
@@ -27,6 +28,12 @@ func (r *rTokeniser) expression(t *parser.Tokeniser) (parser.Token, parser.Token
 		t.AcceptRun(lineTerminators)
 
 		return t.Return(TokenLineTerminator, r.expression)
+	}
+
+	if t.Accept("#") {
+		t.ExceptRun(lineTerminators)
+
+		return t.Return(TokenComment, r.expression)
 	}
 
 	return t.Done()
