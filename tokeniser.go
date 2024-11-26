@@ -198,7 +198,27 @@ func (r *rTokeniser) float(t *parser.Tokeniser, digits string) (parser.Token, pa
 }
 
 func (r *rTokeniser) exponential(t *parser.Tokeniser, digits string) (parser.Token, parser.TokenFunc) {
-	return parser.Token{}, nil
+	e := "eE"
+
+	if digits == hexDigit {
+		e = "pP"
+	}
+
+	if t.Accept(e) {
+		t.Accept("+-")
+
+		if !t.Accept(digits) {
+			t.Err = ErrInvalidNumber
+
+			return t.Error()
+		}
+
+		t.AcceptRun(digits)
+	}
+
+	t.Accept("L")
+
+	return t.Return(TokenNumberLiteral, r.expression)
 }
 
 var (
