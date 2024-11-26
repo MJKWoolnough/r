@@ -20,6 +20,7 @@ const (
 	TokenComment
 	TokenStringLiteral
 	TokenNumberLiteral
+	TokenIntegerLiteral
 )
 
 type rTokeniser struct {
@@ -179,7 +180,7 @@ func (r *rTokeniser) number(t *parser.Tokeniser) (parser.Token, parser.TokenFunc
 	t.AcceptRun(digits)
 
 	if t.Accept("L") {
-		return t.Return(TokenNumberLiteral, r.expression)
+		return t.Return(TokenIntegerLiteral, r.expression)
 	} else if t.Accept(".") {
 		return r.float(t, digits)
 	}
@@ -191,7 +192,7 @@ func (r *rTokeniser) float(t *parser.Tokeniser, digits string) (parser.Token, pa
 	t.AcceptRun(digits)
 
 	if t.Accept("L") {
-		return t.Return(TokenNumberLiteral, r.expression)
+		return t.Return(TokenIntegerLiteral, r.expression)
 	}
 
 	return r.exponential(t, digits)
@@ -216,7 +217,9 @@ func (r *rTokeniser) exponential(t *parser.Tokeniser, digits string) (parser.Tok
 		t.AcceptRun(digits)
 	}
 
-	t.Accept("L")
+	if t.Accept("L") {
+		return t.Return(TokenIntegerLiteral, r.expression)
+	}
 
 	return t.Return(TokenNumberLiteral, r.expression)
 }
