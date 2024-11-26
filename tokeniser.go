@@ -154,6 +154,10 @@ func (r *rTokeniser) string(t *parser.Tokeniser) (parser.Token, parser.TokenFunc
 
 func (r *rTokeniser) number(t *parser.Tokeniser) (parser.Token, parser.TokenFunc) {
 	if t.Accept(".") {
+		if !t.Accept(decimalDigit) {
+			return r.identifier(t)
+		}
+
 		return r.float(t, decimalDigit)
 	}
 
