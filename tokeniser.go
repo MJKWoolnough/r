@@ -19,6 +19,7 @@ const (
 	TokenLineTerminator
 	TokenComment
 	TokenStringLiteral
+	TokenNumberLiteral
 )
 
 type rTokeniser struct {
@@ -46,6 +47,8 @@ func (r *rTokeniser) expression(t *parser.Tokeniser) (parser.Token, parser.Token
 
 	if c := t.Peek(); c == '"' || c == '\'' {
 		return r.string(t)
+	} else if c == '.' || c >= '0' && c <= '9' {
+		return r.number(t)
 	}
 
 	return t.Done()
@@ -154,4 +157,45 @@ func (r *rTokeniser) string(t *parser.Tokeniser) (parser.Token, parser.TokenFunc
 	}
 }
 
-var ErrInvalidString = errors.New("invalid string")
+func (r *rTokeniser) number(t *parser.Tokeniser) (parser.Token, parser.TokenFunc) {
+	if t.Accept(".") {
+		return r.float(t, decimalDigit)
+	}
+
+	digits := decimalDigit
+
+	if t.Accept("0") {
+		if t.Accept("x") {
+			digits = hexDigit
+
+			if !t.Accept(digits) {
+				t.Err = ErrInvalidNumber
+
+				return t.Error()
+			}
+		}
+	}
+
+	t.AcceptRun(digits)
+
+	if t.Accept("L") {
+		return t.Return(TokenNumberLiteral, r.expression)
+	} else if t.Accept(".") {
+		return r.float(t, digits)
+	}
+
+	return r.exponential(t, digits)
+}
+
+func (r *rTokeniser) float(t *parser.Tokeniser, digits string) (parser.Token, parser.TokenFunc) {
+	return parser.Token{}, nil
+}
+
+func (r *rTokeniser) exponential(t *parser.Tokeniser, digits string) (parser.Token, parser.TokenFunc) {
+	return parser.Token{}, nil
+}
+
+var (
+	ErrInvalidString = errors.New("invalid string")
+	ErrInvalidNumber = errors.New("invalid number")
+)
