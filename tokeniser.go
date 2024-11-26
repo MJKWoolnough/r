@@ -188,7 +188,13 @@ func (r *rTokeniser) number(t *parser.Tokeniser) (parser.Token, parser.TokenFunc
 }
 
 func (r *rTokeniser) float(t *parser.Tokeniser, digits string) (parser.Token, parser.TokenFunc) {
-	return parser.Token{}, nil
+	t.AcceptRun(digits)
+
+	if t.Accept("L") {
+		return t.Return(TokenNumberLiteral, r.expression)
+	}
+
+	return r.exponential(t, digits)
 }
 
 func (r *rTokeniser) exponential(t *parser.Tokeniser, digits string) (parser.Token, parser.TokenFunc) {
