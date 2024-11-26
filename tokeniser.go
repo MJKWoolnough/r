@@ -95,11 +95,18 @@ func (r *rTokeniser) string(t *parser.Tokeniser) (parser.Token, parser.TokenFunc
 					return t.Error()
 				}
 
-				t.Accept(hexDigit)
-				t.Accept(hexDigit)
-				t.Accept(hexDigit)
+				if brace {
 
-				if brace && !t.Accept("}") {
+					t.Accept(hexDigit)
+					t.Accept(hexDigit)
+					t.Accept(hexDigit)
+
+					if !t.Accept("}") {
+						t.Err = ErrInvalidString
+
+						return t.Error()
+					}
+				} else if !t.Accept(hexDigit) || !t.Accept(hexDigit) || !t.Accept(hexDigit) {
 					t.Err = ErrInvalidString
 
 					return t.Error()
@@ -115,15 +122,21 @@ func (r *rTokeniser) string(t *parser.Tokeniser) (parser.Token, parser.TokenFunc
 					return t.Error()
 				}
 
-				t.Accept(hexDigit)
-				t.Accept(hexDigit)
-				t.Accept(hexDigit)
-				t.Accept(hexDigit)
-				t.Accept(hexDigit)
-				t.Accept(hexDigit)
-				t.Accept(hexDigit)
+				if brace {
+					t.Accept(hexDigit)
+					t.Accept(hexDigit)
+					t.Accept(hexDigit)
+					t.Accept(hexDigit)
+					t.Accept(hexDigit)
+					t.Accept(hexDigit)
+					t.Accept(hexDigit)
 
-				if brace && !t.Accept("}") {
+					if !t.Accept("}") {
+						t.Err = ErrInvalidString
+
+						return t.Error()
+					}
+				} else if !t.Accept(hexDigit) || !t.Accept(hexDigit) || !t.Accept(hexDigit) || !t.Accept(hexDigit) || !t.Accept(hexDigit) || !t.Accept(hexDigit) || !t.Accept(hexDigit) {
 					t.Err = ErrInvalidString
 
 					return t.Error()
