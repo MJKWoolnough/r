@@ -192,6 +192,12 @@ func (r *rTokeniser) number(t *parser.Tokeniser) (parser.Token, parser.TokenFunc
 }
 
 func (r *rTokeniser) float(t *parser.Tokeniser, digits string) (parser.Token, parser.TokenFunc) {
+	if digits == hexDigit && !t.Accept(digits) {
+		t.Err = ErrInvalidNumber
+
+		return t.Error()
+	}
+
 	t.AcceptRun(digits)
 
 	if t.Accept("L") {
