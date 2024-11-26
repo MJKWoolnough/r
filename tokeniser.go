@@ -12,6 +12,8 @@ const (
 	octalDigit      = "01234567"
 	decimalDigit    = "0123456789"
 	hexDigit        = "0123456789abcdefABCDEF"
+	identifierStart = "ABCDEFGHIJKLMNOPQRSTUVQXYZabcdefghijklmnopqrstuvwxyz"
+	identifierCont  = "_.0123456789ABCDEFGHIJKLMNOPQRSTUVQXYZabcdefghijklmnopqrstuvwxyz"
 )
 
 const (
@@ -22,6 +24,7 @@ const (
 	TokenNumericLiteral
 	TokenIntegerLiteral
 	TokenComplexLiteral
+	TokenIdentifier
 )
 
 type rTokeniser struct {
@@ -51,6 +54,10 @@ func (r *rTokeniser) expression(t *parser.Tokeniser) (parser.Token, parser.Token
 		t.ExceptRun(lineTerminators)
 
 		return t.Return(TokenComment, r.expression)
+	}
+
+	if t.Accept(identifierStart) {
+		return r.identifier(t)
 	}
 
 	if c := t.Peek(); c == '"' || c == '\'' {
@@ -215,6 +222,12 @@ func (r *rTokeniser) exponential(t *parser.Tokeniser, digits string) (parser.Tok
 	}
 
 	return t.Return(TokenNumericLiteral, r.expression)
+}
+
+func (r *rTokeniser) identifier(t *parser.Tokeniser) (parser.Token, parser.TokenFunc) {
+	t.AcceptRun(identifierCont)
+
+	return t.Return(TokenIdentifier, r.expression)
 }
 
 var (
