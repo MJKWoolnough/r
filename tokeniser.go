@@ -28,6 +28,12 @@ type rTokeniser struct {
 	tokenDepth []byte
 }
 
+func (r *rTokeniser) error(t *parser.Tokeniser, err error) (parser.Token, parser.TokenFunc) {
+	t.Err = err
+
+	return t.Error()
+}
+
 func (r *rTokeniser) expression(t *parser.Tokeniser) (parser.Token, parser.TokenFunc) {
 	if t.Accept(whitespace) {
 		t.AcceptRun(whitespace)
@@ -77,17 +83,13 @@ func (r *rTokeniser) string(t *parser.Tokeniser) (parser.Token, parser.TokenFunc
 				t.Next()
 
 				if !t.Accept(octalDigit) || !t.Accept(octalDigit) {
-					t.Err = ErrInvalidString
-
-					return t.Error()
+					return r.error(t, ErrInvalidString)
 				}
 			case 'x':
 				t.Next()
 
 				if !t.Accept(hexDigit) || !t.Accept(hexDigit) {
-					t.Err = ErrInvalidString
-
-					return t.Error()
+					return r.error(t, ErrInvalidString)
 				}
 			case 'u':
 				t.Next()
@@ -95,9 +97,7 @@ func (r *rTokeniser) string(t *parser.Tokeniser) (parser.Token, parser.TokenFunc
 				brace := t.Accept("{")
 
 				if !t.Accept(hexDigit) {
-					t.Err = ErrInvalidString
-
-					return t.Error()
+					return r.error(t, ErrInvalidString)
 				}
 
 				if brace {
@@ -107,14 +107,10 @@ func (r *rTokeniser) string(t *parser.Tokeniser) (parser.Token, parser.TokenFunc
 					t.Accept(hexDigit)
 
 					if !t.Accept("}") {
-						t.Err = ErrInvalidString
-
-						return t.Error()
+						return r.error(t, ErrInvalidString)
 					}
 				} else if !t.Accept(hexDigit) || !t.Accept(hexDigit) || !t.Accept(hexDigit) {
-					t.Err = ErrInvalidString
-
-					return t.Error()
+					return r.error(t, ErrInvalidString)
 				}
 			case 'U':
 				t.Next()
@@ -122,9 +118,7 @@ func (r *rTokeniser) string(t *parser.Tokeniser) (parser.Token, parser.TokenFunc
 				brace := t.Accept("{")
 
 				if !t.Accept(hexDigit) {
-					t.Err = ErrInvalidString
-
-					return t.Error()
+					return r.error(t, ErrInvalidString)
 				}
 
 				if brace {
@@ -137,24 +131,16 @@ func (r *rTokeniser) string(t *parser.Tokeniser) (parser.Token, parser.TokenFunc
 					t.Accept(hexDigit)
 
 					if !t.Accept("}") {
-						t.Err = ErrInvalidString
-
-						return t.Error()
+						return r.error(t, ErrInvalidString)
 					}
 				} else if !t.Accept(hexDigit) || !t.Accept(hexDigit) || !t.Accept(hexDigit) || !t.Accept(hexDigit) || !t.Accept(hexDigit) || !t.Accept(hexDigit) || !t.Accept(hexDigit) {
-					t.Err = ErrInvalidString
-
-					return t.Error()
+					return r.error(t, ErrInvalidString)
 				}
 			default:
-				t.Err = ErrInvalidString
-
-				return t.Error()
+				return r.error(t, ErrInvalidString)
 			}
 		case -1:
-			t.Err = ErrInvalidString
-
-			return t.Error()
+			return r.error(t, ErrInvalidString)
 		}
 	}
 }
@@ -171,9 +157,7 @@ func (r *rTokeniser) number(t *parser.Tokeniser) (parser.Token, parser.TokenFunc
 			digits = hexDigit
 
 			if !t.Accept(digits) {
-				t.Err = ErrInvalidNumber
-
-				return t.Error()
+				return r.error(t, ErrInvalidNumber)
 			}
 		}
 	}
@@ -193,9 +177,7 @@ func (r *rTokeniser) number(t *parser.Tokeniser) (parser.Token, parser.TokenFunc
 
 func (r *rTokeniser) float(t *parser.Tokeniser, digits string) (parser.Token, parser.TokenFunc) {
 	if digits == hexDigit && !t.Accept(digits) {
-		t.Err = ErrInvalidNumber
-
-		return t.Error()
+		return r.error(t, ErrInvalidNumber)
 	}
 
 	t.AcceptRun(digits)
@@ -220,9 +202,7 @@ func (r *rTokeniser) exponential(t *parser.Tokeniser, digits string) (parser.Tok
 		t.Accept("+-")
 
 		if !t.Accept(digits) {
-			t.Err = ErrInvalidNumber
-
-			return t.Error()
+			return r.error(t, ErrInvalidNumber)
 		}
 
 		t.AcceptRun(digits)
