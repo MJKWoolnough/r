@@ -2,6 +2,7 @@ package r
 
 import (
 	"errors"
+	"io"
 
 	"vimagination.zapto.org/parser"
 )
@@ -40,6 +41,10 @@ type rTokeniser struct {
 
 func (r *rTokeniser) expression(t *parser.Tokeniser) (parser.Token, parser.TokenFunc) {
 	if t.Peek() == -1 {
+		if len(r.tokenDepth) != 0 {
+			return t.ReturnError(io.ErrUnexpectedEOF)
+		}
+
 		return t.Done()
 	}
 
