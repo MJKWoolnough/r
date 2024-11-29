@@ -234,6 +234,8 @@ func (r *rTokeniser) identifier(t *parser.Tokeniser) (parser.Token, parser.Token
 		tk.Type = TokenNull
 	case "TRUE", "FALSE":
 		tk.Type = TokenBooleanLiteral
+	case "Inf", "NaN":
+		tk.Type = TokenNumericLiteral
 	}
 
 	return tk, r.expression
