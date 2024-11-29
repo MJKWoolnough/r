@@ -24,6 +24,7 @@ const (
 	TokenNumericLiteral
 	TokenIntegerLiteral
 	TokenComplexLiteral
+	TokenNull
 	TokenIdentifier
 )
 
@@ -225,7 +226,14 @@ func (r *rTokeniser) exponential(t *parser.Tokeniser, digits string) (parser.Tok
 func (r *rTokeniser) identifier(t *parser.Tokeniser) (parser.Token, parser.TokenFunc) {
 	t.AcceptRun(identifierCont)
 
-	return t.Return(TokenIdentifier, r.expression)
+	tk := parser.Token{Type: TokenIdentifier, Data: t.Get()}
+
+	switch tk.Data {
+	case "NULL":
+		tk.Type = TokenNull
+	}
+
+	return tk, r.expression
 }
 
 var (
