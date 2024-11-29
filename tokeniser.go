@@ -321,7 +321,7 @@ func (r *rTokeniser) operator(t *parser.Tokeniser) (parser.Token, parser.TokenFu
 
 		return tk, r.expression
 	} else {
-		return t.ReturnError(ErrInvalidOperator)
+		return t.ReturnError(ErrInvalidCharacter)
 	}
 
 	return t.Return(TokenOperator, r.expression)
