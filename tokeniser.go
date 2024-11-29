@@ -30,6 +30,7 @@ const (
 	TokenIdentifier
 	TokenKeyword
 	TokenEllipsis
+	TokenOperator
 )
 
 type rTokeniser struct {
@@ -37,6 +38,10 @@ type rTokeniser struct {
 }
 
 func (r *rTokeniser) expression(t *parser.Tokeniser) (parser.Token, parser.TokenFunc) {
+	if t.Peek() == -1 {
+		return t.Done()
+	}
+
 	if t.Accept(whitespace) {
 		t.AcceptRun(whitespace)
 
@@ -65,7 +70,7 @@ func (r *rTokeniser) expression(t *parser.Tokeniser) (parser.Token, parser.Token
 		return r.number(t)
 	}
 
-	return t.Done()
+	return r.operator(t)
 }
 
 func (r *rTokeniser) string(t *parser.Tokeniser) (parser.Token, parser.TokenFunc) {
@@ -266,7 +271,29 @@ func (r *rTokeniser) identifier(t *parser.Tokeniser) (parser.Token, parser.Token
 	return tk, r.expression
 }
 
+func (r *rTokeniser) operator(t *parser.Tokeniser) (parser.Token, parser.TokenFunc) {
+	if t.Accept("+*/^&|~$:") {
+	} else if t.Accept(">=!") {
+		t.Accept("=")
+	} else if t.Accept("-") {
+		t.Accept(">")
+	} else if t.Accept("<") {
+		t.Accept("=-")
+	} else if t.Accept("%") {
+		t.ExceptRun("%")
+
+		if !t.Accept("%") {
+			return t.ReturnError(ErrInvalidOperator)
+		}
+	} else {
+		return t.ReturnError(ErrInvalidOperator)
+	}
+
+	return t.Return(TokenOperator, r.expression)
+}
+
 var (
-	ErrInvalidString = errors.New("invalid string")
-	ErrInvalidNumber = errors.New("invalid number")
+	ErrInvalidString   = errors.New("invalid string")
+	ErrInvalidNumber   = errors.New("invalid number")
+	ErrInvalidOperator = errors.New("invalid operator")
 )
