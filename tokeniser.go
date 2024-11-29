@@ -24,6 +24,7 @@ const (
 	TokenNumericLiteral
 	TokenIntegerLiteral
 	TokenComplexLiteral
+	TokenBooleanLiteral
 	TokenNull
 	TokenIdentifier
 )
@@ -231,6 +232,8 @@ func (r *rTokeniser) identifier(t *parser.Tokeniser) (parser.Token, parser.Token
 	switch tk.Data {
 	case "NULL":
 		tk.Type = TokenNull
+	case "TRUE", "FALSE":
+		tk.Type = TokenBooleanLiteral
 	}
 
 	return tk, r.expression
