@@ -26,6 +26,7 @@ const (
 	TokenComplexLiteral
 	TokenBooleanLiteral
 	TokenNull
+	TokenNA
 	TokenIdentifier
 )
 
@@ -236,6 +237,8 @@ func (r *rTokeniser) identifier(t *parser.Tokeniser) (parser.Token, parser.Token
 		tk.Type = TokenBooleanLiteral
 	case "Inf", "NaN":
 		tk.Type = TokenNumericLiteral
+	case "NA", "NA_character_", "NA_integer_", "NA_real_", "NA_complex_":
+		tk.Type = TokenNA
 	}
 
 	return tk, r.expression
