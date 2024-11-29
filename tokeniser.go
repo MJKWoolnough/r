@@ -31,6 +31,7 @@ const (
 	TokenKeyword
 	TokenEllipsis
 	TokenOperator
+	TokenGrouping
 )
 
 type rTokeniser struct {
@@ -285,6 +286,35 @@ func (r *rTokeniser) operator(t *parser.Tokeniser) (parser.Token, parser.TokenFu
 		if !t.Accept("%") {
 			return t.ReturnError(ErrInvalidOperator)
 		}
+	} else if t.Accept("({[") {
+		tk := parser.Token{
+			Type: TokenGrouping,
+			Data: t.Get(),
+		}
+
+		switch tk.Data[0] {
+		case '(':
+			r.tokenDepth = append(r.tokenDepth, ')')
+		case '{':
+			r.tokenDepth = append(r.tokenDepth, '}')
+		case '[':
+			r.tokenDepth = append(r.tokenDepth, ']')
+		}
+
+		return tk, r.expression
+	} else if t.Accept(")}]") {
+		tk := parser.Token{
+			Type: TokenGrouping,
+			Data: t.Get(),
+		}
+
+		if len(r.tokenDepth) == 0 || tk.Data[0] != r.tokenDepth[len(r.tokenDepth)-1] {
+			return t.ReturnError(ErrInvalidCharacter)
+		}
+
+		r.tokenDepth = r.tokenDepth[:len(r.tokenDepth)-1]
+
+		return tk, r.expression
 	} else {
 		return t.ReturnError(ErrInvalidOperator)
 	}
@@ -293,7 +323,8 @@ func (r *rTokeniser) operator(t *parser.Tokeniser) (parser.Token, parser.TokenFu
 }
 
 var (
-	ErrInvalidString   = errors.New("invalid string")
-	ErrInvalidNumber   = errors.New("invalid number")
-	ErrInvalidOperator = errors.New("invalid operator")
+	ErrInvalidString    = errors.New("invalid string")
+	ErrInvalidNumber    = errors.New("invalid number")
+	ErrInvalidOperator  = errors.New("invalid operator")
+	ErrInvalidCharacter = errors.New("invalid character")
 )
