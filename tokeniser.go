@@ -28,6 +28,7 @@ const (
 	TokenNull
 	TokenNA
 	TokenIdentifier
+	TokenKeyword
 )
 
 type rTokeniser struct {
@@ -239,6 +240,8 @@ func (r *rTokeniser) identifier(t *parser.Tokeniser) (parser.Token, parser.Token
 		tk.Type = TokenNumericLiteral
 	case "NA", "NA_character_", "NA_integer_", "NA_real_", "NA_complex_":
 		tk.Type = TokenNA
+	case "if", "else", "repeat", "while", "function", "for", "in", "next", "break":
+		tk.Type = TokenKeyword
 	}
 
 	return tk, r.expression
