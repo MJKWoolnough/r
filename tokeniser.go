@@ -29,6 +29,7 @@ const (
 	TokenNA
 	TokenIdentifier
 	TokenKeyword
+	TokenEllipsis
 )
 
 type rTokeniser struct {
@@ -153,7 +154,7 @@ func (r *rTokeniser) string(t *parser.Tokeniser) (parser.Token, parser.TokenFunc
 func (r *rTokeniser) number(t *parser.Tokeniser) (parser.Token, parser.TokenFunc) {
 	if t.Accept(".") {
 		if !t.Accept(decimalDigit) {
-			return r.identifier(t)
+			return r.ellipsisOrIdentifier(t)
 		}
 
 		return r.float(t, decimalDigit)
@@ -224,6 +225,24 @@ func (r *rTokeniser) exponential(t *parser.Tokeniser, digits string) (parser.Tok
 	}
 
 	return t.Return(TokenNumericLiteral, r.expression)
+}
+
+func (r *rTokeniser) ellipsisOrIdentifier(t *parser.Tokeniser) (parser.Token, parser.TokenFunc) {
+	if t.Accept(".") {
+		if t.Accept(".") {
+			if !t.Accept(identifierCont) {
+				return t.Return(TokenEllipsis, r.expression)
+			}
+		} else if t.Accept(decimalDigit) {
+			t.AcceptRun(decimalDigit)
+
+			if !t.Accept(identifierCont) {
+				return t.Return(TokenEllipsis, r.expression)
+			}
+		}
+	}
+
+	return r.identifier(t)
 }
 
 func (r *rTokeniser) identifier(t *parser.Tokeniser) (parser.Token, parser.TokenFunc) {
