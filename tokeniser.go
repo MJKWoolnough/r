@@ -35,6 +35,12 @@ const (
 	TokenGrouping
 )
 
+func SetTokeniser(t *parser.Tokeniser) *parser.Tokeniser {
+	t.TokeniserState(new(rTokeniser).expression)
+
+	return t
+}
+
 type rTokeniser struct {
 	tokenDepth []byte
 }
