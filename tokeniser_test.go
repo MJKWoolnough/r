@@ -20,6 +20,15 @@ func TestTokeniser(t *testing.T) {
 				{Type: parser.TokenDone, Data: ""},
 			},
 		},
+		{ // 2
+			"\n\r \u2028\u2029",
+			[]parser.Token{
+				{Type: TokenLineTerminator, Data: "\n\r"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenLineTerminator, Data: "\u2028\u2029"},
+				{Type: parser.TokenDone, Data: ""},
+			},
+		},
 	} {
 		p := parser.NewStringTokeniser(test.Input)
 
