@@ -75,6 +75,23 @@ func TestTokeniser(t *testing.T) {
 				{Type: parser.TokenDone, Data: ""},
 			},
 		},
+		{ // 6
+			"1L 99.88L 1e1L 1.2E-23L 0x123L 0xFEEDp101L",
+			[]parser.Token{
+				{Type: TokenIntegerLiteral, Data: "1L"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenIntegerLiteral, Data: "99.88L"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenIntegerLiteral, Data: "1e1L"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenIntegerLiteral, Data: "1.2E-23L"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenIntegerLiteral, Data: "0x123L"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenIntegerLiteral, Data: "0xFEEDp101L"},
+				{Type: parser.TokenDone, Data: ""},
+			},
+		},
 	} {
 		p := parser.NewStringTokeniser(test.Input)
 
