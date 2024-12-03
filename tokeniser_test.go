@@ -110,6 +110,15 @@ func TestTokeniser(t *testing.T) {
 			},
 		},
 		{ // 8
+			"TRUE FALSE",
+			[]parser.Token{
+				{Type: TokenBooleanLiteral, Data: "TRUE"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenBooleanLiteral, Data: "FALSE"},
+				{Type: parser.TokenDone, Data: ""},
+			},
+		},
+		{ // 9
 			"NULL",
 			[]parser.Token{
 				{Type: TokenNull, Data: "NULL"},
