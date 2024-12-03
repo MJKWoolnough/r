@@ -48,6 +48,33 @@ func TestTokeniser(t *testing.T) {
 				{Type: parser.TokenDone, Data: ""},
 			},
 		},
+		{ // 5
+			"0 1 23 0x1a2f30 .123 0.456 123.456 9.8e+7 7E-6 0x123.FEDpFF 0xFFP+FF",
+			[]parser.Token{
+				{Type: TokenNumericLiteral, Data: "0"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenNumericLiteral, Data: "1"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenNumericLiteral, Data: "23"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenNumericLiteral, Data: "0x1a2f30"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenNumericLiteral, Data: ".123"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenNumericLiteral, Data: "0.456"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenNumericLiteral, Data: "123.456"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenNumericLiteral, Data: "9.8e+7"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenNumericLiteral, Data: "7E-6"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenNumericLiteral, Data: "0x123.FEDpFF"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenNumericLiteral, Data: "0xFFP+FF"},
+				{Type: parser.TokenDone, Data: ""},
+			},
+		},
 	} {
 		p := parser.NewStringTokeniser(test.Input)
 
