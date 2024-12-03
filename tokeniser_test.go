@@ -134,6 +134,21 @@ func TestTokeniser(t *testing.T) {
 				{Type: parser.TokenDone, Data: ""},
 			},
 		},
+		{ // 11
+			"NA NA_character_ NA_integer_ NA_real_ NA_complex_",
+			[]parser.Token{
+				{Type: TokenNA, Data: "NA"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenNA, Data: "NA_character_"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenNA, Data: "NA_integer_"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenNA, Data: "NA_real_"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenNA, Data: "NA_complex_"},
+				{Type: parser.TokenDone, Data: ""},
+			},
+		},
 	} {
 		p := parser.NewStringTokeniser(test.Input)
 
