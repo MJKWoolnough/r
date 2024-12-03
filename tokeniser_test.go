@@ -76,6 +76,15 @@ func TestTokeniser(t *testing.T) {
 			},
 		},
 		{ // 6
+			"Inf NaN",
+			[]parser.Token{
+				{Type: TokenNumericLiteral, Data: "Inf"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenNumericLiteral, Data: "NaN"},
+				{Type: parser.TokenDone, Data: ""},
+			},
+		},
+		{ // 7
 			"1L 99.88L 1e1L 1.2E-23L 0x123L 0xFEEDp101L",
 			[]parser.Token{
 				{Type: TokenIntegerLiteral, Data: "1L"},
@@ -92,7 +101,7 @@ func TestTokeniser(t *testing.T) {
 				{Type: parser.TokenDone, Data: ""},
 			},
 		},
-		{ // 7
+		{ // 8
 			"1i .2i 9.8e1i 0x123i 0x456.ffi 0xapbi",
 			[]parser.Token{
 				{Type: TokenComplexLiteral, Data: "1i"},
@@ -109,7 +118,7 @@ func TestTokeniser(t *testing.T) {
 				{Type: parser.TokenDone, Data: ""},
 			},
 		},
-		{ // 8
+		{ // 9
 			"TRUE FALSE",
 			[]parser.Token{
 				{Type: TokenBooleanLiteral, Data: "TRUE"},
@@ -118,7 +127,7 @@ func TestTokeniser(t *testing.T) {
 				{Type: parser.TokenDone, Data: ""},
 			},
 		},
-		{ // 9
+		{ // 10
 			"NULL",
 			[]parser.Token{
 				{Type: TokenNull, Data: "NULL"},
