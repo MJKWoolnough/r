@@ -149,6 +149,23 @@ func TestTokeniser(t *testing.T) {
 				{Type: parser.TokenDone, Data: ""},
 			},
 		},
+		{ // 11
+			"a bc def a1 b_c abc.def",
+			[]parser.Token{
+				{Type: TokenIdentifier, Data: "a"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenIdentifier, Data: "bc"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenIdentifier, Data: "def"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenIdentifier, Data: "a1"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenIdentifier, Data: "b_c"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenIdentifier, Data: "abc.def"},
+				{Type: parser.TokenDone, Data: ""},
+			},
+		},
 	} {
 		p := parser.NewStringTokeniser(test.Input)
 
