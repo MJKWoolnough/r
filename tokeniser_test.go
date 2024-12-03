@@ -92,6 +92,23 @@ func TestTokeniser(t *testing.T) {
 				{Type: parser.TokenDone, Data: ""},
 			},
 		},
+		{ // 7
+			"1i .2i 9.8e1i 0x123i 0x456.ffi 0xapbi",
+			[]parser.Token{
+				{Type: TokenComplexLiteral, Data: "1i"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenComplexLiteral, Data: ".2i"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenComplexLiteral, Data: "9.8e1i"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenComplexLiteral, Data: "0x123i"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenComplexLiteral, Data: "0x456.ffi"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenComplexLiteral, Data: "0xapbi"},
+				{Type: parser.TokenDone, Data: ""},
+			},
+		},
 	} {
 		p := parser.NewStringTokeniser(test.Input)
 
