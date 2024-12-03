@@ -39,6 +39,15 @@ func TestTokeniser(t *testing.T) {
 				{Type: parser.TokenDone, Data: ""},
 			},
 		},
+		{ // 4
+			"\"abc\"'def'\"a\\n\\t\\\"\"",
+			[]parser.Token{
+				{Type: TokenStringLiteral, Data: "\"abc\""},
+				{Type: TokenStringLiteral, Data: "'def'"},
+				{Type: TokenStringLiteral, Data: "\"a\\n\\t\\\"\""},
+				{Type: parser.TokenDone, Data: ""},
+			},
+		},
 	} {
 		p := parser.NewStringTokeniser(test.Input)
 
