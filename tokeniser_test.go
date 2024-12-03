@@ -109,6 +109,13 @@ func TestTokeniser(t *testing.T) {
 				{Type: parser.TokenDone, Data: ""},
 			},
 		},
+		{ // 8
+			"NULL",
+			[]parser.Token{
+				{Type: TokenNull, Data: "NULL"},
+				{Type: parser.TokenDone, Data: ""},
+			},
+		},
 	} {
 		p := parser.NewStringTokeniser(test.Input)
 
