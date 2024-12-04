@@ -259,6 +259,18 @@ func TestTokeniser(t *testing.T) {
 				{Type: parser.TokenDone, Data: ""},
 			},
 		},
+		{ // 16
+			"([{}])]",
+			[]parser.Token{
+				{Type: TokenGrouping, Data: "("},
+				{Type: TokenGrouping, Data: "["},
+				{Type: TokenGrouping, Data: "{"},
+				{Type: TokenGrouping, Data: "}"},
+				{Type: TokenGrouping, Data: "]"},
+				{Type: TokenGrouping, Data: ")"},
+				{Type: parser.TokenError, Data: "invalid character"},
+			},
+		},
 	} {
 		p := parser.NewStringTokeniser(test.Input)
 
