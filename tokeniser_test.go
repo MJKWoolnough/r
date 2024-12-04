@@ -189,6 +189,19 @@ func TestTokeniser(t *testing.T) {
 				{Type: parser.TokenDone, Data: ""},
 			},
 		},
+		{ // 13
+			"... ..1 ..2 ..99",
+			[]parser.Token{
+				{Type: TokenEllipsis, Data: "..."},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenEllipsis, Data: "..1"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenEllipsis, Data: "..2"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenEllipsis, Data: "..99"},
+				{Type: parser.TokenDone, Data: ""},
+			},
+		},
 	} {
 		p := parser.NewStringTokeniser(test.Input)
 
