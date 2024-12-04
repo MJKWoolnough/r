@@ -166,6 +166,29 @@ func TestTokeniser(t *testing.T) {
 				{Type: parser.TokenDone, Data: ""},
 			},
 		},
+		{ // 12
+			"if else repeat while function for in next break",
+			[]parser.Token{
+				{Type: TokenKeyword, Data: "if"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenKeyword, Data: "else"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenKeyword, Data: "repeat"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenKeyword, Data: "while"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenKeyword, Data: "function"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenKeyword, Data: "for"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenKeyword, Data: "in"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenKeyword, Data: "next"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenKeyword, Data: "break"},
+				{Type: parser.TokenDone, Data: ""},
+			},
+		},
 	} {
 		p := parser.NewStringTokeniser(test.Input)
 
