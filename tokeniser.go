@@ -3,6 +3,7 @@ package r
 import (
 	"errors"
 	"io"
+	"strconv"
 
 	"vimagination.zapto.org/parser"
 )
@@ -292,7 +293,8 @@ func (r *rTokeniser) operator(t *parser.Tokeniser) (parser.Token, parser.TokenFu
 	} else if t.Accept("<") {
 		t.Accept("=-")
 	} else if t.Accept("%") {
-		t.ExceptRun("%")
+		for ; t.Peek() != '%' && strconv.IsPrint(t.Peek()); t.Next() {
+		}
 
 		if !t.Accept("%") {
 			return t.ReturnError(ErrInvalidOperator)
