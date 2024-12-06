@@ -14,20 +14,20 @@ func Parse(t Tokeniser) (*File, error) {
 	}
 
 	f := new(File)
-	if err = f.parse(r); err != nil {
+	if err = f.parse(&r); err != nil {
 		return nil, err
 	}
 
 	return f, nil
 }
 
-func (f *File) parse(r rParser) error {
+func (f *File) parse(r *rParser) error {
 	for r.AcceptRunWhitespace() != parser.TokenDone {
 		var s Expression
 
 		q := r.NewGoal()
 
-		if err := s.parse(q); err != nil {
+		if err := s.parse(&q); err != nil {
 			return r.Error("File", err)
 		}
 
