@@ -101,6 +101,13 @@ func TestTokeniser(t *testing.T) {
 			},
 		},
 		{ // 13
+			"\"\\U01000000 \\U{2190}\"",
+			[]parser.Token{
+				{Type: TokenStringLiteral, Data: "\"\\U01000000 \\U{2190}\""},
+				{Type: parser.TokenDone, Data: ""},
+			},
+		},
+		{ // 14
 			"0 1 23 0x1a2f30 .123 0.456 123.456 9.8e+7 7E-6 0x123.FEDpFF 0xFFP+FF",
 			[]parser.Token{
 				{Type: TokenNumericLiteral, Data: "0"},
@@ -127,7 +134,7 @@ func TestTokeniser(t *testing.T) {
 				{Type: parser.TokenDone, Data: ""},
 			},
 		},
-		{ // 14
+		{ // 15
 			"Inf NaN",
 			[]parser.Token{
 				{Type: TokenNumericLiteral, Data: "Inf"},
@@ -136,31 +143,31 @@ func TestTokeniser(t *testing.T) {
 				{Type: parser.TokenDone, Data: ""},
 			},
 		},
-		{ // 15
+		{ // 16
 			"0xz",
 			[]parser.Token{
 				{Type: parser.TokenError, Data: "invalid number"},
 			},
 		},
-		{ // 16
+		{ // 17
 			"0x1.",
 			[]parser.Token{
 				{Type: parser.TokenError, Data: "invalid number"},
 			},
 		},
-		{ // 17
+		{ // 18
 			"0x1pz",
 			[]parser.Token{
 				{Type: parser.TokenError, Data: "invalid number"},
 			},
 		},
-		{ // 18
+		{ // 19
 			"1ea",
 			[]parser.Token{
 				{Type: parser.TokenError, Data: "invalid number"},
 			},
 		},
-		{ // 19
+		{ // 20
 			"1L 99.88L 1e1L 1.2E-23L 0x123L 0xFEEDp101L",
 			[]parser.Token{
 				{Type: TokenIntegerLiteral, Data: "1L"},
@@ -177,7 +184,7 @@ func TestTokeniser(t *testing.T) {
 				{Type: parser.TokenDone, Data: ""},
 			},
 		},
-		{ // 20
+		{ // 21
 			"1i .2i 9.8e1i 0x123i 0x456.ffi 0xapbi",
 			[]parser.Token{
 				{Type: TokenComplexLiteral, Data: "1i"},
@@ -194,7 +201,7 @@ func TestTokeniser(t *testing.T) {
 				{Type: parser.TokenDone, Data: ""},
 			},
 		},
-		{ // 21
+		{ // 22
 			"TRUE FALSE",
 			[]parser.Token{
 				{Type: TokenBooleanLiteral, Data: "TRUE"},
@@ -203,14 +210,14 @@ func TestTokeniser(t *testing.T) {
 				{Type: parser.TokenDone, Data: ""},
 			},
 		},
-		{ // 22
+		{ // 23
 			"NULL",
 			[]parser.Token{
 				{Type: TokenNull, Data: "NULL"},
 				{Type: parser.TokenDone, Data: ""},
 			},
 		},
-		{ // 23
+		{ // 24
 			"NA NA_character_ NA_integer_ NA_real_ NA_complex_",
 			[]parser.Token{
 				{Type: TokenNA, Data: "NA"},
@@ -225,7 +232,7 @@ func TestTokeniser(t *testing.T) {
 				{Type: parser.TokenDone, Data: ""},
 			},
 		},
-		{ // 24
+		{ // 25
 			"a bc def a1 b_c abc.def",
 			[]parser.Token{
 				{Type: TokenIdentifier, Data: "a"},
@@ -242,14 +249,14 @@ func TestTokeniser(t *testing.T) {
 				{Type: parser.TokenDone, Data: ""},
 			},
 		},
-		{ // 25
+		{ // 26
 			".a",
 			[]parser.Token{
 				{Type: TokenIdentifier, Data: ".a"},
 				{Type: parser.TokenDone, Data: ""},
 			},
 		},
-		{ // 26
+		{ // 27
 			"if else repeat while function for in next break",
 			[]parser.Token{
 				{Type: TokenKeyword, Data: "if"},
@@ -272,7 +279,7 @@ func TestTokeniser(t *testing.T) {
 				{Type: parser.TokenDone, Data: ""},
 			},
 		},
-		{ // 27
+		{ // 28
 			"... ..1 ..2 ..99",
 			[]parser.Token{
 				{Type: TokenEllipsis, Data: "..."},
@@ -285,7 +292,7 @@ func TestTokeniser(t *testing.T) {
 				{Type: parser.TokenDone, Data: ""},
 			},
 		},
-		{ // 28
+		{ // 29
 			"+ - * / %% %/% ^ > >= < <= == != ! & | ~ -> <- $ : %*% %in% %o% %x% %||%",
 			[]parser.Token{
 				{Type: TokenOperator, Data: "+"},
@@ -342,19 +349,19 @@ func TestTokeniser(t *testing.T) {
 				{Type: parser.TokenDone, Data: ""},
 			},
 		},
-		{ // 29
+		{ // 30
 			"%\n%",
 			[]parser.Token{
 				{Type: parser.TokenError, Data: "invalid operator"},
 			},
 		},
-		{ // 30
+		{ // 31
 			"@",
 			[]parser.Token{
 				{Type: parser.TokenError, Data: "invalid character"},
 			},
 		},
-		{ // 31
+		{ // 32
 			"([{}])]",
 			[]parser.Token{
 				{Type: TokenGrouping, Data: "("},
@@ -366,28 +373,28 @@ func TestTokeniser(t *testing.T) {
 				{Type: parser.TokenError, Data: "invalid character"},
 			},
 		},
-		{ // 32
+		{ // 33
 			"(",
 			[]parser.Token{
 				{Type: TokenGrouping, Data: "("},
 				{Type: parser.TokenError, Data: "unexpected EOF"},
 			},
 		},
-		{ // 33
+		{ // 34
 			"[",
 			[]parser.Token{
 				{Type: TokenGrouping, Data: "["},
 				{Type: parser.TokenError, Data: "unexpected EOF"},
 			},
 		},
-		{ // 34
+		{ // 35
 			"{",
 			[]parser.Token{
 				{Type: TokenGrouping, Data: "{"},
 				{Type: parser.TokenError, Data: "unexpected EOF"},
 			},
 		},
-		{ // 35
+		{ // 36
 			"{]",
 			[]parser.Token{
 				{Type: TokenGrouping, Data: "{"},
