@@ -9,18 +9,19 @@ import (
 )
 
 const (
-	whitespace      = "\t\v\f \u00a0\ufeff" // Tab, Vertical Tab, Form Feed, Space, No-break space, ZeroWidth No-Break Space, https://262.ecma-international.org/11.0/#table-32
-	lineTerminators = "\n\r\u2028\u2029"    // Line Feed, Carriage Return, Line Separator, Paragraph Separator, https://262.ecma-international.org/11.0/#table-33
-	octalDigit      = "01234567"
-	decimalDigit    = "0123456789"
-	hexDigit        = "0123456789abcdefABCDEF"
-	identifierStart = "ABCDEFGHIJKLMNOPQRSTUVQXYZabcdefghijklmnopqrstuvwxyz"
-	identifierCont  = "_.0123456789ABCDEFGHIJKLMNOPQRSTUVQXYZabcdefghijklmnopqrstuvwxyz"
+	whitespace            = "\t\v\f \u00a0\ufeff" // Tab, Vertical Tab, Form Feed, Space, No-break space, ZeroWidth No-Break Space, https://262.ecma-international.org/11.0/#table-32
+	expressionTerminators = "\n\r\u2028\u2029"    // Semi-Colon, Line Feed, Carriage Return, Line Separator, Paragraph Separator, https://262.ecma-international.org/11.0/#table-33
+	octalDigit            = "01234567"
+	decimalDigit          = "0123456789"
+	hexDigit              = "0123456789abcdefABCDEF"
+	identifierStart       = "ABCDEFGHIJKLMNOPQRSTUVQXYZabcdefghijklmnopqrstuvwxyz"
+	identifierCont        = "_.0123456789ABCDEFGHIJKLMNOPQRSTUVQXYZabcdefghijklmnopqrstuvwxyz"
 )
 
 const (
 	TokenWhitespace parser.TokenType = iota
 	TokenLineTerminator
+	TokenExpressionTerminator
 	TokenComment
 	TokenStringLiteral
 	TokenNumericLiteral
@@ -61,14 +62,14 @@ func (r *rTokeniser) expression(t *parser.Tokeniser) (parser.Token, parser.Token
 		return t.Return(TokenWhitespace, r.expression)
 	}
 
-	if t.Accept(lineTerminators) {
-		t.AcceptRun(lineTerminators)
+	if t.Accept(expressionTerminators) {
+		t.AcceptRun(expressionTerminators)
 
 		return t.Return(TokenLineTerminator, r.expression)
 	}
 
 	if t.Accept("#") {
-		t.ExceptRun(lineTerminators)
+		t.ExceptRun(expressionTerminators)
 
 		return t.Return(TokenComment, r.expression)
 	}
@@ -285,7 +286,9 @@ func (r *rTokeniser) identifier(t *parser.Tokeniser) (parser.Token, parser.Token
 }
 
 func (r *rTokeniser) operator(t *parser.Tokeniser) (parser.Token, parser.TokenFunc) {
-	if t.Accept("+*/^&|~$:") {
+	if t.Accept(";") {
+		return t.Return(TokenExpressionTerminator, r.expression)
+	} else if t.Accept("+*/^&|~$:") {
 	} else if t.Accept(">=!") {
 		t.Accept("=")
 	} else if t.Accept("-") {
