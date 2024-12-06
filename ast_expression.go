@@ -1,6 +1,10 @@
 package r
 
-import "vimagination.zapto.org/parser"
+import (
+	"errors"
+
+	"vimagination.zapto.org/parser"
+)
 
 type Expression struct {
 	CompoundExpression   *CompoundExpression
@@ -37,9 +41,41 @@ func (e *Expression) parse(r *rParser) error {
 	return nil
 }
 
-type CompoundExpression struct{}
+type CompoundExpression struct {
+	Expressions []Expression
+	Tokens      Tokens
+}
 
 func (c *CompoundExpression) parse(r *rParser) error {
+	r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "{"})
+	r.AcceptRunWhitespace()
+
+	for !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "}"}) {
+		s := r.NewGoal()
+
+		var e Expression
+
+		if err := e.parse(&s); err != nil {
+			return s.Error("CompoundExpression", err)
+		}
+
+		c.Expressions = append(c.Expressions, e)
+
+		r.Score(s)
+		r.AcceptRunWhitespaceNoNewLine()
+
+		if s.AcceptToken(parser.Token{Type: TokenGrouping, Data: "}"}) {
+			break
+		} else if !s.Accept(TokenLineTerminator, TokenExpressionTerminator) {
+			return s.Error("CompoundExpression", ErrMissingTerminator)
+		}
+
+		r.Score(s)
+		r.AcceptRunWhitespace()
+	}
+
+	c.Tokens = r.ToTokens()
+
 	return nil
 }
 
@@ -60,3 +96,5 @@ type AssignmentExpression struct{}
 func (a *AssignmentExpression) parse(r *rParser) error {
 	return nil
 }
+
+var ErrMissingTerminator = errors.New("missing terminator")
