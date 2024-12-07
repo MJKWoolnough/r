@@ -184,9 +184,47 @@ func (i *IfControl) parse(r *rParser) error {
 	return nil
 }
 
-type WhileControl struct{}
+type WhileControl struct {
+	Cond   ConditionalExpression
+	Expr   Expression
+	Tokens Tokens
+}
 
 func (w *WhileControl) parse(r *rParser) error {
+	r.AcceptToken(parser.Token{Type: TokenKeyword, Data: "while"})
+	r.AcceptRunWhitespaceNoNewLine()
+
+	if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "("}) {
+		return r.Error("WhileControl", ErrMissingOpeningParen)
+	}
+
+	r.AcceptRunWhitespace()
+
+	s := r.NewGoal()
+
+	if err := w.Cond.parse(&s); err != nil {
+		return r.Error("WhileControl", err)
+	}
+
+	r.Score(s)
+	r.AcceptRunWhitespaceNoNewLine()
+
+	if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
+		return r.Error("WhileControl", ErrMissingClosingParen)
+	}
+
+	r.AcceptRunWhitespaceNoNewLine()
+
+	s = r.NewGoal()
+
+	if err := w.Expr.parse(&s); err != nil {
+		return r.Error("WhileControl", err)
+	}
+
+	r.Score(s)
+
+	w.Tokens = r.ToTokens()
+
 	return nil
 }
 
