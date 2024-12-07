@@ -121,9 +121,66 @@ func (f *FlowControl) parse(r *rParser) error {
 	return nil
 }
 
-type IfControl struct{}
+type IfControl struct {
+	Cond   ConditionalExpression
+	Expr   Expression
+	Else   *Expression
+	Tokens Tokens
+}
 
 func (i *IfControl) parse(r *rParser) error {
+	r.AcceptToken(parser.Token{Type: TokenKeyword, Data: "if"})
+	r.AcceptRunWhitespaceNoNewLine()
+
+	if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "("}) {
+		return r.Error("IfControl", ErrMissingOpeningParen)
+	}
+
+	r.AcceptRunWhitespace()
+
+	s := r.NewGoal()
+
+	if err := i.Cond.parse(&s); err != nil {
+		return r.Error("IfControl", err)
+	}
+
+	r.Score(s)
+	r.AcceptRunWhitespaceNoNewLine()
+
+	if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
+		return r.Error("IfControl", ErrMissingClosingParen)
+	}
+
+	r.AcceptRunWhitespaceNoNewLine()
+
+	s = r.NewGoal()
+
+	if err := i.Expr.parse(&s); err != nil {
+		return r.Error("IfControl", err)
+	}
+
+	r.Score(s)
+
+	s = r.NewGoal()
+
+	s.AcceptRunWhitespaceNoNewLine()
+
+	if s.AcceptToken(parser.Token{Type: TokenKeyword, Data: "else"}) {
+		s.AcceptRunWhitespaceNoNewLine()
+
+		t := s.NewGoal()
+		i.Else = new(Expression)
+
+		if err := i.Else.parse(&t); err != nil {
+			return r.Error("IfControl", err)
+		}
+
+		s.Score(t)
+		r.Score(t)
+	}
+
+	i.Tokens = r.ToTokens()
+
 	return nil
 }
 
@@ -157,4 +214,14 @@ func (a *AssignmentExpression) parse(r *rParser) error {
 	return nil
 }
 
-var ErrMissingTerminator = errors.New("missing terminator")
+type ConditionalExpression struct{}
+
+func (c *ConditionalExpression) parse(r *rParser) error {
+	return nil
+}
+
+var (
+	ErrMissingTerminator   = errors.New("missing terminator")
+	ErrMissingOpeningParen = errors.New("missing opening paren")
+	ErrMissingClosingParen = errors.New("missing closing paren")
+)
