@@ -354,9 +354,47 @@ func (f *FunctionDefinition) parse(r *rParser) error {
 	return nil
 }
 
-type ArgList struct{}
+type ArgList struct {
+	Args   []Argument
+	Tokens Tokens
+}
 
 func (a *ArgList) parse(r *rParser) error {
+	s := r.NewGoal()
+
+	for {
+		var arg Argument
+
+		if err := arg.parse(&s); err != nil {
+			return r.Error("ArgList", err)
+		}
+
+		r.Score(s)
+
+		s = r.NewGoal()
+
+		s.AcceptRunWhitespaceNoNewLine()
+
+		if s.Peek() == (parser.Token{Type: TokenGrouping, Data: ")"}) {
+			break
+		} else if !s.AcceptToken(parser.Token{Type: TokenExpressionTerminator, Data: ","}) {
+			return s.Error("CompoundExpression", ErrMissingTerminator)
+		}
+
+		s.AcceptRunWhitespaceNoNewLine()
+		r.Score(s)
+
+		s = r.NewGoal()
+	}
+
+	a.Tokens = r.ToTokens()
+
+	return nil
+}
+
+type Argument struct{}
+
+func (a *Argument) parse(r *rParser) error {
 	return nil
 }
 
