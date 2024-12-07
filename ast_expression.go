@@ -250,9 +250,63 @@ func (rc *RepeatControl) parse(r *rParser) error {
 	return nil
 }
 
-type ForControl struct{}
+type ForControl struct {
+	Var    Atom
+	List   ConditionalExpression
+	Expr   Expression
+	Tokens Tokens
+}
 
 func (f *ForControl) parse(r *rParser) error {
+	r.AcceptToken(parser.Token{Type: TokenKeyword, Data: "for"})
+	r.AcceptRunWhitespaceNoNewLine()
+
+	if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "("}) {
+		return r.Error("ForControl", ErrMissingOpeningParen)
+	}
+
+	r.AcceptRunWhitespace()
+
+	s := r.NewGoal()
+
+	if err := f.Var.parse(&s); err != nil {
+		return r.Error("ForControl", err)
+	}
+
+	r.Score(s)
+	r.AcceptRunWhitespaceNoNewLine()
+
+	if !r.AcceptToken(parser.Token{Type: TokenKeyword, Data: "in"}) {
+		return r.Error("ForControl", ErrMissingIn)
+	}
+
+	r.AcceptRunWhitespaceNoNewLine()
+
+	s = r.NewGoal()
+
+	if err := f.List.parse(&s); err != nil {
+		return r.Error("ForControl", err)
+	}
+
+	r.Score(s)
+	r.AcceptRunWhitespaceNoNewLine()
+
+	if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
+		return r.Error("ForControl", ErrMissingClosingParen)
+	}
+
+	r.AcceptRunWhitespaceNoNewLine()
+
+	s = r.NewGoal()
+
+	if err := f.Expr.parse(&s); err != nil {
+		return r.Error("ForControl", err)
+	}
+
+	r.Score(s)
+
+	f.Tokens = r.ToTokens()
+
 	return nil
 }
 
@@ -274,8 +328,15 @@ func (c *ConditionalExpression) parse(r *rParser) error {
 	return nil
 }
 
+type Atom struct{}
+
+func (a *Atom) parse(r *rParser) error {
+	return nil
+}
+
 var (
 	ErrMissingTerminator   = errors.New("missing terminator")
 	ErrMissingOpeningParen = errors.New("missing opening paren")
 	ErrMissingClosingParen = errors.New("missing closing paren")
+	ErrMissingIn           = errors.New("missing in keyword")
 )
