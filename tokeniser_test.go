@@ -30,9 +30,10 @@ func TestTokeniser(t *testing.T) {
 			},
 		},
 		{ // 3
-			";",
+			";,",
 			[]parser.Token{
 				{Type: TokenExpressionTerminator, Data: ";"},
+				{Type: TokenExpressionTerminator, Data: ","},
 				{Type: parser.TokenDone, Data: ""},
 			},
 		},
