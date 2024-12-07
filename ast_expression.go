@@ -228,9 +228,25 @@ func (w *WhileControl) parse(r *rParser) error {
 	return nil
 }
 
-type RepeatControl struct{}
+type RepeatControl struct {
+	Cond   ConditionalExpression
+	Tokens Tokens
+}
 
 func (rc *RepeatControl) parse(r *rParser) error {
+	r.AcceptToken(parser.Token{Type: TokenKeyword, Data: "repeat"})
+	r.AcceptRunWhitespaceNoNewLine()
+
+	s := r.NewGoal()
+
+	if err := rc.Cond.parse(&s); err != nil {
+		return r.Error("RepeatControl", err)
+	}
+
+	r.Score(s)
+
+	rc.Tokens = r.ToTokens()
+
 	return nil
 }
 
