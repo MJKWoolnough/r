@@ -310,9 +310,53 @@ func (f *ForControl) parse(r *rParser) error {
 	return nil
 }
 
-type FunctionDefinition struct{}
+type FunctionDefinition struct {
+	ArgList ArgList
+	Body    Expression
+	Tokens  Tokens
+}
 
 func (f *FunctionDefinition) parse(r *rParser) error {
+	r.AcceptToken(parser.Token{Type: TokenKeyword, Data: "function"})
+	r.AcceptRunWhitespaceNoNewLine()
+
+	if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "("}) {
+		return r.Error("FunctionDefinition", ErrMissingOpeningParen)
+	}
+
+	r.AcceptRunWhitespace()
+
+	s := r.NewGoal()
+
+	if err := f.ArgList.parse(&s); err != nil {
+		return r.Error("FunctionDefinition", err)
+	}
+
+	r.Score(s)
+	r.AcceptRunWhitespaceNoNewLine()
+
+	if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
+		return r.Error("FunctionDefinition", ErrMissingClosingParen)
+	}
+
+	r.AcceptRunWhitespaceNoNewLine()
+
+	s = r.NewGoal()
+
+	if err := f.Body.parse(&s); err != nil {
+		return r.Error("FunctionDefinition", err)
+	}
+
+	r.Score(s)
+
+	f.Tokens = r.ToTokens()
+
+	return nil
+}
+
+type ArgList struct{}
+
+func (a *ArgList) parse(r *rParser) error {
 	return nil
 }
 
