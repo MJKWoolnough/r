@@ -79,9 +79,69 @@ func (c *CompoundExpression) parse(r *rParser) error {
 	return nil
 }
 
-type FlowControl struct{}
+type FlowControl struct {
+	IfControl     *IfControl
+	WhileControl  *WhileControl
+	RepeatControl *RepeatControl
+	ForControl    *ForControl
+	Tokens        Tokens
+}
 
 func (f *FlowControl) parse(r *rParser) error {
+	var err error
+
+	s := r.NewGoal()
+	switch r.Peek() {
+	case parser.Token{Type: TokenKeyword, Data: "if"}:
+		f.IfControl = new(IfControl)
+
+		err = f.IfControl.parse(&s)
+	case parser.Token{Type: TokenKeyword, Data: "while"}:
+		f.WhileControl = new(WhileControl)
+
+		err = f.WhileControl.parse(&s)
+	case parser.Token{Type: TokenKeyword, Data: "repeat"}:
+		f.RepeatControl = new(RepeatControl)
+
+		err = f.RepeatControl.parse(&s)
+	case parser.Token{Type: TokenKeyword, Data: "for"}:
+		f.ForControl = new(ForControl)
+
+		err = f.ForControl.parse(&s)
+	}
+
+	if err != nil {
+		return r.Error("FlowControl", err)
+	}
+
+	r.Score(s)
+
+	f.Tokens = r.ToTokens()
+
+	return nil
+}
+
+type IfControl struct{}
+
+func (i *IfControl) parse(r *rParser) error {
+	return nil
+}
+
+type WhileControl struct{}
+
+func (w *WhileControl) parse(r *rParser) error {
+	return nil
+}
+
+type RepeatControl struct{}
+
+func (rc *RepeatControl) parse(r *rParser) error {
+	return nil
+}
+
+type ForControl struct{}
+
+func (f *ForControl) parse(r *rParser) error {
 	return nil
 }
 
