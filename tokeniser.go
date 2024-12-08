@@ -296,7 +296,7 @@ func (r *rTokeniser) operator(t *parser.Tokeniser) (parser.Token, parser.TokenFu
 		t.Accept(">")
 	} else if t.Accept("<") {
 		if t.Accept("<") && !t.Accept("-") {
-			t.ReturnError(ErrInvalidOperator)
+			return t.ReturnError(ErrInvalidOperator)
 		} else {
 			t.Accept("=-")
 		}
