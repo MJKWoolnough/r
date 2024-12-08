@@ -349,7 +349,7 @@ func TestTokeniser(t *testing.T) {
 			},
 		},
 		{ // 38
-			"+ - * / %% %/% ^ > >= < <= == != ! & | ~ -> <- $ : %*% %in% %o% %x% %||%",
+			"+ - * / %% %/% ^ > >= < <= == != ! & | ~ -> <- ->> <<- $ : %*% %in% %o% %x% %||%",
 			[]parser.Token{
 				{Type: TokenOperator, Data: "+"},
 				{Type: TokenWhitespace, Data: " "},
@@ -388,6 +388,10 @@ func TestTokeniser(t *testing.T) {
 				{Type: TokenOperator, Data: "->"},
 				{Type: TokenWhitespace, Data: " "},
 				{Type: TokenOperator, Data: "<-"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenOperator, Data: "->>"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenOperator, Data: "<<-"},
 				{Type: TokenWhitespace, Data: " "},
 				{Type: TokenOperator, Data: "$"},
 				{Type: TokenWhitespace, Data: " "},
