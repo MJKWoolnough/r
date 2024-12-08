@@ -378,7 +378,7 @@ func (a *ArgList) parse(r *rParser) error {
 		if s.Peek() == (parser.Token{Type: TokenGrouping, Data: ")"}) {
 			break
 		} else if !s.AcceptToken(parser.Token{Type: TokenExpressionTerminator, Data: ","}) {
-			return s.Error("CompoundExpression", ErrMissingTerminator)
+			return s.Error("ArgList", ErrMissingTerminator)
 		}
 
 		s.AcceptRunWhitespaceNoNewLine()
@@ -392,9 +392,42 @@ func (a *ArgList) parse(r *rParser) error {
 	return nil
 }
 
-type Argument struct{}
+type Argument struct {
+	Identifier *Token
+	Default    *Expression
+	Tokens     Tokens
+}
 
 func (a *Argument) parse(r *rParser) error {
+	if !r.Accept(TokenIdentifier) && !r.AcceptToken(parser.Token{Type: TokenEllipsis, Data: "..."}) {
+		return r.Error("Argument", ErrMissingIdentifier)
+	}
+
+	a.Identifier = r.GetLastToken()
+
+	if a.Identifier.Type == TokenIdentifier {
+		s := r.NewGoal()
+
+		s.AcceptRunWhitespaceNoNewLine()
+
+		if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "="}) {
+			s.AcceptRunWhitespaceNoNewLine()
+
+			r.Score(s)
+
+			s = r.NewGoal()
+			a.Default = new(Expression)
+
+			if err := a.Default.parse(&s); err != nil {
+				return r.Error("Argument", err)
+			}
+
+			r.Score(s)
+		}
+	}
+
+	a.Tokens = r.ToTokens()
+
 	return nil
 }
 
@@ -421,4 +454,5 @@ var (
 	ErrMissingOpeningParen = errors.New("missing opening paren")
 	ErrMissingClosingParen = errors.New("missing closing paren")
 	ErrMissingIn           = errors.New("missing in keyword")
+	ErrMissingIdentifier   = errors.New("missing identifier")
 )
