@@ -450,7 +450,7 @@ func (a *AssignmentExpression) parse(r *rParser) error {
 
 	s.AcceptRunWhitespaceNoNewLine()
 
-	if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "="}) {
+	if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "="}) || s.AcceptToken(parser.Token{Type: TokenOperator, Data: "<-"}) || s.AcceptToken(parser.Token{Type: TokenOperator, Data: "<<-"}) || s.AcceptToken(parser.Token{Type: TokenOperator, Data: "->"}) || s.AcceptToken(parser.Token{Type: TokenOperator, Data: "->>"}) {
 		s.AcceptRunWhitespaceNoNewLine()
 
 		r.Score(s)
