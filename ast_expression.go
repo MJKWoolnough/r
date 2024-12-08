@@ -431,9 +431,42 @@ func (a *Argument) parse(r *rParser) error {
 	return nil
 }
 
-type AssignmentExpression struct{}
+type AssignmentExpression struct {
+	ConditionalExpression ConditionalExpression
+	AssignmentExpression  *AssignmentExpression
+	Tokens                Tokens
+}
 
 func (a *AssignmentExpression) parse(r *rParser) error {
+	s := r.NewGoal()
+
+	if err := a.ConditionalExpression.parse(&s); err != nil {
+		return r.Error("AssignmentExpression", err)
+	}
+
+	r.Score(s)
+
+	s = r.NewGoal()
+
+	s.AcceptRunWhitespaceNoNewLine()
+
+	if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "="}) {
+		s.AcceptRunWhitespaceNoNewLine()
+
+		r.Score(s)
+
+		s = r.NewGoal()
+		a.AssignmentExpression = new(AssignmentExpression)
+
+		if err := a.AssignmentExpression.parse(&s); err != nil {
+			return r.Error("AssignmentExpression", err)
+		}
+
+		r.Score(s)
+	}
+
+	a.Tokens = r.ToTokens()
+
 	return nil
 }
 
