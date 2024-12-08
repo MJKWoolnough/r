@@ -1,12 +1,15 @@
+// Package r implements an R tokeniser and parser.
 package r
 
 import "vimagination.zapto.org/parser"
 
+// File represents a parsed R file.
 type File struct {
 	Statements []Expression
 	Tokens     Tokens
 }
 
+// Parse parses R input into AST.
 func Parse(t Tokeniser) (*File, error) {
 	r, err := newRParser(t)
 	if err != nil {
