@@ -410,18 +410,24 @@ func TestTokeniser(t *testing.T) {
 			},
 		},
 		{ // 39
-			"%\n%",
+			"<<",
 			[]parser.Token{
 				{Type: parser.TokenError, Data: "invalid operator"},
 			},
 		},
 		{ // 40
+			"%\n%",
+			[]parser.Token{
+				{Type: parser.TokenError, Data: "invalid operator"},
+			},
+		},
+		{ // 41
 			"@",
 			[]parser.Token{
 				{Type: parser.TokenError, Data: "invalid character"},
 			},
 		},
-		{ // 41
+		{ // 42
 			"([{}])]",
 			[]parser.Token{
 				{Type: TokenGrouping, Data: "("},
@@ -433,28 +439,28 @@ func TestTokeniser(t *testing.T) {
 				{Type: parser.TokenError, Data: "invalid character"},
 			},
 		},
-		{ // 42
+		{ // 43
 			"(",
 			[]parser.Token{
 				{Type: TokenGrouping, Data: "("},
 				{Type: parser.TokenError, Data: "unexpected EOF"},
 			},
 		},
-		{ // 43
+		{ // 44
 			"[",
 			[]parser.Token{
 				{Type: TokenGrouping, Data: "["},
 				{Type: parser.TokenError, Data: "unexpected EOF"},
 			},
 		},
-		{ // 44
+		{ // 45
 			"{",
 			[]parser.Token{
 				{Type: TokenGrouping, Data: "{"},
 				{Type: parser.TokenError, Data: "unexpected EOF"},
 			},
 		},
-		{ // 45
+		{ // 46
 			"{]",
 			[]parser.Token{
 				{Type: TokenGrouping, Data: "{"},
