@@ -288,7 +288,7 @@ func (r *rTokeniser) identifier(t *parser.Tokeniser) (parser.Token, parser.Token
 func (r *rTokeniser) operator(t *parser.Tokeniser) (parser.Token, parser.TokenFunc) {
 	if t.Accept(";,") {
 		return t.Return(TokenExpressionTerminator, r.expression)
-	} else if t.Accept("+*/^&|~$:") {
+	} else if t.Accept("+*/^&~$:") {
 	} else if t.Accept(">=!") {
 		t.Accept("=")
 	} else if t.Accept("-") {
@@ -307,6 +307,8 @@ func (r *rTokeniser) operator(t *parser.Tokeniser) (parser.Token, parser.TokenFu
 		if !t.Accept("%") {
 			return t.ReturnError(ErrInvalidOperator)
 		}
+	} else if t.Accept("|") {
+		t.Accept("|>")
 	} else if t.Accept("({[") {
 		tk := parser.Token{
 			Type: TokenGrouping,
