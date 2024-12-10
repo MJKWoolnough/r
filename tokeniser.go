@@ -34,6 +34,7 @@ const (
 	TokenKeyword
 	TokenEllipsis
 	TokenOperator
+	TokenSpecialOperator
 	TokenGrouping
 )
 
@@ -307,6 +308,8 @@ func (r *rTokeniser) operator(t *parser.Tokeniser) (parser.Token, parser.TokenFu
 		if !t.Accept("%") {
 			return t.ReturnError(ErrInvalidOperator)
 		}
+
+		return t.Return(TokenSpecialOperator, r.expression)
 	} else if t.Accept(":") {
 		t.Accept(":")
 	} else if t.Accept("&") {
