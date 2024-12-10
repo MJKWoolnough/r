@@ -708,9 +708,62 @@ func (c *ComparisonExpression) parse(r *rParser) error {
 	return nil
 }
 
-type AdditionExpression struct{}
+type AdditionType uint8
+
+const (
+	AdditionNone AdditionType = iota
+	AdditionAdd
+	AdditionSubtract
+)
+
+type AdditionExpression struct {
+	MultiplicationExpression MultiplicationExpression
+	AdditionType             AdditionType
+	AdditionExpression       *AdditionExpression
+	Tokens                   Tokens
+}
 
 func (a *AdditionExpression) parse(r *rParser) error {
+	s := r.NewGoal()
+
+	if err := a.MultiplicationExpression.parse(&s); err != nil {
+		return r.Error("AdditionExpression", err)
+	}
+
+	r.Score(s)
+
+	s = r.NewGoal()
+
+	s.AcceptRunWhitespaceNoNewLine()
+
+	if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "+"}) {
+		a.AdditionType = AdditionAdd
+	} else if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "-"}) {
+		a.AdditionType = AdditionSubtract
+	}
+
+	if a.AdditionType != AdditionNone {
+		s.AcceptRunWhitespaceNoNewLine()
+		r.Score(s)
+
+		s = r.NewGoal()
+		a.AdditionExpression = new(AdditionExpression)
+
+		if err := a.AdditionExpression.parse(&s); err != nil {
+			return r.Error("AdditionExpression", err)
+		}
+
+		r.Score(s)
+	}
+
+	a.Tokens = r.ToTokens()
+
+	return nil
+}
+
+type MultiplicationExpression struct{}
+
+func (m *MultiplicationExpression) parse(r *rParser) error {
 	return nil
 }
 
