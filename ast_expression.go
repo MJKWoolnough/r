@@ -513,9 +513,62 @@ func (f *FormulaeExpression) parse(r *rParser) error {
 	return nil
 }
 
-type OrExpression struct{}
+type OrType uint8
+
+const (
+	OrNone OrType = iota
+	OrVectorized
+	OrNotVectorized
+)
+
+type OrExpression struct {
+	AndExpression AndExpression
+	OrType        OrType
+	OrExpression  *OrExpression
+	Tokens        Tokens
+}
 
 func (o *OrExpression) parse(r *rParser) error {
+	s := r.NewGoal()
+
+	if err := o.AndExpression.parse(&s); err != nil {
+		return r.Error("OrExpression", err)
+	}
+
+	r.Score(s)
+
+	s = r.NewGoal()
+
+	s.AcceptRunWhitespaceNoNewLine()
+
+	if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "|"}) {
+		o.OrType = OrVectorized
+	} else if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "||"}) {
+		o.OrType = OrNotVectorized
+	}
+
+	if o.OrType != OrNone {
+		s.AcceptRunWhitespace()
+		r.Score(s)
+
+		s = r.NewGoal()
+		o.OrExpression = new(OrExpression)
+
+		if err := o.OrExpression.parse(&s); err != nil {
+			return r.Error("OrExpression", err)
+		}
+
+		r.Score(s)
+	}
+
+	o.Tokens = r.ToTokens()
+
+	return nil
+}
+
+type AndExpression struct{}
+
+func (a *AndExpression) parse(r *rParser) error {
 	return nil
 }
 
