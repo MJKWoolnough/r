@@ -761,9 +761,62 @@ func (a *AdditionExpression) parse(r *rParser) error {
 	return nil
 }
 
-type MultiplicationExpression struct{}
+type MultiplicationType uint8
+
+const (
+	MultiplicationNone MultiplicationType = iota
+	MultiplicationMultiply
+	MultiplicationDivide
+)
+
+type MultiplicationExpression struct {
+	PipeOrSpecialExpression  PipeOrSpecialExpression
+	MultiplicationType       MultiplicationType
+	MultiplicationExpression *MultiplicationExpression
+	Tokens                   Tokens
+}
 
 func (m *MultiplicationExpression) parse(r *rParser) error {
+	s := r.NewGoal()
+
+	if err := m.PipeOrSpecialExpression.parse(&s); err != nil {
+		return r.Error("MultiplicationExpression", err)
+	}
+
+	r.Score(s)
+
+	s = r.NewGoal()
+
+	s.AcceptRunWhitespaceNoNewLine()
+
+	if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "*"}) {
+		m.MultiplicationType = MultiplicationMultiply
+	} else if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "/"}) {
+		m.MultiplicationType = MultiplicationDivide
+	}
+
+	if m.MultiplicationType != MultiplicationNone {
+		s.AcceptRunWhitespaceNoNewLine()
+		r.Score(s)
+
+		s = r.NewGoal()
+		m.MultiplicationExpression = new(MultiplicationExpression)
+
+		if err := m.MultiplicationExpression.parse(&s); err != nil {
+			return r.Error("MultiplicationExpression", err)
+		}
+
+		r.Score(s)
+	}
+
+	m.Tokens = r.ToTokens()
+
+	return nil
+}
+
+type PipeOrSpecialExpression struct{}
+
+func (p *PipeOrSpecialExpression) parse(r *rParser) error {
 	return nil
 }
 
