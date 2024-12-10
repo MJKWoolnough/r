@@ -566,9 +566,62 @@ func (o *OrExpression) parse(r *rParser) error {
 	return nil
 }
 
-type AndExpression struct{}
+type AndType uint8
+
+const (
+	AndNone AndType = iota
+	AndVectorized
+	AndNotVectorized
+)
+
+type AndExpression struct {
+	NotExpression NotExpression
+	AndType       AndType
+	AndExpression *AndExpression
+	Tokens        Tokens
+}
 
 func (a *AndExpression) parse(r *rParser) error {
+	s := r.NewGoal()
+
+	if err := a.NotExpression.parse(&s); err != nil {
+		return r.Error("AndExpression", err)
+	}
+
+	r.Score(s)
+
+	s = r.NewGoal()
+
+	s.AcceptRunWhitespaceNoNewLine()
+
+	if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "&"}) {
+		a.AndType = AndVectorized
+	} else if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "&&"}) {
+		a.AndType = AndNotVectorized
+	}
+
+	if a.AndType != AndNone {
+		s.AcceptRunWhitespace()
+		r.Score(s)
+
+		s = r.NewGoal()
+		a.AndExpression = new(AndExpression)
+
+		if err := a.NotExpression.parse(&s); err != nil {
+			return r.Error("AndExpression", err)
+		}
+
+		r.Score(s)
+	}
+
+	a.Tokens = r.ToTokens()
+
+	return nil
+}
+
+type NotExpression struct{}
+
+func (n *NotExpression) parse(r *rParser) error {
 	return nil
 }
 
