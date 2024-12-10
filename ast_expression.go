@@ -122,7 +122,7 @@ func (f *FlowControl) parse(r *rParser) error {
 }
 
 type IfControl struct {
-	Cond   ConditionalExpression
+	Cond   FormulaeExpression
 	Expr   Expression
 	Else   *Expression
 	Tokens Tokens
@@ -185,7 +185,7 @@ func (i *IfControl) parse(r *rParser) error {
 }
 
 type WhileControl struct {
-	Cond   ConditionalExpression
+	Cond   FormulaeExpression
 	Expr   Expression
 	Tokens Tokens
 }
@@ -229,7 +229,7 @@ func (w *WhileControl) parse(r *rParser) error {
 }
 
 type RepeatControl struct {
-	Cond   ConditionalExpression
+	Cond   FormulaeExpression
 	Tokens Tokens
 }
 
@@ -252,7 +252,7 @@ func (rc *RepeatControl) parse(r *rParser) error {
 
 type ForControl struct {
 	Var    Atom
-	List   ConditionalExpression
+	List   FormulaeExpression
 	Expr   Expression
 	Tokens Tokens
 }
@@ -432,7 +432,7 @@ func (a *Argument) parse(r *rParser) error {
 }
 
 type AssignmentExpression struct {
-	ConditionalExpression ConditionalExpression
+	ConditionalExpression FormulaeExpression
 	AssignmentExpression  *AssignmentExpression
 	Tokens                Tokens
 }
@@ -470,9 +470,52 @@ func (a *AssignmentExpression) parse(r *rParser) error {
 	return nil
 }
 
-type ConditionalExpression struct{}
+type FormulaeExpression struct {
+	OrExpression       *OrExpression
+	FormulaeExpression *FormulaeExpression
+	Tokens             Tokens
+}
 
-func (c *ConditionalExpression) parse(r *rParser) error {
+func (f *FormulaeExpression) parse(r *rParser) error {
+	s := r.NewGoal()
+
+	if s.Peek() != (parser.Token{Type: TokenOperator, Data: "~"}) {
+		f.OrExpression = new(OrExpression)
+
+		if err := f.OrExpression.parse(&s); err != nil {
+			return r.Error("FormulaeExpression", err)
+		}
+
+		r.Score(s)
+
+		s = r.NewGoal()
+
+		s.AcceptRunWhitespaceNoNewLine()
+	}
+
+	if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "~"}) {
+		s.AcceptRunWhitespaceNoNewLine()
+
+		r.Score(s)
+
+		s = r.NewGoal()
+		f.FormulaeExpression = new(FormulaeExpression)
+
+		if err := f.FormulaeExpression.parse(&s); err != nil {
+			return r.Error("FormulaeExpression", err)
+		}
+
+		r.Score(s)
+	}
+
+	f.Tokens = r.ToTokens()
+
+	return nil
+}
+
+type OrExpression struct{}
+
+func (o *OrExpression) parse(r *rParser) error {
 	return nil
 }
 
