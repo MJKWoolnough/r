@@ -814,9 +814,50 @@ func (m *MultiplicationExpression) parse(r *rParser) error {
 	return nil
 }
 
-type PipeOrSpecialExpression struct{}
+type PipeOrSpecialExpression struct {
+	SequenceExpression      SequenceExpression
+	Operator                *Token
+	PipeOrSpecialExpression *PipeOrSpecialExpression
+	Tokens                  Tokens
+}
 
 func (p *PipeOrSpecialExpression) parse(r *rParser) error {
+	s := r.NewGoal()
+
+	if err := p.SequenceExpression.parse(&s); err != nil {
+		return r.Error("PipeOrSpecialExpression", err)
+	}
+
+	r.Score(s)
+
+	s = r.NewGoal()
+
+	s.AcceptRunWhitespaceNoNewLine()
+
+	if s.AcceptToken(parser.Token{}) || s.Accept(TokenSpecialOperator) {
+		p.Operator = s.GetLastToken()
+
+		s.AcceptRunWhitespaceNoNewLine()
+		r.Score(s)
+
+		s = r.NewGoal()
+		p.PipeOrSpecialExpression = new(PipeOrSpecialExpression)
+
+		if err := p.PipeOrSpecialExpression.parse(&s); err != nil {
+			return r.Error("PipeOrSpecialExpression", err)
+		}
+
+		r.Score(s)
+	}
+
+	p.Tokens = r.ToTokens()
+
+	return nil
+}
+
+type SequenceExpression struct{}
+
+func (s *SequenceExpression) parse(r *rParser) error {
 	return nil
 }
 
