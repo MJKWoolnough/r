@@ -619,9 +619,31 @@ func (a *AndExpression) parse(r *rParser) error {
 	return nil
 }
 
-type NotExpression struct{}
+type NotExpression struct {
+	Not                  bool
+	ComparisonExpression ComparisonExpression
+	Tokens               Tokens
+}
 
 func (n *NotExpression) parse(r *rParser) error {
+	n.Not = r.AcceptToken(parser.Token{Type: TokenOperator, Data: "!"})
+
+	r.AcceptRunWhitespaceNoNewLine()
+
+	s := r.NewGoal()
+
+	if err := n.ComparisonExpression.parse(&s); err != nil {
+		return r.Error("NotExpression", err)
+	}
+
+	n.Tokens = r.ToTokens()
+
+	return nil
+}
+
+type ComparisonExpression struct{}
+
+func (c *ComparisonExpression) parse(r *rParser) error {
 	return nil
 }
 
