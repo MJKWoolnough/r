@@ -636,14 +636,81 @@ func (n *NotExpression) parse(r *rParser) error {
 		return r.Error("NotExpression", err)
 	}
 
+	r.Score(s)
+
 	n.Tokens = r.ToTokens()
 
 	return nil
 }
 
-type ComparisonExpression struct{}
+type ComparisonOperator uint8
+
+const (
+	ComparisonNone ComparisonOperator = iota
+	ComparisonGreaterThan
+	ComparisonGreaterThanOrEqual
+	ComparisonLessThan
+	ComparisonLessThanOrEqual
+	ComparisonEqual
+	ComparisonNotEqual
+)
+
+type ComparisonExpression struct {
+	AdditionExpression   AdditionExpression
+	ComparisonOperator   ComparisonOperator
+	ComparisonExpression *ComparisonExpression
+	Tokens               Tokens
+}
 
 func (c *ComparisonExpression) parse(r *rParser) error {
+	s := r.NewGoal()
+
+	if err := c.AdditionExpression.parse(&s); err != nil {
+		return r.Error("ComparisonExpression", err)
+	}
+
+	r.Score(s)
+
+	s = r.NewGoal()
+
+	s.AcceptRunWhitespaceNoNewLine()
+
+	if s.AcceptToken(parser.Token{Type: TokenOperator, Data: ">"}) {
+		c.ComparisonOperator = ComparisonGreaterThan
+	} else if s.AcceptToken(parser.Token{Type: TokenOperator, Data: ">="}) {
+		c.ComparisonOperator = ComparisonGreaterThanOrEqual
+	} else if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "<"}) {
+		c.ComparisonOperator = ComparisonLessThan
+	} else if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "<="}) {
+		c.ComparisonOperator = ComparisonLessThanOrEqual
+	} else if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "=="}) {
+		c.ComparisonOperator = ComparisonEqual
+	} else if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "!="}) {
+		c.ComparisonOperator = ComparisonNotEqual
+	}
+
+	if c.ComparisonOperator != ComparisonNone {
+		s.AcceptRunWhitespaceNoNewLine()
+		r.Score(s)
+
+		s = r.NewGoal()
+		c.ComparisonExpression = new(ComparisonExpression)
+
+		if err := c.ComparisonExpression.parse(&s); err != nil {
+			return r.Error("ComparisonExpression", err)
+		}
+
+		r.Score(s)
+	}
+
+	c.Tokens = r.ToTokens()
+
+	return nil
+}
+
+type AdditionExpression struct{}
+
+func (a *AdditionExpression) parse(r *rParser) error {
 	return nil
 }
 
