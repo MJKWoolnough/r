@@ -621,7 +621,7 @@ func (a *AndExpression) parse(r *rParser) error {
 
 type NotExpression struct {
 	Not                  bool
-	ComparisonExpression ComparisonExpression
+	ComparisonExpression RelationalExpression
 	Tokens               Tokens
 }
 
@@ -643,30 +643,30 @@ func (n *NotExpression) parse(r *rParser) error {
 	return nil
 }
 
-type ComparisonOperator uint8
+type RelationalOperator uint8
 
 const (
-	ComparisonNone ComparisonOperator = iota
-	ComparisonGreaterThan
-	ComparisonGreaterThanOrEqual
-	ComparisonLessThan
-	ComparisonLessThanOrEqual
-	ComparisonEqual
-	ComparisonNotEqual
+	RelationalNone RelationalOperator = iota
+	RelationalGreaterThan
+	RelationalGreaterThanOrEqual
+	RelationalLessThan
+	RelationalLessThanOrEqual
+	RelationalEqual
+	RelationalNotEqual
 )
 
-type ComparisonExpression struct {
+type RelationalExpression struct {
 	AdditionExpression   AdditionExpression
-	ComparisonOperator   ComparisonOperator
-	ComparisonExpression *ComparisonExpression
+	ComparisonOperator   RelationalOperator
+	ComparisonExpression *RelationalExpression
 	Tokens               Tokens
 }
 
-func (c *ComparisonExpression) parse(r *rParser) error {
+func (re *RelationalExpression) parse(r *rParser) error {
 	s := r.NewGoal()
 
-	if err := c.AdditionExpression.parse(&s); err != nil {
-		return r.Error("ComparisonExpression", err)
+	if err := re.AdditionExpression.parse(&s); err != nil {
+		return r.Error("RelationalExpression", err)
 	}
 
 	r.Score(s)
@@ -676,34 +676,34 @@ func (c *ComparisonExpression) parse(r *rParser) error {
 	s.AcceptRunWhitespaceNoNewLine()
 
 	if s.AcceptToken(parser.Token{Type: TokenOperator, Data: ">"}) {
-		c.ComparisonOperator = ComparisonGreaterThan
+		re.ComparisonOperator = RelationalGreaterThan
 	} else if s.AcceptToken(parser.Token{Type: TokenOperator, Data: ">="}) {
-		c.ComparisonOperator = ComparisonGreaterThanOrEqual
+		re.ComparisonOperator = RelationalGreaterThanOrEqual
 	} else if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "<"}) {
-		c.ComparisonOperator = ComparisonLessThan
+		re.ComparisonOperator = RelationalLessThan
 	} else if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "<="}) {
-		c.ComparisonOperator = ComparisonLessThanOrEqual
+		re.ComparisonOperator = RelationalLessThanOrEqual
 	} else if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "=="}) {
-		c.ComparisonOperator = ComparisonEqual
+		re.ComparisonOperator = RelationalEqual
 	} else if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "!="}) {
-		c.ComparisonOperator = ComparisonNotEqual
+		re.ComparisonOperator = RelationalNotEqual
 	}
 
-	if c.ComparisonOperator != ComparisonNone {
+	if re.ComparisonOperator != RelationalNone {
 		s.AcceptRunWhitespaceNoNewLine()
 		r.Score(s)
 
 		s = r.NewGoal()
-		c.ComparisonExpression = new(ComparisonExpression)
+		re.ComparisonExpression = new(RelationalExpression)
 
-		if err := c.ComparisonExpression.parse(&s); err != nil {
-			return r.Error("ComparisonExpression", err)
+		if err := re.ComparisonExpression.parse(&s); err != nil {
+			return r.Error("RelationalExpression", err)
 		}
 
 		r.Score(s)
 	}
 
-	c.Tokens = r.ToTokens()
+	re.Tokens = r.ToTokens()
 
 	return nil
 }
