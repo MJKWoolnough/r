@@ -989,7 +989,7 @@ type SubsetExpression struct {
 func (se *SubsetExpression) parse(r *rParser) error {
 	s := r.NewGoal()
 
-	if err := se.ScopeExpression.parser(&s); err != nil {
+	if err := se.ScopeExpression.parse(&s); err != nil {
 		return r.Error("SubsetExpression", err)
 	}
 
@@ -1024,9 +1024,47 @@ func (se *SubsetExpression) parse(r *rParser) error {
 	return nil
 }
 
-type ScopeExpression struct{}
+type ScopeExpression struct {
+	IndexOrCallExpression IndexOrCallExpression
+	ScopeExpression       *ScopeExpression
+	Tokens                Tokens
+}
 
-func (se *ScopeExpression) parser(r *rParser) error {
+func (se *ScopeExpression) parse(r *rParser) error {
+	s := r.NewGoal()
+
+	if err := se.IndexOrCallExpression.parse(&s); err != nil {
+		return r.Error("ScopeExpression", err)
+	}
+
+	r.Score(s)
+
+	s = r.NewGoal()
+
+	s.AcceptRunWhitespaceNoNewLine()
+
+	if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "::"}) {
+		s.AcceptRunWhitespaceNoNewLine()
+		r.Score(s)
+
+		s = r.NewGoal()
+		se.ScopeExpression = new(ScopeExpression)
+
+		if err := se.ScopeExpression.parse(&s); err != nil {
+			return r.Error("ScopeExpression", err)
+		}
+
+		r.Score(s)
+	}
+
+	se.Tokens = r.ToTokens()
+
+	return nil
+}
+
+type IndexOrCallExpression struct{}
+
+func (i *IndexOrCallExpression) parse(r *rParser) error {
 	return nil
 }
 
