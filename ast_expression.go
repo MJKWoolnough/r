@@ -1127,9 +1127,23 @@ Loop:
 	return nil
 }
 
-type Atom struct{}
+type Atom struct {
+	Identifier *Token
+	Literal    *Token
+	Tokens     Tokens
+}
 
 func (a *Atom) parse(r *rParser) error {
+	if r.Accept(TokenIdentifier) {
+		a.Identifier = r.GetLastToken()
+	} else if r.Accept(TokenStringLiteral, TokenNumericLiteral, TokenIntegerLiteral, TokenComplexLiteral, TokenBooleanLiteral, TokenNull, TokenNA) {
+		a.Literal = r.GetLastToken()
+	} else {
+		return r.Error("Atom", ErrInvalidAtom)
+	}
+
+	a.Tokens = r.ToTokens()
+
 	return nil
 }
 
@@ -1151,4 +1165,5 @@ var (
 	ErrMissingClosingParen = errors.New("missing closing paren")
 	ErrMissingIn           = errors.New("missing in keyword")
 	ErrMissingIdentifier   = errors.New("missing identifier")
+	ErrInvalidAtom         = errors.New("invalid atom")
 )
