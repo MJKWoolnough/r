@@ -1062,15 +1062,86 @@ func (se *ScopeExpression) parse(r *rParser) error {
 	return nil
 }
 
-type IndexOrCallExpression struct{}
+type IndexOrCallExpression struct {
+	Atom                  *Atom
+	IndexOrCallExpression *IndexOrCallExpression
+	Index                 *Index
+	Call                  *Call
+	Tokens                Tokens
+}
 
 func (i *IndexOrCallExpression) parse(r *rParser) error {
+	s := r.NewGoal()
+	i.Atom = new(Atom)
+
+	if err := i.Atom.parse(&s); err != nil {
+		return r.Error("IndexOrCallExpression", err)
+	}
+
+	r.Score(s)
+
+Loop:
+	for {
+		i.Tokens = r.ToTokens()
+		s = r.NewGoal()
+
+		s.AcceptRunWhitespaceNoNewLine()
+
+		var (
+			index *Index
+			call  *Call
+			err   error
+		)
+
+		switch s.Peek() {
+		case parser.Token{Type: TokenGrouping, Data: "["}, parser.Token{Type: TokenGrouping, Data: "[["}:
+			r.Score(s)
+
+			s = r.NewGoal()
+			index = new(Index)
+			err = index.parse(&s)
+		case parser.Token{Type: TokenGrouping, Data: "("}:
+			r.Score(s)
+
+			s = r.NewGoal()
+			call = new(Call)
+			err = call.parse(&s)
+		default:
+
+			break Loop
+		}
+
+		if err != nil {
+			return r.Error("IndexOrCallExpression", err)
+		}
+
+		r.Score(s)
+
+		i = &IndexOrCallExpression{
+			IndexOrCallExpression: i,
+			Index:                 index,
+			Call:                  call,
+		}
+	}
+
 	return nil
 }
 
 type Atom struct{}
 
 func (a *Atom) parse(r *rParser) error {
+	return nil
+}
+
+type Index struct{}
+
+func (i *Index) parse(r *rParser) error {
+	return nil
+}
+
+type Call struct{}
+
+func (c *Call) parse(r *rParser) error {
 	return nil
 }
 
