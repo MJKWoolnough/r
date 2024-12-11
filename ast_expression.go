@@ -893,9 +893,49 @@ func (se *SequenceExpression) parse(r *rParser) error {
 	return nil
 }
 
-type UnaryExpression struct{}
+type UnaryType uint8
+
+const (
+	UnaryNone UnaryType = iota
+	UnaryAdd
+	UnaryMinus
+)
+
+type UnaryExpression struct {
+	UnaryType       UnaryType
+	UnaryExpression *UnaryExpression
+	Tokens          Tokens
+}
 
 func (u *UnaryExpression) parse(r *rParser) error {
+	s := r.NewGoal()
+
+	if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "+"}) {
+		u.UnaryType = UnaryAdd
+		s.AcceptRunWhitespaceNoNewLine()
+	} else if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "-"}) {
+		u.UnaryType = UnaryMinus
+		s.AcceptRunWhitespaceNoNewLine()
+	}
+
+	r.Score(s)
+
+	s = r.NewGoal()
+
+	if err := u.UnaryExpression.parse(&s); err != nil {
+		return r.Error("UnaryExpression", err)
+	}
+
+	r.Score(s)
+
+	u.Tokens = r.ToTokens()
+
+	return nil
+}
+
+type ExponentiationExpression struct{}
+
+func (e *ExponentiationExpression) parse(r *rParser) error {
 	return nil
 }
 
