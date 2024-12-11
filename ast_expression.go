@@ -933,9 +933,47 @@ func (u *UnaryExpression) parse(r *rParser) error {
 	return nil
 }
 
-type ExponentiationExpression struct{}
+type ExponentiationExpression struct {
+	SubsetExpression         SubsetExpression
+	ExponentiationExpression *ExponentiationExpression
+	Tokens                   Tokens
+}
 
 func (e *ExponentiationExpression) parse(r *rParser) error {
+	s := r.NewGoal()
+
+	if err := e.SubsetExpression.parse(&s); err != nil {
+		return r.Error("ExponentiationExpression", err)
+	}
+
+	r.Score(s)
+
+	s = r.NewGoal()
+
+	s.AcceptRunWhitespaceNoNewLine()
+
+	if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "^"}) {
+		s.AcceptRunWhitespaceNoNewLine()
+		r.Score(s)
+
+		s = r.NewGoal()
+		e.ExponentiationExpression = new(ExponentiationExpression)
+
+		if err := e.ExponentiationExpression.parse(&s); err != nil {
+			return r.Error("ExponentiationExpression", err)
+		}
+
+		r.Score(s)
+	}
+
+	e.Tokens = r.ToTokens()
+
+	return nil
+}
+
+type SubsetExpression struct{}
+
+func (se *SubsetExpression) parse(r *rParser) error {
 	return nil
 }
 
