@@ -133,24 +133,6 @@ Loop:
 	}
 }
 
-func (r *rParser) Skip() {
-	r.next()
-}
-
-func (r *rParser) ExceptRun(ts ...parser.TokenType) parser.TokenType {
-	for {
-		tt := r.next().Type
-
-		for _, pt := range ts {
-			if pt == tt || tt < 0 {
-				r.backup()
-
-				return tt
-			}
-		}
-	}
-}
-
 func (r *rParser) AcceptToken(tk parser.Token) bool {
 	if r.next().Token == tk {
 		return true
