@@ -971,9 +971,62 @@ func (e *ExponentiationExpression) parse(r *rParser) error {
 	return nil
 }
 
-type SubsetExpression struct{}
+type SubsetType uint8
+
+const (
+	SubsetNone SubsetType = iota
+	SubsetList
+	SubsetStructure
+)
+
+type SubsetExpression struct {
+	ScopeExpression  ScopeExpression
+	SubsetType       SubsetType
+	SubsetExpression *SubsetExpression
+	Tokens           Tokens
+}
 
 func (se *SubsetExpression) parse(r *rParser) error {
+	s := r.NewGoal()
+
+	if err := se.ScopeExpression.parser(&s); err != nil {
+		return r.Error("SubsetExpression", err)
+	}
+
+	r.Score(s)
+
+	s = r.NewGoal()
+
+	s.AcceptRunWhitespaceNoNewLine()
+
+	if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "$"}) {
+		se.SubsetType = SubsetList
+	} else if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "@"}) {
+		se.SubsetType = SubsetStructure
+	}
+
+	if se.SubsetType != SubsetNone {
+		s.AcceptRunWhitespaceNoNewLine()
+		r.Score(s)
+
+		s = r.NewGoal()
+		se.SubsetExpression = new(SubsetExpression)
+
+		if err := se.SubsetExpression.parse(&s); err != nil {
+			return r.Error("SubsetExpression", err)
+		}
+
+		r.Score(s)
+	}
+
+	se.Tokens = r.ToTokens()
+
+	return nil
+}
+
+type ScopeExpression struct{}
+
+func (se *ScopeExpression) parser(r *rParser) error {
 	return nil
 }
 
