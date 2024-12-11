@@ -855,9 +855,47 @@ func (p *PipeOrSpecialExpression) parse(r *rParser) error {
 	return nil
 }
 
-type SequenceExpression struct{}
+type SequenceExpression struct {
+	UnaryExpression    UnaryExpression
+	SequenceExpression *SequenceExpression
+	Tokens             Tokens
+}
 
-func (s *SequenceExpression) parse(r *rParser) error {
+func (se *SequenceExpression) parse(r *rParser) error {
+	s := r.NewGoal()
+
+	if err := se.UnaryExpression.parse(&s); err != nil {
+		return r.Error("SequenceExpression", err)
+	}
+
+	r.Score(s)
+
+	s = r.NewGoal()
+
+	s.AcceptRunWhitespaceNoNewLine()
+
+	if s.AcceptToken(parser.Token{Type: TokenOperator, Data: ":"}) {
+		s.AcceptRunWhitespaceNoNewLine()
+		r.Score(s)
+
+		s = r.NewGoal()
+		se.SequenceExpression = new(SequenceExpression)
+
+		if err := se.SequenceExpression.parse(&s); err != nil {
+			return r.Error("SequenceExpression", err)
+		}
+
+		r.Score(s)
+	}
+
+	se.Tokens = r.ToTokens()
+
+	return nil
+}
+
+type UnaryExpression struct{}
+
+func (u *UnaryExpression) parse(r *rParser) error {
 	return nil
 }
 
