@@ -1147,9 +1147,50 @@ func (a *Atom) parse(r *rParser) error {
 	return nil
 }
 
-type Index struct{}
+type Index struct {
+	Double bool
+	Args   []Arg
+	Tokens Tokens
+}
 
 func (i *Index) parse(r *rParser) error {
+	if r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "[["}) {
+		i.Double = true
+	} else {
+		r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "["})
+	}
+
+	r.AcceptRunWhitespaceNoNewLine()
+
+	for {
+		s := r.NewGoal()
+
+		var a Arg
+
+		if err := a.parse(&s); err != nil {
+			return r.Error("Index", err)
+		}
+
+		i.Args = append(i.Args, a)
+
+		r.Score(s)
+		r.AcceptRunWhitespaceNoNewLine()
+
+		if i.Double {
+			if r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "]]"}) {
+				break
+			}
+		} else if r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "]"}) {
+			break
+		} else if !r.AcceptToken(parser.Token{Type: TokenExpressionTerminator, Data: ","}) {
+			return r.Error("Index", ErrMissingComma)
+		}
+
+		r.AcceptRunWhitespaceNoNewLine()
+	}
+
+	i.Tokens = r.ToTokens()
+
 	return nil
 }
 
@@ -1159,11 +1200,18 @@ func (c *Call) parse(r *rParser) error {
 	return nil
 }
 
+type Arg struct{}
+
+func (a *Arg) parse(r *rParser) error {
+	return nil
+}
+
 var (
 	ErrMissingTerminator   = errors.New("missing terminator")
 	ErrMissingOpeningParen = errors.New("missing opening paren")
 	ErrMissingClosingParen = errors.New("missing closing paren")
 	ErrMissingIn           = errors.New("missing in keyword")
 	ErrMissingIdentifier   = errors.New("missing identifier")
+	ErrMissingComma        = errors.New("missing comma")
 	ErrInvalidAtom         = errors.New("invalid atom")
 )
