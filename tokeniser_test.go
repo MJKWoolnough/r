@@ -500,6 +500,13 @@ func TestTokeniser(t *testing.T) {
 				{Type: parser.TokenError, Data: "invalid character"},
 			},
 		},
+		{ // 50
+			"[[}",
+			[]parser.Token{
+				{Type: TokenGrouping, Data: "[["},
+				{Type: parser.TokenError, Data: "invalid character"},
+			},
+		},
 	} {
 		p := parser.NewStringTokeniser(test.Input)
 
