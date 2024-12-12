@@ -1149,7 +1149,7 @@ func (a *SimpleExpression) parse(r *rParser) error {
 
 type Index struct {
 	Double bool
-	Args   []Arg
+	Args   []AssignmentExpression
 	Tokens Tokens
 }
 
@@ -1165,7 +1165,7 @@ func (i *Index) parse(r *rParser) error {
 	for {
 		s := r.NewGoal()
 
-		var a Arg
+		var a AssignmentExpression
 
 		if err := a.parse(&s); err != nil {
 			return r.Error("Index", err)
