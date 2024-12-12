@@ -48,6 +48,18 @@ type rTokeniser struct {
 	tokenDepth []byte
 }
 
+func (r *rTokeniser) lastDepth() byte {
+	if len(r.tokenDepth) == 0 {
+		return 0
+	}
+
+	d := r.tokenDepth[len(r.tokenDepth)-1]
+
+	r.tokenDepth = r.tokenDepth[:len(r.tokenDepth)-1]
+
+	return d
+}
+
 func (r *rTokeniser) expression(t *parser.Tokeniser) (parser.Token, parser.TokenFunc) {
 	if t.Peek() == -1 {
 		if len(r.tokenDepth) != 0 {
@@ -333,11 +345,7 @@ func (r *rTokeniser) operator(t *parser.Tokeniser) (parser.Token, parser.TokenFu
 
 		return t.Return(TokenGrouping, r.expression)
 	} else if t.Accept("]") {
-		if len(r.tokenDepth) == 0 {
-			return t.ReturnError(ErrInvalidCharacter)
-		}
-
-		if g := r.tokenDepth[len(r.tokenDepth)-1]; g == '#' {
+		if g := r.lastDepth(); g == '#' {
 			if !t.Accept("]") {
 				return t.ReturnError(ErrInvalidCharacter)
 			}
@@ -345,23 +353,17 @@ func (r *rTokeniser) operator(t *parser.Tokeniser) (parser.Token, parser.TokenFu
 			return t.ReturnError(ErrInvalidCharacter)
 		}
 
-		r.tokenDepth = r.tokenDepth[:len(r.tokenDepth)-1]
-
 		return t.Return(TokenGrouping, r.expression)
 	} else if t.Accept(")") {
-		if len(r.tokenDepth) == 0 || r.tokenDepth[len(r.tokenDepth)-1] != ')' {
+		if r.lastDepth() != ')' {
 			return t.ReturnError(ErrInvalidCharacter)
 		}
-
-		r.tokenDepth = r.tokenDepth[:len(r.tokenDepth)-1]
 
 		return t.Return(TokenGrouping, r.expression)
 	} else if t.Accept("}") {
-		if len(r.tokenDepth) == 0 || r.tokenDepth[len(r.tokenDepth)-1] != '}' {
+		if r.lastDepth() != '}' {
 			return t.ReturnError(ErrInvalidCharacter)
 		}
-
-		r.tokenDepth = r.tokenDepth[:len(r.tokenDepth)-1]
 
 		return t.Return(TokenGrouping, r.expression)
 	} else {
