@@ -316,35 +316,54 @@ func (r *rTokeniser) operator(t *parser.Tokeniser) (parser.Token, parser.TokenFu
 		t.Accept("&")
 	} else if t.Accept("|") {
 		t.Accept("|>")
-	} else if t.Accept("({[") {
-		tk := parser.Token{
-			Type: TokenGrouping,
-			Data: t.Get(),
-		}
-
-		switch tk.Data[0] {
-		case '(':
-			r.tokenDepth = append(r.tokenDepth, ')')
-		case '{':
-			r.tokenDepth = append(r.tokenDepth, '}')
-		case '[':
+	} else if t.Accept("[") {
+		if t.Accept("[") {
+			r.tokenDepth = append(r.tokenDepth, '#')
+		} else {
 			r.tokenDepth = append(r.tokenDepth, ']')
 		}
 
-		return tk, r.expression
-	} else if t.Accept(")}]") {
-		tk := parser.Token{
-			Type: TokenGrouping,
-			Data: t.Get(),
+		return t.Return(TokenGrouping, r.expression)
+	} else if t.Accept("(") {
+		r.tokenDepth = append(r.tokenDepth, ')')
+
+		return t.Return(TokenGrouping, r.expression)
+	} else if t.Accept("{") {
+		r.tokenDepth = append(r.tokenDepth, '}')
+
+		return t.Return(TokenGrouping, r.expression)
+	} else if t.Accept("]") {
+		if len(r.tokenDepth) == 0 {
+			return t.ReturnError(ErrInvalidCharacter)
 		}
 
-		if len(r.tokenDepth) == 0 || tk.Data[0] != r.tokenDepth[len(r.tokenDepth)-1] {
+		if g := r.tokenDepth[len(r.tokenDepth)-1]; g == '#' {
+			if !t.Accept("]") {
+				return t.ReturnError(ErrInvalidCharacter)
+			}
+		} else if g != ']' {
 			return t.ReturnError(ErrInvalidCharacter)
 		}
 
 		r.tokenDepth = r.tokenDepth[:len(r.tokenDepth)-1]
 
-		return tk, r.expression
+		return t.Return(TokenGrouping, r.expression)
+	} else if t.Accept(")") {
+		if len(r.tokenDepth) == 0 || r.tokenDepth[len(r.tokenDepth)-1] != ')' {
+			return t.ReturnError(ErrInvalidCharacter)
+		}
+
+		r.tokenDepth = r.tokenDepth[:len(r.tokenDepth)-1]
+
+		return t.Return(TokenGrouping, r.expression)
+	} else if t.Accept("}") {
+		if len(r.tokenDepth) == 0 || r.tokenDepth[len(r.tokenDepth)-1] != '}' {
+			return t.ReturnError(ErrInvalidCharacter)
+		}
+
+		r.tokenDepth = r.tokenDepth[:len(r.tokenDepth)-1]
+
+		return t.Return(TokenGrouping, r.expression)
 	} else {
 		return t.ReturnError(ErrInvalidCharacter)
 	}
