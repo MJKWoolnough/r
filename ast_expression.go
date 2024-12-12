@@ -1194,9 +1194,45 @@ func (i *Index) parse(r *rParser) error {
 	return nil
 }
 
-type Call struct{}
+type Call struct {
+	Args   []Arg
+	Tokens Tokens
+}
 
 func (c *Call) parse(r *rParser) error {
+	r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "("})
+	r.AcceptRunWhitespaceNoNewLine()
+
+	if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
+		for {
+			if tk := r.Peek(); tk == (parser.Token{Type: TokenExpressionTerminator, Data: ","}) || tk == (parser.Token{Type: TokenGrouping, Data: ")"}) {
+				c.Args = append(c.Args, Arg{})
+			} else {
+				s := r.NewGoal()
+
+				var a Arg
+
+				if err := a.parse(&s); err != nil {
+					return r.Error("Call", err)
+				}
+
+				r.Score(s)
+
+				c.Args = append(c.Args, a)
+			}
+
+			if r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
+				break
+			} else if !r.AcceptToken(parser.Token{Type: TokenExpressionTerminator, Data: ","}) {
+				return r.Error("Call", ErrMissingComma)
+			}
+
+			r.AcceptRunWhitespaceNoNewLine()
+		}
+	}
+
+	c.Tokens = r.ToTokens()
+
 	return nil
 }
 
