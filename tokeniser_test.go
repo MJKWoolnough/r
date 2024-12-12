@@ -445,11 +445,13 @@ func TestTokeniser(t *testing.T) {
 			},
 		},
 		{ // 43
-			"([{}])]",
+			"([{[[]]}])]",
 			[]parser.Token{
 				{Type: TokenGrouping, Data: "("},
 				{Type: TokenGrouping, Data: "["},
 				{Type: TokenGrouping, Data: "{"},
+				{Type: TokenGrouping, Data: "[["},
+				{Type: TokenGrouping, Data: "]]"},
 				{Type: TokenGrouping, Data: "}"},
 				{Type: TokenGrouping, Data: "]"},
 				{Type: TokenGrouping, Data: ")"},
