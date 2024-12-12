@@ -251,7 +251,7 @@ func (rc *RepeatControl) parse(r *rParser) error {
 }
 
 type ForControl struct {
-	Var    Atom
+	Var    SimpleExpression
 	List   FormulaeExpression
 	Expr   Expression
 	Tokens Tokens
@@ -1063,7 +1063,7 @@ func (se *ScopeExpression) parse(r *rParser) error {
 }
 
 type IndexOrCallExpression struct {
-	Atom                  *Atom
+	Atom                  *SimpleExpression
 	IndexOrCallExpression *IndexOrCallExpression
 	Index                 *Index
 	Call                  *Call
@@ -1072,7 +1072,7 @@ type IndexOrCallExpression struct {
 
 func (i *IndexOrCallExpression) parse(r *rParser) error {
 	s := r.NewGoal()
-	i.Atom = new(Atom)
+	i.Atom = new(SimpleExpression)
 
 	if err := i.Atom.parse(&s); err != nil {
 		return r.Error("IndexOrCallExpression", err)
@@ -1127,17 +1127,17 @@ Loop:
 	return nil
 }
 
-type Atom struct {
+type SimpleExpression struct {
 	Identifier *Token
-	Literal    *Token
+	Constant   *Token
 	Tokens     Tokens
 }
 
-func (a *Atom) parse(r *rParser) error {
+func (a *SimpleExpression) parse(r *rParser) error {
 	if r.Accept(TokenIdentifier) {
 		a.Identifier = r.GetLastToken()
 	} else if r.Accept(TokenStringLiteral, TokenNumericLiteral, TokenIntegerLiteral, TokenComplexLiteral, TokenBooleanLiteral, TokenNull, TokenNA) {
-		a.Literal = r.GetLastToken()
+		a.Constant = r.GetLastToken()
 	} else {
 		return r.Error("Atom", ErrInvalidAtom)
 	}
