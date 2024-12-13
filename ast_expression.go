@@ -431,9 +431,67 @@ func (a *Argument) parse(r *rParser) error {
 	return nil
 }
 
-type HelpExpression struct{}
+type HelpType uint8
+
+const (
+	HelpNone HelpType = iota
+	HelpUnary
+	HelpBinary
+)
+
+type HelpExpression struct {
+	HelpType             HelpType
+	AssignmentExpression AssignmentExpression
+	HelpExpression       *HelpExpression
+	Tokens               Tokens
+}
 
 func (h *HelpExpression) parse(r *rParser) error {
+	if r.AcceptToken(parser.Token{Type: TokenOperator, Data: "?"}) {
+		h.HelpType = HelpUnary
+
+		r.AcceptRunWhitespaceNoNewLine()
+
+		s := r.NewGoal()
+		h.HelpExpression = new(HelpExpression)
+
+		if err := h.HelpExpression.parse(&s); err != nil {
+			return r.Error("HelpExpression", err)
+		}
+
+		r.Score(s)
+	} else {
+		s := r.NewGoal()
+
+		if err := h.AssignmentExpression.parse(&s); err != nil {
+			return r.Error("HelpExpression", err)
+		}
+
+		r.Score(s)
+
+		s = r.NewGoal()
+
+		s.AcceptRunWhitespaceNoNewLine()
+
+		if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "?"}) {
+			s.AcceptRunWhitespaceNoNewLine()
+
+			r.Score(s)
+
+			s = r.NewGoal()
+			h.HelpType = HelpBinary
+			h.HelpExpression = new(HelpExpression)
+
+			if err := h.HelpExpression.parse(&s); err != nil {
+				return r.Error("HelpExpression", err)
+			}
+
+			r.Score(s)
+		}
+	}
+
+	h.Tokens = r.ToTokens()
+
 	return nil
 }
 
