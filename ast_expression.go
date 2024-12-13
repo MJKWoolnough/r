@@ -431,6 +431,12 @@ func (a *Argument) parse(r *rParser) error {
 	return nil
 }
 
+type HelpExpression struct{}
+
+func (h *HelpExpression) parse(r *rParser) error {
+	return nil
+}
+
 type AssignmentExpression struct {
 	ConditionalExpression FormulaeExpression
 	AssignmentExpression  *AssignmentExpression
@@ -1152,7 +1158,7 @@ func (a *SimpleExpression) parse(r *rParser) error {
 
 type Index struct {
 	Double bool
-	Args   []AssignmentExpression
+	Args   []HelpExpression
 	Tokens Tokens
 }
 
@@ -1169,13 +1175,13 @@ func (i *Index) parse(r *rParser) error {
 		for {
 			s := r.NewGoal()
 
-			var a AssignmentExpression
+			var h HelpExpression
 
-			if err := a.parse(&s); err != nil {
+			if err := h.parse(&s); err != nil {
 				return r.Error("Index", err)
 			}
 
-			i.Args = append(i.Args, a)
+			i.Args = append(i.Args, h)
 
 			r.Score(s)
 			r.AcceptRunWhitespaceNoNewLine()
@@ -1242,9 +1248,9 @@ func (c *Call) parse(r *rParser) error {
 }
 
 type Arg struct {
-	AssignmentExpression *AssignmentExpression
-	Ellipsis             *Token
-	Tokens               Tokens
+	HelpExpression *HelpExpression
+	Ellipsis       *Token
+	Tokens         Tokens
 }
 
 func (a *Arg) parse(r *rParser) error {
@@ -1252,9 +1258,9 @@ func (a *Arg) parse(r *rParser) error {
 		a.Ellipsis = r.GetLastToken()
 	} else {
 		s := r.NewGoal()
-		a.AssignmentExpression = new(AssignmentExpression)
+		a.HelpExpression = new(HelpExpression)
 
-		if err := a.AssignmentExpression.parse(&s); err != nil {
+		if err := a.HelpExpression.parse(&s); err != nil {
 			return r.Error("Arg", err)
 		}
 
