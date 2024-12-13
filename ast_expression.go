@@ -1130,6 +1130,7 @@ Loop:
 type SimpleExpression struct {
 	Identifier *Token
 	Constant   *Token
+	Ellipsis   *Token
 	Tokens     Tokens
 }
 
@@ -1138,6 +1139,8 @@ func (a *SimpleExpression) parse(r *rParser) error {
 		a.Identifier = r.GetLastToken()
 	} else if r.Accept(TokenStringLiteral, TokenNumericLiteral, TokenIntegerLiteral, TokenComplexLiteral, TokenBooleanLiteral, TokenNull, TokenNA) {
 		a.Constant = r.GetLastToken()
+	} else if r.Accept(TokenEllipsis) {
+		a.Ellipsis = r.GetLastToken()
 	} else {
 		return r.Error("Atom", ErrInvalidAtom)
 	}
