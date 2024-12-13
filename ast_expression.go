@@ -1162,31 +1162,33 @@ func (i *Index) parse(r *rParser) error {
 
 	r.AcceptRunWhitespaceNoNewLine()
 
-	for {
-		s := r.NewGoal()
+	if i.Double || !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "]"}) {
+		for {
+			s := r.NewGoal()
 
-		var a AssignmentExpression
+			var a AssignmentExpression
 
-		if err := a.parse(&s); err != nil {
-			return r.Error("Index", err)
-		}
-
-		i.Args = append(i.Args, a)
-
-		r.Score(s)
-		r.AcceptRunWhitespaceNoNewLine()
-
-		if i.Double {
-			if r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "]]"}) {
-				break
+			if err := a.parse(&s); err != nil {
+				return r.Error("Index", err)
 			}
-		} else if r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "]"}) {
-			break
-		} else if !r.AcceptToken(parser.Token{Type: TokenExpressionTerminator, Data: ","}) {
-			return r.Error("Index", ErrMissingComma)
-		}
 
-		r.AcceptRunWhitespaceNoNewLine()
+			i.Args = append(i.Args, a)
+
+			r.Score(s)
+			r.AcceptRunWhitespaceNoNewLine()
+
+			if i.Double {
+				if r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "]]"}) {
+					break
+				}
+			} else if r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "]"}) {
+				break
+			} else if !r.AcceptToken(parser.Token{Type: TokenExpressionTerminator, Data: ","}) {
+				return r.Error("Index", ErrMissingComma)
+			}
+
+			r.AcceptRunWhitespaceNoNewLine()
+		}
 	}
 
 	i.Tokens = r.ToTokens()
