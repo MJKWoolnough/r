@@ -349,7 +349,7 @@ func TestTokeniser(t *testing.T) {
 			},
 		},
 		{ // 38
-			"+ - * / ^ > >= < <= == != ! & && | ~ -> <- ->> <<- $ : :: || |> @ = ?",
+			"+ - * / ^ > >= < <= == != ! & && | ~ -> <- ->> <<- $ : :: || |> @ = ? ??",
 			[]parser.Token{
 				{Type: TokenOperator, Data: "+"},
 				{Type: TokenWhitespace, Data: " "},
@@ -406,6 +406,8 @@ func TestTokeniser(t *testing.T) {
 				{Type: TokenOperator, Data: "="},
 				{Type: TokenWhitespace, Data: " "},
 				{Type: TokenOperator, Data: "?"},
+				{Type: TokenWhitespace, Data: " "},
+				{Type: TokenOperator, Data: "??"},
 				{Type: parser.TokenDone, Data: ""},
 			},
 		},
