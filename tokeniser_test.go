@@ -439,7 +439,7 @@ func TestTokeniser(t *testing.T) {
 			},
 		},
 		{ // 42
-			"?",
+			"£",
 			[]parser.Token{
 				{Type: parser.TokenError, Data: "invalid character"},
 			},
