@@ -1236,9 +1236,28 @@ func (c *Call) parse(r *rParser) error {
 	return nil
 }
 
-type Arg struct{}
+type Arg struct {
+	AssignmentExpression *AssignmentExpression
+	Ellipsis             *Token
+	Tokens               Tokens
+}
 
 func (a *Arg) parse(r *rParser) error {
+	if r.Accept(TokenEllipsis) {
+		a.Ellipsis = r.GetLastToken()
+	} else {
+		s := r.NewGoal()
+		a.AssignmentExpression = new(AssignmentExpression)
+
+		if err := a.AssignmentExpression.parse(&s); err != nil {
+			return r.Error("Arg", err)
+		}
+
+		r.Score(s)
+	}
+
+	a.Tokens = r.ToTokens()
+
 	return nil
 }
 
