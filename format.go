@@ -37,7 +37,7 @@ func (a AndType) printType(w io.Writer, _ bool) {
 }
 
 func (m MultiplicationType) String() string {
-	switch a {
+	switch m {
 	case MultiplicationNone:
 		return "MultiplicationNone"
 	case MultiplicationMultiply:
@@ -51,4 +51,21 @@ func (m MultiplicationType) String() string {
 
 func (m MultiplicationType) printType(w io.Writer, _ bool) {
 	io.WriteString(w, m.String())
+}
+
+func (o OrType) String() string {
+	switch o {
+	case OrNone:
+		return "OrNone"
+	case OrVectorized:
+		return "OrVectorized"
+	case OrNotVectorized:
+		return "OrNotVectorized"
+	default:
+		return "Unknown"
+	}
+}
+
+func (o OrType) printType(w io.Writer, _ bool) {
+	io.WriteString(w, o.String())
 }
