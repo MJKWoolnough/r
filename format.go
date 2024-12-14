@@ -111,3 +111,20 @@ func (r RelationalOperator) String() string {
 func (r RelationalOperator) printType(w io.Writer, _ bool) {
 	io.WriteString(w, r.String())
 }
+
+func (s SubsetType) String() string {
+	switch s {
+	case SubsetNone:
+		return "SubsetNone"
+	case SubsetList:
+		return "SubsetList"
+	case SubsetStructure:
+		return "SubsetStructure"
+	default:
+		return "Unknown"
+	}
+}
+
+func (s SubsetType) printType(w io.Writer, _ bool) {
+	io.WriteString(w, s.String())
+}
