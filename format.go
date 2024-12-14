@@ -86,3 +86,28 @@ func (q QueryType) String() string {
 func (q QueryType) printType(w io.Writer, _ bool) {
 	io.WriteString(w, q.String())
 }
+
+func (r RelationalOperator) String() string {
+	switch r {
+	case RelationalNone:
+		return "RelationalNone"
+	case RelationalGreaterThan:
+		return "RelationalGreaterThan"
+	case RelationalGreaterThanOrEqual:
+		return "RelationalGreaterThanOrEqual"
+	case RelationalLessThan:
+		return "RelationalLessThan"
+	case RelationalLessThanOrEqual:
+		return "RelationalLessThanOrEqual"
+	case RelationalEqual:
+		return "RelationalEqual"
+	case RelationalNotEqual:
+		return "RelationalNotEqual"
+	default:
+		return "Unknown"
+	}
+}
+
+func (r RelationalOperator) printType(w io.Writer, _ bool) {
+	io.WriteString(w, r.String())
+}
