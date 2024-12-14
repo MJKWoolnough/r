@@ -69,3 +69,20 @@ func (o OrType) String() string {
 func (o OrType) printType(w io.Writer, _ bool) {
 	io.WriteString(w, o.String())
 }
+
+func (q QueryType) String() string {
+	switch q {
+	case QueryNone:
+		return "QueryNone"
+	case QueryUnary:
+		return "QueryUnary"
+	case QueryBinary:
+		return "QueryBinary"
+	default:
+		return "Unknown"
+	}
+}
+
+func (q QueryType) printType(w io.Writer, _ bool) {
+	io.WriteString(w, q.String())
+}
