@@ -35,3 +35,20 @@ func (a AndType) String() string {
 func (a AndType) printType(w io.Writer, _ bool) {
 	io.WriteString(w, a.String())
 }
+
+func (m MultiplicationType) String() string {
+	switch a {
+	case MultiplicationNone:
+		return "MultiplicationNone"
+	case MultiplicationMultiply:
+		return "MultiplicationMultiply"
+	case MultiplicationDivide:
+		return "MultiplicationDivide"
+	default:
+		return "Unknown"
+	}
+}
+
+func (m MultiplicationType) printType(w io.Writer, _ bool) {
+	io.WriteString(w, m.String())
+}
