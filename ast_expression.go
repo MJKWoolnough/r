@@ -431,40 +431,40 @@ func (a *Argument) parse(r *rParser) error {
 	return nil
 }
 
-type HelpType uint8
+type QueryType uint8
 
 const (
-	HelpNone HelpType = iota
-	HelpUnary
-	HelpBinary
+	QueryNone QueryType = iota
+	QueryUnary
+	QueryBinary
 )
 
-type HelpExpression struct {
-	HelpType             HelpType
+type QueryExpression struct {
+	QueryType            QueryType
 	AssignmentExpression AssignmentExpression
-	HelpExpression       *HelpExpression
+	QueryExpression      *QueryExpression
 	Tokens               Tokens
 }
 
-func (h *HelpExpression) parse(r *rParser) error {
+func (q *QueryExpression) parse(r *rParser) error {
 	if r.AcceptToken(parser.Token{Type: TokenOperator, Data: "?"}) {
-		h.HelpType = HelpUnary
+		q.QueryType = QueryUnary
 
 		r.AcceptRunWhitespaceNoNewLine()
 
 		s := r.NewGoal()
-		h.HelpExpression = new(HelpExpression)
+		q.QueryExpression = new(QueryExpression)
 
-		if err := h.HelpExpression.parse(&s); err != nil {
-			return r.Error("HelpExpression", err)
+		if err := q.QueryExpression.parse(&s); err != nil {
+			return r.Error("QueryExpression", err)
 		}
 
 		r.Score(s)
 	} else {
 		s := r.NewGoal()
 
-		if err := h.AssignmentExpression.parse(&s); err != nil {
-			return r.Error("HelpExpression", err)
+		if err := q.AssignmentExpression.parse(&s); err != nil {
+			return r.Error("QueryExpression", err)
 		}
 
 		r.Score(s)
@@ -479,18 +479,18 @@ func (h *HelpExpression) parse(r *rParser) error {
 			r.Score(s)
 
 			s = r.NewGoal()
-			h.HelpType = HelpBinary
-			h.HelpExpression = new(HelpExpression)
+			q.QueryType = QueryBinary
+			q.QueryExpression = new(QueryExpression)
 
-			if err := h.HelpExpression.parse(&s); err != nil {
-				return r.Error("HelpExpression", err)
+			if err := q.QueryExpression.parse(&s); err != nil {
+				return r.Error("QueryExpression", err)
 			}
 
 			r.Score(s)
 		}
 	}
 
-	h.Tokens = r.ToTokens()
+	q.Tokens = r.ToTokens()
 
 	return nil
 }
@@ -1216,7 +1216,7 @@ func (a *SimpleExpression) parse(r *rParser) error {
 
 type Index struct {
 	Double bool
-	Args   []HelpExpression
+	Args   []QueryExpression
 	Tokens Tokens
 }
 
@@ -1233,7 +1233,7 @@ func (i *Index) parse(r *rParser) error {
 		for {
 			s := r.NewGoal()
 
-			var h HelpExpression
+			var h QueryExpression
 
 			if err := h.parse(&s); err != nil {
 				return r.Error("Index", err)
@@ -1306,9 +1306,9 @@ func (c *Call) parse(r *rParser) error {
 }
 
 type Arg struct {
-	HelpExpression *HelpExpression
-	Ellipsis       *Token
-	Tokens         Tokens
+	QueryExpression *QueryExpression
+	Ellipsis        *Token
+	Tokens          Tokens
 }
 
 func (a *Arg) parse(r *rParser) error {
@@ -1316,9 +1316,9 @@ func (a *Arg) parse(r *rParser) error {
 		a.Ellipsis = r.GetLastToken()
 	} else {
 		s := r.NewGoal()
-		a.HelpExpression = new(HelpExpression)
+		a.QueryExpression = new(QueryExpression)
 
-		if err := a.HelpExpression.parse(&s); err != nil {
+		if err := a.QueryExpression.parse(&s); err != nil {
 			return r.Error("Arg", err)
 		}
 
