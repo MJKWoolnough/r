@@ -721,7 +721,7 @@ const (
 
 type RelationalExpression struct {
 	AdditionExpression   AdditionExpression
-	ComparisonOperator   RelationalOperator
+	RelationalOperator   RelationalOperator
 	ComparisonExpression *RelationalExpression
 	Tokens               Tokens
 }
@@ -740,20 +740,20 @@ func (re *RelationalExpression) parse(r *rParser) error {
 	s.AcceptRunWhitespaceNoNewLine()
 
 	if s.AcceptToken(parser.Token{Type: TokenOperator, Data: ">"}) {
-		re.ComparisonOperator = RelationalGreaterThan
+		re.RelationalOperator = RelationalGreaterThan
 	} else if s.AcceptToken(parser.Token{Type: TokenOperator, Data: ">="}) {
-		re.ComparisonOperator = RelationalGreaterThanOrEqual
+		re.RelationalOperator = RelationalGreaterThanOrEqual
 	} else if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "<"}) {
-		re.ComparisonOperator = RelationalLessThan
+		re.RelationalOperator = RelationalLessThan
 	} else if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "<="}) {
-		re.ComparisonOperator = RelationalLessThanOrEqual
+		re.RelationalOperator = RelationalLessThanOrEqual
 	} else if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "=="}) {
-		re.ComparisonOperator = RelationalEqual
+		re.RelationalOperator = RelationalEqual
 	} else if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "!="}) {
-		re.ComparisonOperator = RelationalNotEqual
+		re.RelationalOperator = RelationalNotEqual
 	}
 
-	if re.ComparisonOperator != RelationalNone {
+	if re.RelationalOperator != RelationalNone {
 		s.AcceptRunWhitespaceNoNewLine()
 		r.Score(s)
 
