@@ -489,8 +489,8 @@ func (f *NotExpression) printType(w io.Writer, v bool) {
 		pp.Printf("\nNot: %v", f.Not)
 	}
 
-	pp.Print("\nComparisonExpression: ")
-	f.ComparisonExpression.printType(&pp, v)
+	pp.Print("\nRelationalExpression: ")
+	f.RelationalExpression.printType(&pp, v)
 
 	pp.Print("\nTokens: ")
 	f.Tokens.printType(&pp, v)

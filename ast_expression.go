@@ -682,7 +682,7 @@ func (a *AndExpression) parse(r *rParser) error {
 
 type NotExpression struct {
 	Not                  bool
-	ComparisonExpression RelationalExpression
+	RelationalExpression RelationalExpression
 	Tokens               Tokens
 }
 
@@ -693,7 +693,7 @@ func (n *NotExpression) parse(r *rParser) error {
 
 	s := r.NewGoal()
 
-	if err := n.ComparisonExpression.parse(&s); err != nil {
+	if err := n.RelationalExpression.parse(&s); err != nil {
 		return r.Error("NotExpression", err)
 	}
 
