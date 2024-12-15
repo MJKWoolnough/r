@@ -1127,7 +1127,7 @@ func (se *ScopeExpression) parse(r *rParser) error {
 }
 
 type IndexOrCallExpression struct {
-	Atom                  *SimpleExpression
+	SimpleExpression      *SimpleExpression
 	IndexOrCallExpression *IndexOrCallExpression
 	Index                 *Index
 	Call                  *Call
@@ -1136,9 +1136,9 @@ type IndexOrCallExpression struct {
 
 func (i *IndexOrCallExpression) parse(r *rParser) error {
 	s := r.NewGoal()
-	i.Atom = new(SimpleExpression)
+	i.SimpleExpression = new(SimpleExpression)
 
-	if err := i.Atom.parse(&s); err != nil {
+	if err := i.SimpleExpression.parse(&s); err != nil {
 		return r.Error("IndexOrCallExpression", err)
 	}
 
@@ -1206,7 +1206,7 @@ func (a *SimpleExpression) parse(r *rParser) error {
 	} else if r.Accept(TokenEllipsis) {
 		a.Ellipsis = r.GetLastToken()
 	} else {
-		return r.Error("Atom", ErrInvalidAtom)
+		return r.Error("SimpleExpression", ErrInvalidAtom)
 	}
 
 	a.Tokens = r.ToTokens()
