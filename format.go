@@ -139,6 +139,20 @@ func (t Tokens) printType(w io.Writer, v bool) {
 	io.WriteString(w, "\n]")
 }
 
+type formatter interface {
+	printType(io.Writer, bool)
+	printSource(io.Writer, bool)
+}
+
+func format(f formatter, s fmt.State, v rune) {
+	switch v {
+	case 'v':
+		f.printType(s, s.Flag('+'))
+	case 's':
+		f.printSource(s, s.Flag('+'))
+	}
+}
+
 func (a AdditionType) String() string {
 	switch a {
 	case AdditionNone:
