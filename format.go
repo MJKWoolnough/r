@@ -128,3 +128,20 @@ func (s SubsetType) String() string {
 func (s SubsetType) printType(w io.Writer, _ bool) {
 	io.WriteString(w, s.String())
 }
+
+func (u UnaryType) String() string {
+	switch u {
+	case UnaryNone:
+		return "UnaryNone"
+	case UnaryAdd:
+		return "UnaryAdd"
+	case UnaryMinus:
+		return "UnaryMinus"
+	default:
+		return "Unknown"
+	}
+}
+
+func (u UnaryType) printType(w io.Writer, _ bool) {
+	io.WriteString(w, u.String())
+}
