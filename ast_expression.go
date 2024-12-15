@@ -1192,10 +1192,11 @@ Loop:
 }
 
 type SimpleExpression struct {
-	Identifier *Token
-	Constant   *Token
-	Ellipsis   *Token
-	Tokens     Tokens
+	Identifier              *Token
+	Constant                *Token
+	Ellipsis                *Token
+	ParenthesizedExpression *Expression
+	Tokens                  Tokens
 }
 
 func (a *SimpleExpression) parse(r *rParser) error {
@@ -1205,6 +1206,22 @@ func (a *SimpleExpression) parse(r *rParser) error {
 		a.Constant = r.GetLastToken()
 	} else if r.Accept(TokenEllipsis) {
 		a.Ellipsis = r.GetLastToken()
+	} else if r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "("}) {
+		r.AcceptRunWhitespaceNoNewLine()
+
+		s := r.NewGoal()
+		a.ParenthesizedExpression = new(Expression)
+
+		if err := a.ParenthesizedExpression.parse(&s); err != nil {
+			return r.Error("SimpleExpression", err)
+		}
+
+		r.Score(s)
+		r.AcceptRunWhitespaceNoNewLine()
+
+		if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "("}) {
+			return r.Error("SimpleExpression", ErrMissingClosingParen)
+		}
 	} else {
 		return r.Error("SimpleExpression", ErrInvalidAtom)
 	}
