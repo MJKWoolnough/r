@@ -233,13 +233,6 @@ func (f *Expression) printType(w io.Writer, v bool) {
 
 	pp.Print("Expression {")
 
-	if f.CompoundExpression != nil {
-		pp.Print("\nCompoundExpression: ")
-		f.CompoundExpression.printType(&pp, v)
-	} else if v {
-		pp.Print("\nCompoundExpression: nil")
-	}
-
 	if f.FlowControl != nil {
 		pp.Print("\nFlowControl: ")
 		f.FlowControl.printType(&pp, v)
@@ -429,11 +422,11 @@ func (f *IndexOrCallExpression) printType(w io.Writer, v bool) {
 
 	pp.Print("IndexOrCallExpression {")
 
-	if f.Atom != nil {
-		pp.Print("\nAtom: ")
-		f.Atom.printType(&pp, v)
+	if f.SimpleExpression != nil {
+		pp.Print("\nSimpleExpression: ")
+		f.SimpleExpression.printType(&pp, v)
 	} else if v {
-		pp.Print("\nAtom: nil")
+		pp.Print("\nSimpleExpression: nil")
 	}
 
 	if f.IndexOrCallExpression != nil {
@@ -685,6 +678,20 @@ func (f *SimpleExpression) printType(w io.Writer, v bool) {
 		f.Ellipsis.printType(&pp, v)
 	} else if v {
 		pp.Print("\nEllipsis: nil")
+	}
+
+	if f.ParenthesizedExpression != nil {
+		pp.Print("\nParenthesizedExpression: ")
+		f.ParenthesizedExpression.printType(&pp, v)
+	} else if v {
+		pp.Print("\nParenthesizedExpression: nil")
+	}
+
+	if f.CompoundExpression != nil {
+		pp.Print("\nCompoundExpression: ")
+		f.CompoundExpression.printType(&pp, v)
+	} else if v {
+		pp.Print("\nCompoundExpression: nil")
 	}
 
 	pp.Print("\nTokens: ")
