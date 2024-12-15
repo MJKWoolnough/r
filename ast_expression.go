@@ -7,7 +7,6 @@ import (
 )
 
 type Expression struct {
-	CompoundExpression   *CompoundExpression
 	FlowControl          *FlowControl
 	FunctionDefinition   *FunctionDefinition
 	AssignmentExpression *AssignmentExpression
@@ -20,8 +19,6 @@ func (e *Expression) parse(r *rParser) error {
 	s := r.NewGoal()
 
 	switch tk := r.Peek(); tk {
-	case parser.Token{Type: TokenGrouping, Data: "{"}:
-		err = e.CompoundExpression.parse(&s)
 	case parser.Token{Type: TokenKeyword, Data: "if"}, parser.Token{Type: TokenKeyword, Data: "while"}, parser.Token{Type: TokenKeyword, Data: "repeat"}, parser.Token{Type: TokenKeyword, Data: "for"}:
 		err = e.FlowControl.parse(&s)
 	case parser.Token{Type: TokenKeyword, Data: "function"}:
@@ -1196,6 +1193,7 @@ type SimpleExpression struct {
 	Constant                *Token
 	Ellipsis                *Token
 	ParenthesizedExpression *Expression
+	CompoundExpression      *CompoundExpression
 	Tokens                  Tokens
 }
 
@@ -1221,6 +1219,13 @@ func (a *SimpleExpression) parse(r *rParser) error {
 
 		if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "("}) {
 			return r.Error("SimpleExpression", ErrMissingClosingParen)
+		}
+	} else if tk := r.Peek(); tk == (parser.Token{Type: TokenGrouping, Data: "{"}) {
+		s := r.NewGoal()
+		a.CompoundExpression = new(CompoundExpression)
+
+		if err := a.CompoundExpression.parse(&s); err != nil {
+			return r.Error("SimpleExpression", err)
 		}
 	} else {
 		return r.Error("SimpleExpression", ErrInvalidAtom)
