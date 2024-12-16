@@ -7,10 +7,10 @@ import (
 )
 
 type Expression struct {
-	FlowControl          *FlowControl
-	FunctionDefinition   *FunctionDefinition
-	AssignmentExpression *AssignmentExpression
-	Tokens               Tokens
+	FlowControl        *FlowControl
+	FunctionDefinition *FunctionDefinition
+	QueryExpression    *QueryExpression
+	Tokens             Tokens
 }
 
 func (e *Expression) parse(r *rParser) error {
@@ -20,11 +20,15 @@ func (e *Expression) parse(r *rParser) error {
 
 	switch tk := r.Peek(); tk {
 	case parser.Token{Type: TokenKeyword, Data: "if"}, parser.Token{Type: TokenKeyword, Data: "while"}, parser.Token{Type: TokenKeyword, Data: "repeat"}, parser.Token{Type: TokenKeyword, Data: "for"}:
+		e.FlowControl = new(FlowControl)
 		err = e.FlowControl.parse(&s)
 	case parser.Token{Type: TokenKeyword, Data: "function"}:
+		e.FunctionDefinition = new(FunctionDefinition)
 		err = e.FunctionDefinition.parse(&s)
 	default:
-		err = e.AssignmentExpression.parse(&s)
+		e.QueryExpression = new(QueryExpression)
+
+		err = e.QueryExpression.parse(&s)
 	}
 
 	if err != nil {

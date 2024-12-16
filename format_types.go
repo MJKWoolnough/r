@@ -247,11 +247,11 @@ func (f *Expression) printType(w io.Writer, v bool) {
 		pp.Print("\nFunctionDefinition: nil")
 	}
 
-	if f.AssignmentExpression != nil {
-		pp.Print("\nAssignmentExpression: ")
-		f.AssignmentExpression.printType(&pp, v)
+	if f.QueryExpression != nil {
+		pp.Print("\nQueryExpression: ")
+		f.QueryExpression.printType(&pp, v)
 	} else if v {
-		pp.Print("\nAssignmentExpression: nil")
+		pp.Print("\nQueryExpression: nil")
 	}
 
 	pp.Print("\nTokens: ")
