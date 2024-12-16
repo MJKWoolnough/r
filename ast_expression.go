@@ -1222,7 +1222,7 @@ func (a *SimpleExpression) parse(r *rParser) error {
 		r.Score(s)
 		r.AcceptRunWhitespaceNoNewLine()
 
-		if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "("}) {
+		if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
 			return r.Error("SimpleExpression", ErrMissingClosingParen)
 		}
 	} else if tk := r.Peek(); tk == (parser.Token{Type: TokenGrouping, Data: "{"}) {
