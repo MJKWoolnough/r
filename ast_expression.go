@@ -493,15 +493,15 @@ func (q *QueryExpression) parse(r *rParser) error {
 }
 
 type AssignmentExpression struct {
-	ConditionalExpression FormulaeExpression
-	AssignmentExpression  *AssignmentExpression
-	Tokens                Tokens
+	FormulaeExpression   FormulaeExpression
+	AssignmentExpression *AssignmentExpression
+	Tokens               Tokens
 }
 
 func (a *AssignmentExpression) parse(r *rParser) error {
 	s := r.NewGoal()
 
-	if err := a.ConditionalExpression.parse(&s); err != nil {
+	if err := a.FormulaeExpression.parse(&s); err != nil {
 		return r.Error("AssignmentExpression", err)
 	}
 
