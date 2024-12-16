@@ -65,13 +65,12 @@ func (c *CompoundExpression) parse(r *rParser) error {
 		r.Score(s)
 		r.AcceptRunWhitespaceNoNewLine()
 
-		if s.AcceptToken(parser.Token{Type: TokenGrouping, Data: "}"}) {
+		if r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "}"}) {
 			break
-		} else if !s.Accept(TokenLineTerminator, TokenExpressionTerminator) {
+		} else if !r.Accept(TokenLineTerminator, TokenExpressionTerminator) {
 			return s.Error("CompoundExpression", ErrMissingTerminator)
 		}
 
-		r.Score(s)
 		r.AcceptRunWhitespace()
 	}
 
