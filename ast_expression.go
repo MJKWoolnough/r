@@ -681,15 +681,16 @@ func (a *AndExpression) parse(r *rParser) error {
 }
 
 type NotExpression struct {
-	Not                  bool
+	Nots                 uint
 	RelationalExpression RelationalExpression
 	Tokens               Tokens
 }
 
 func (n *NotExpression) parse(r *rParser) error {
-	n.Not = r.AcceptToken(parser.Token{Type: TokenOperator, Data: "!"})
-
-	r.AcceptRunWhitespaceNoNewLine()
+	for r.AcceptToken(parser.Token{Type: TokenOperator, Data: "!"}) {
+		n.Nots++
+		r.AcceptRunWhitespaceNoNewLine()
+	}
 
 	s := r.NewGoal()
 
