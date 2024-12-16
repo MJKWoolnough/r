@@ -585,11 +585,11 @@ func (f *RelationalExpression) printType(w io.Writer, v bool) {
 	pp.Print("\nRelationalOperator: ")
 	f.RelationalOperator.printType(&pp, v)
 
-	if f.ComparisonExpression != nil {
-		pp.Print("\nComparisonExpression: ")
-		f.ComparisonExpression.printType(&pp, v)
+	if f.RelationalExpression != nil {
+		pp.Print("\nRelationalExpression: ")
+		f.RelationalExpression.printType(&pp, v)
 	} else if v {
-		pp.Print("\nComparisonExpression: nil")
+		pp.Print("\nRelationalExpression: nil")
 	}
 
 	pp.Print("\nTokens: ")

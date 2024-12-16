@@ -720,7 +720,7 @@ const (
 type RelationalExpression struct {
 	AdditionExpression   AdditionExpression
 	RelationalOperator   RelationalOperator
-	ComparisonExpression *RelationalExpression
+	RelationalExpression *RelationalExpression
 	Tokens               Tokens
 }
 
@@ -756,9 +756,9 @@ func (re *RelationalExpression) parse(r *rParser) error {
 		r.Score(s)
 
 		s = r.NewGoal()
-		re.ComparisonExpression = new(RelationalExpression)
+		re.RelationalExpression = new(RelationalExpression)
 
-		if err := re.ComparisonExpression.parse(&s); err != nil {
+		if err := re.RelationalExpression.parse(&s); err != nil {
 			return r.Error("RelationalExpression", err)
 		}
 
