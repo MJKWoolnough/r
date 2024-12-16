@@ -37,10 +37,6 @@ func (ScopeExpression) queryWrappable() {}
 
 func (IndexOrCallExpression) queryWrappable() {}
 
-func (Index) queryWrappable() {}
-
-func (Call) queryWrappable() {}
-
 func (SimpleExpression) queryWrappable() {}
 
 func (CompoundExpression) queryWrappable() {}
