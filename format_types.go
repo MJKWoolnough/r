@@ -729,15 +729,25 @@ func (f *UnaryExpression) printType(w io.Writer, v bool) {
 
 	pp.Print("UnaryExpression {")
 
-	pp.Print("\nUnaryType: ")
-	f.UnaryType.printType(&pp, v)
+	if f.UnaryType == nil {
+		pp.Print("\nUnaryType: nil")
+	} else if len(f.UnaryType) > 0 {
+		pp.Print("\nUnaryType: [")
 
-	if f.UnaryExpression != nil {
-		pp.Print("\nUnaryExpression: ")
-		f.UnaryExpression.printType(&pp, v)
+		ipp := indentPrinter{&pp}
+
+		for n, e := range f.UnaryType {
+			ipp.Printf("\n%d: ", n)
+			e.printType(&ipp, v)
+		}
+
+		pp.Print("\n]")
 	} else if v {
-		pp.Print("\nUnaryExpression: nil")
+		pp.Print("\nUnaryType: []")
 	}
+
+	pp.Print("\nExponentiationExpression: ")
+	f.ExponentiationExpression.printType(&pp, v)
 
 	pp.Print("\nTokens: ")
 	f.Tokens.printType(&pp, v)

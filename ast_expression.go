@@ -963,27 +963,27 @@ const (
 )
 
 type UnaryExpression struct {
-	UnaryType       UnaryType
-	UnaryExpression *UnaryExpression
-	Tokens          Tokens
+	UnaryType                []UnaryType
+	ExponentiationExpression ExponentiationExpression
+	Tokens                   Tokens
 }
 
 func (u *UnaryExpression) parse(r *rParser) error {
-	s := r.NewGoal()
-
-	if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "+"}) {
-		u.UnaryType = UnaryAdd
-		s.AcceptRunWhitespaceNoNewLine()
-	} else if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "-"}) {
-		u.UnaryType = UnaryMinus
-		s.AcceptRunWhitespaceNoNewLine()
+	for {
+		if r.AcceptToken(parser.Token{Type: TokenOperator, Data: "+"}) {
+			u.UnaryType = append(u.UnaryType, UnaryAdd)
+			r.AcceptRunWhitespaceNoNewLine()
+		} else if r.AcceptToken(parser.Token{Type: TokenOperator, Data: "-"}) {
+			u.UnaryType = append(u.UnaryType, UnaryMinus)
+			r.AcceptRunWhitespaceNoNewLine()
+		} else {
+			break
+		}
 	}
 
-	r.Score(s)
+	s := r.NewGoal()
 
-	s = r.NewGoal()
-
-	if err := u.UnaryExpression.parse(&s); err != nil {
+	if err := u.ExponentiationExpression.parse(&s); err != nil {
 		return r.Error("UnaryExpression", err)
 	}
 
