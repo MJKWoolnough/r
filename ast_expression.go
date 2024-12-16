@@ -1231,6 +1231,8 @@ func (a *SimpleExpression) parse(r *rParser) error {
 		if err := a.CompoundExpression.parse(&s); err != nil {
 			return r.Error("SimpleExpression", err)
 		}
+
+		r.Score(s)
 	} else {
 		return r.Error("SimpleExpression", ErrInvalidAtom)
 	}
