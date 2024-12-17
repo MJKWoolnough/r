@@ -16,7 +16,23 @@ func (a AssignmentExpression) printSource(w io.Writer, v bool) {}
 
 func (c Call) printSource(w io.Writer, v bool) {}
 
-func (c CompoundExpression) printSource(w io.Writer, v bool) {}
+func (c CompoundExpression) printSource(w io.Writer, v bool) {
+	if len(c.Expressions) == 0 {
+		return
+	}
+
+	ipp := indentPrinter{w}
+
+	io.WriteString(&ipp, "{\n")
+	c.Expressions[0].printSource(&ipp, v)
+
+	for _, e := range c.Expressions[1:] {
+		io.WriteString(&ipp, "\n")
+		e.printSource(&ipp, v)
+	}
+
+	io.WriteString(w, "}")
+}
 
 func (e ExponentiationExpression) printSource(w io.Writer, v bool) {}
 
