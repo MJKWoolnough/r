@@ -99,6 +99,13 @@ func TestSimpleExpression(t *testing.T) {
 				Tokens: tk[:3],
 			}
 		}},
+		{"in", func(t *test, tk Tokens) { // 14
+			t.Err = Error{
+				Err:     ErrInvalidSimpleExpression,
+				Parsing: "SimpleExpression",
+				Token:   tk[0],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var se SimpleExpression
 
