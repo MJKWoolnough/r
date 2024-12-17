@@ -2,6 +2,129 @@ package r
 
 import "testing"
 
+func TestCompoundExpression(t *testing.T) {
+	doTests(t, []sourceFn{
+		{"{a}", func(t *test, tk Tokens) { // 1
+			t.Output = CompoundExpression{
+				Expressions: []Expression{
+					{
+						QueryExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[1],
+							Tokens:     tk[1:2],
+						}),
+						Tokens: tk[1:2],
+					},
+				},
+				Tokens: tk[:3],
+			}
+		}},
+		{"{ a }", func(t *test, tk Tokens) { // 2
+			t.Output = CompoundExpression{
+				Expressions: []Expression{
+					{
+						QueryExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[2],
+							Tokens:     tk[2:3],
+						}),
+						Tokens: tk[2:3],
+					},
+				},
+				Tokens: tk[:5],
+			}
+		}},
+		{"{a;b}", func(t *test, tk Tokens) { // 3
+			t.Output = CompoundExpression{
+				Expressions: []Expression{
+					{
+						QueryExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[1],
+							Tokens:     tk[1:2],
+						}),
+						Tokens: tk[1:2],
+					},
+					{
+						QueryExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[3],
+							Tokens:     tk[3:4],
+						}),
+						Tokens: tk[3:4],
+					},
+				},
+				Tokens: tk[:5],
+			}
+		}},
+		{"{ a ; b }", func(t *test, tk Tokens) { // 4
+			t.Output = CompoundExpression{
+				Expressions: []Expression{
+					{
+						QueryExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[2],
+							Tokens:     tk[2:3],
+						}),
+						Tokens: tk[2:3],
+					},
+					{
+						QueryExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[6],
+							Tokens:     tk[6:7],
+						}),
+						Tokens: tk[6:7],
+					},
+				},
+				Tokens: tk[:9],
+			}
+		}},
+		{"{a\nb}", func(t *test, tk Tokens) { // 5
+			t.Output = CompoundExpression{
+				Expressions: []Expression{
+					{
+						QueryExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[1],
+							Tokens:     tk[1:2],
+						}),
+						Tokens: tk[1:2],
+					},
+					{
+						QueryExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[3],
+							Tokens:     tk[3:4],
+						}),
+						Tokens: tk[3:4],
+					},
+				},
+				Tokens: tk[:5],
+			}
+		}},
+		{"{\n\ta\n\tb\n}", func(t *test, tk Tokens) { // 6
+			t.Output = CompoundExpression{
+				Expressions: []Expression{
+					{
+						QueryExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[3],
+							Tokens:     tk[3:4],
+						}),
+						Tokens: tk[3:4],
+					},
+					{
+						QueryExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[6],
+							Tokens:     tk[6:7],
+						}),
+						Tokens: tk[6:7],
+					},
+				},
+				Tokens: tk[:9],
+			}
+		}},
+	}, func(t *test) (Type, error) {
+		var ce CompoundExpression
+
+		err := ce.parse(&t.Tokens)
+
+		return ce, err
+	})
+}
+
 func TestSimpleExpression(t *testing.T) {
 	doTests(t, []sourceFn{
 		{"a", func(t *test, tk Tokens) { // 1
