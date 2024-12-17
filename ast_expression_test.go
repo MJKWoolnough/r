@@ -116,6 +116,20 @@ func TestCompoundExpression(t *testing.T) {
 				Tokens: tk[:9],
 			}
 		}},
+		{"{in}", func(t *test, tk Tokens) { // 7
+			t.Err = wrapQueryExpressionError(Error{
+				Err:     ErrInvalidSimpleExpression,
+				Parsing: "SimpleExpression",
+				Token:   tk[1],
+			})
+		}},
+		{"{a a}", func(t *test, tk Tokens) { // 8
+			t.Err = Error{
+				Err:     ErrMissingTerminator,
+				Parsing: "CompoundExpression",
+				Token:   tk[2],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var ce CompoundExpression
 
