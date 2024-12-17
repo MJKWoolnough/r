@@ -243,6 +243,13 @@ func TestSimpleExpression(t *testing.T) {
 				Token:   tk[0],
 			}
 		}},
+		{"(a b)", func(t *test, tk Tokens) { // 15
+			t.Err = Error{
+				Err:     ErrMissingClosingParen,
+				Parsing: "SimpleExpression",
+				Token:   tk[3],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var se SimpleExpression
 
