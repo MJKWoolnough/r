@@ -46,3 +46,142 @@ func doTests(t *testing.T, tests []sourceFn, fn func(*test) (Type, error)) {
 		}
 	}
 }
+
+func wrapQueryExpressionError(err Error) Error {
+	switch err.Parsing {
+	case "CompoundExpression":
+		err = Error{
+			Err:     err,
+			Parsing: "SimpleExpression",
+			Token:   err.Token,
+		}
+
+		fallthrough
+	case "SimpleExpression":
+		err = Error{
+			Err:     err,
+			Parsing: "IndexOrCallExpression",
+			Token:   err.Token,
+		}
+
+		fallthrough
+	case "IndexOrCallExpression":
+		err = Error{
+			Err:     err,
+			Parsing: "ScopeExpression",
+			Token:   err.Token,
+		}
+
+		fallthrough
+	case "ScopeExpression":
+		err = Error{
+			Err:     err,
+			Parsing: "SubsetExpression",
+			Token:   err.Token,
+		}
+
+		fallthrough
+	case "SubsetExpression":
+		err = Error{
+			Err:     err,
+			Parsing: "ExponentiationExpression",
+			Token:   err.Token,
+		}
+
+		fallthrough
+	case "ExponentiationExpression":
+		err = Error{
+			Err:     err,
+			Parsing: "UnaryExpression",
+			Token:   err.Token,
+		}
+
+		fallthrough
+	case "UnaryExpression":
+		err = Error{
+			Err:     err,
+			Parsing: "SequenceExpression",
+			Token:   err.Token,
+		}
+
+		fallthrough
+	case "SequenceExpression":
+		err = Error{
+			Err:     err,
+			Parsing: "PipeOrSpecialExpression",
+			Token:   err.Token,
+		}
+
+		fallthrough
+	case "PipeOrSpecialExpression":
+		err = Error{
+			Err:     err,
+			Parsing: "MultiplicationExpression",
+			Token:   err.Token,
+		}
+
+		fallthrough
+	case "MultiplicationExpression":
+		err = Error{
+			Err:     err,
+			Parsing: "AdditionExpression",
+			Token:   err.Token,
+		}
+
+		fallthrough
+	case "AdditionExpression":
+		err = Error{
+			Err:     err,
+			Parsing: "RelationalExpression",
+			Token:   err.Token,
+		}
+
+		fallthrough
+	case "RelationalExpression":
+		err = Error{
+			Err:     err,
+			Parsing: "NotExpression",
+			Token:   err.Token,
+		}
+
+		fallthrough
+	case "NotExpression":
+		err = Error{
+			Err:     err,
+			Parsing: "AndExpression",
+			Token:   err.Token,
+		}
+
+		fallthrough
+	case "AndExpression":
+		err = Error{
+			Err:     err,
+			Parsing: "OrExpression",
+			Token:   err.Token,
+		}
+
+		fallthrough
+	case "OrExpression":
+		err = Error{
+			Err:     err,
+			Parsing: "FormulaeExpression",
+			Token:   err.Token,
+		}
+		fallthrough
+	case "FormulaeExpression":
+		err = Error{
+			Err:     err,
+			Parsing: "AssignmentExpression",
+			Token:   err.Token,
+		}
+		fallthrough
+	case "AssignmentExpression":
+		err = Error{
+			Err:     err,
+			Parsing: "QueryExpression",
+			Token:   err.Token,
+		}
+	}
+
+	return err
+}
