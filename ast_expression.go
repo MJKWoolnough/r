@@ -1234,7 +1234,7 @@ func (a *SimpleExpression) parse(r *rParser) error {
 
 		r.Score(s)
 	} else {
-		return r.Error("SimpleExpression", ErrInvalidAtom)
+		return r.Error("SimpleExpression", ErrInvalidSimpleExpression)
 	}
 
 	a.Tokens = r.ToTokens()
@@ -1359,11 +1359,11 @@ func (a *Arg) parse(r *rParser) error {
 }
 
 var (
-	ErrMissingTerminator   = errors.New("missing terminator")
-	ErrMissingOpeningParen = errors.New("missing opening paren")
-	ErrMissingClosingParen = errors.New("missing closing paren")
-	ErrMissingIn           = errors.New("missing in keyword")
-	ErrMissingIdentifier   = errors.New("missing identifier")
-	ErrMissingComma        = errors.New("missing comma")
-	ErrInvalidAtom         = errors.New("invalid atom")
+	ErrMissingTerminator       = errors.New("missing terminator")
+	ErrMissingOpeningParen     = errors.New("missing opening paren")
+	ErrMissingClosingParen     = errors.New("missing closing paren")
+	ErrMissingIn               = errors.New("missing in keyword")
+	ErrMissingIdentifier       = errors.New("missing identifier")
+	ErrMissingComma            = errors.New("missing comma")
+	ErrInvalidSimpleExpression = errors.New("invalid simple expression")
 )
