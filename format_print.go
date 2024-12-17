@@ -54,7 +54,21 @@ func (s ScopeExpression) printSource(w io.Writer, v bool) {}
 
 func (s SequenceExpression) printSource(w io.Writer, v bool) {}
 
-func (s SimpleExpression) printSource(w io.Writer, v bool) {}
+func (s SimpleExpression) printSource(w io.Writer, v bool) {
+	if s.Identifier != nil {
+		io.WriteString(w, s.Identifier.Data)
+	} else if s.Constant != nil {
+		io.WriteString(w, s.Constant.Data)
+	} else if s.Ellipsis != nil {
+		io.WriteString(w, s.Ellipsis.Data)
+	} else if s.ParenthesizedExpression != nil {
+		io.WriteString(w, "(")
+		s.ParenthesizedExpression.printSource(w, v)
+		io.WriteString(w, ")")
+	} else if s.CompoundExpression != nil {
+		s.CompoundExpression.printSource(w, v)
+	}
+}
 
 func (s SubsetExpression) printSource(w io.Writer, v bool) {}
 
