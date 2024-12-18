@@ -1172,7 +1172,6 @@ Loop:
 			call = new(Call)
 			err = call.parse(&s)
 		default:
-
 			break Loop
 		}
 
@@ -1182,8 +1181,11 @@ Loop:
 
 		r.Score(s)
 
-		i = &IndexOrCallExpression{
-			IndexOrCallExpression: i,
+		j := new(IndexOrCallExpression)
+		*j = *i
+
+		*i = IndexOrCallExpression{
+			IndexOrCallExpression: j,
 			Index:                 index,
 			Call:                  call,
 		}
