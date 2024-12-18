@@ -275,6 +275,51 @@ func TestIndexOrCallExpression(t *testing.T) {
 				Tokens: tk[:5],
 			}
 		}},
+		{"in", func(t *test, tk Tokens) { // 7
+			t.Err = Error{
+				Err: Error{
+					Err:     ErrInvalidSimpleExpression,
+					Parsing: "SimpleExpression",
+					Token:   tk[0],
+				},
+				Parsing: "IndexOrCallExpression",
+				Token:   tk[0],
+			}
+		}},
+		{"a[in]", func(t *test, tk Tokens) { // 8
+			t.Err = Error{
+				Err: Error{
+					Err: wrapQueryExpressionError(Error{
+						Err:     ErrInvalidSimpleExpression,
+						Parsing: "SimpleExpression",
+						Token:   tk[2],
+					}),
+					Parsing: "Index",
+					Token:   tk[2],
+				},
+				Parsing: "IndexOrCallExpression",
+				Token:   tk[1],
+			}
+		}},
+		{"a(in)", func(t *test, tk Tokens) { // 9
+			t.Err = Error{
+				Err: Error{
+					Err: Error{
+						Err: wrapQueryExpressionError(Error{
+							Err:     ErrInvalidSimpleExpression,
+							Parsing: "SimpleExpression",
+							Token:   tk[2],
+						}),
+						Parsing: "Arg",
+						Token:   tk[2],
+					},
+					Parsing: "Call",
+					Token:   tk[2],
+				},
+				Parsing: "IndexOrCallExpression",
+				Token:   tk[1],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var ice IndexOrCallExpression
 
