@@ -532,6 +532,42 @@ func TestIndex(t *testing.T) {
 				Tokens: tk[:5],
 			}
 		}},
+		{"[in]", func(t *test, tk Tokens) { // 8
+			t.Err = Error{
+				Err: wrapQueryExpressionError(Error{
+					Err:     ErrInvalidSimpleExpression,
+					Parsing: "SimpleExpression",
+					Token:   tk[1],
+				}),
+				Parsing: "Index",
+				Token:   tk[1],
+			}
+		}},
+		{"[a b]", func(t *test, tk Tokens) { // 9
+			t.Err = Error{
+				Err:     ErrMissingComma,
+				Parsing: "Index",
+				Token:   tk[3],
+			}
+		}},
+		{"[[in]]", func(t *test, tk Tokens) { // 10
+			t.Err = Error{
+				Err: wrapQueryExpressionError(Error{
+					Err:     ErrInvalidSimpleExpression,
+					Parsing: "SimpleExpression",
+					Token:   tk[1],
+				}),
+				Parsing: "Index",
+				Token:   tk[1],
+			}
+		}},
+		{"[[a b]]", func(t *test, tk Tokens) { // 11
+			t.Err = Error{
+				Err:     ErrMissingClosingDoubleBracket,
+				Parsing: "Index",
+				Token:   tk[3],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var i Index
 
