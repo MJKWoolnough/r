@@ -50,7 +50,19 @@ func (i IfControl) printSource(w io.Writer, v bool) {}
 
 func (i Index) printSource(w io.Writer, v bool) {}
 
-func (i IndexOrCallExpression) printSource(w io.Writer, v bool) {}
+func (i IndexOrCallExpression) printSource(w io.Writer, v bool) {
+	if i.SimpleExpression != nil {
+		i.SimpleExpression.printSource(w, v)
+	} else if i.IndexOrCallExpression != nil {
+		i.IndexOrCallExpression.printSource(w, v)
+
+		if i.Index != nil {
+			i.Index.printSource(w, v)
+		} else if i.Call != nil {
+			i.Call.printSource(w, v)
+		}
+	}
+}
 
 func (m MultiplicationExpression) printSource(w io.Writer, v bool) {}
 
