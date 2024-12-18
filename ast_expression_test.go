@@ -139,6 +139,151 @@ func TestCompoundExpression(t *testing.T) {
 	})
 }
 
+func TestIndexOrCallExpression(t *testing.T) {
+	doTests(t, []sourceFn{
+		{"a[b]", func(t *test, tk Tokens) { // 1
+			t.Output = IndexOrCallExpression{
+				IndexOrCallExpression: &IndexOrCallExpression{
+					SimpleExpression: &SimpleExpression{
+						Identifier: &tk[0],
+						Tokens:     tk[:1],
+					},
+					Tokens: tk[:1],
+				},
+				Index: &Index{
+					Args: []QueryExpression{
+						*WrapQuery(&SimpleExpression{
+							Identifier: &tk[2],
+							Tokens:     tk[2:3],
+						}),
+					},
+					Tokens: tk[1:4],
+				},
+				Tokens: tk[:4],
+			}
+		}},
+		{"a [b]", func(t *test, tk Tokens) { // 2
+			t.Output = IndexOrCallExpression{
+				IndexOrCallExpression: &IndexOrCallExpression{
+					SimpleExpression: &SimpleExpression{
+						Identifier: &tk[0],
+						Tokens:     tk[:1],
+					},
+					Tokens: tk[:1],
+				},
+				Index: &Index{
+					Args: []QueryExpression{
+						*WrapQuery(&SimpleExpression{
+							Identifier: &tk[3],
+							Tokens:     tk[3:4],
+						}),
+					},
+					Tokens: tk[2:5],
+				},
+				Tokens: tk[:5],
+			}
+		}},
+		{"a[[b]]", func(t *test, tk Tokens) { // 3
+			t.Output = IndexOrCallExpression{
+				IndexOrCallExpression: &IndexOrCallExpression{
+					SimpleExpression: &SimpleExpression{
+						Identifier: &tk[0],
+						Tokens:     tk[:1],
+					},
+					Tokens: tk[:1],
+				},
+				Index: &Index{
+					Double: true,
+					Args: []QueryExpression{
+						*WrapQuery(&SimpleExpression{
+							Identifier: &tk[2],
+							Tokens:     tk[2:3],
+						}),
+					},
+					Tokens: tk[1:4],
+				},
+				Tokens: tk[:4],
+			}
+		}},
+		{"a [[b]]", func(t *test, tk Tokens) { // 4
+			t.Output = IndexOrCallExpression{
+				IndexOrCallExpression: &IndexOrCallExpression{
+					SimpleExpression: &SimpleExpression{
+						Identifier: &tk[0],
+						Tokens:     tk[:1],
+					},
+					Tokens: tk[:1],
+				},
+				Index: &Index{
+					Double: true,
+					Args: []QueryExpression{
+						*WrapQuery(&SimpleExpression{
+							Identifier: &tk[3],
+							Tokens:     tk[3:4],
+						}),
+					},
+					Tokens: tk[2:5],
+				},
+				Tokens: tk[:5],
+			}
+		}},
+		{"a(b)", func(t *test, tk Tokens) { // 5
+			t.Output = IndexOrCallExpression{
+				IndexOrCallExpression: &IndexOrCallExpression{
+					SimpleExpression: &SimpleExpression{
+						Identifier: &tk[0],
+						Tokens:     tk[:1],
+					},
+					Tokens: tk[:1],
+				},
+				Call: &Call{
+					Args: []Arg{
+						{
+							QueryExpression: WrapQuery(&SimpleExpression{
+								Identifier: &tk[2],
+								Tokens:     tk[2:3],
+							}),
+							Tokens: tk[2:3],
+						},
+					},
+					Tokens: tk[1:4],
+				},
+				Tokens: tk[:4],
+			}
+		}},
+		{"a (b)", func(t *test, tk Tokens) { // 6
+			t.Output = IndexOrCallExpression{
+				IndexOrCallExpression: &IndexOrCallExpression{
+					SimpleExpression: &SimpleExpression{
+						Identifier: &tk[0],
+						Tokens:     tk[:1],
+					},
+					Tokens: tk[:1],
+				},
+				Call: &Call{
+					Args: []Arg{
+						{
+							QueryExpression: WrapQuery(&SimpleExpression{
+								Identifier: &tk[3],
+								Tokens:     tk[3:4],
+							}),
+							Tokens: tk[3:4],
+						},
+					},
+					Tokens: tk[2:5],
+				},
+				Tokens: tk[:5],
+			}
+		}},
+	}, func(t *test) (Type, error) {
+		var ice IndexOrCallExpression
+
+		err := ice.parse(&t.Tokens)
+
+		return ice, err
+	})
+}
+
 func TestSimpleExpression(t *testing.T) {
 	doTests(t, []sourceFn{
 		{"a", func(t *test, tk Tokens) { // 1
