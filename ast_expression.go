@@ -1322,6 +1322,8 @@ func (c *Call) parse(r *rParser) error {
 				c.Args = append(c.Args, a)
 			}
 
+			r.AcceptRunWhitespaceNoNewLine()
+
 			if r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
 				break
 			} else if !r.AcceptToken(parser.Token{Type: TokenExpressionTerminator, Data: ","}) {
