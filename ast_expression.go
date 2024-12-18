@@ -1275,9 +1275,11 @@ func (i *Index) parse(r *rParser) error {
 			r.AcceptRunWhitespaceNoNewLine()
 
 			if i.Double {
-				if r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "]]"}) {
-					break
+				if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "]]"}) {
+					return r.Error("Index", ErrMissingClosingDoubleBracket)
 				}
+
+				break
 			} else if r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "]"}) {
 				break
 			} else if !r.AcceptToken(parser.Token{Type: TokenExpressionTerminator, Data: ","}) {
@@ -1361,11 +1363,12 @@ func (a *Arg) parse(r *rParser) error {
 }
 
 var (
-	ErrMissingTerminator       = errors.New("missing terminator")
-	ErrMissingOpeningParen     = errors.New("missing opening paren")
-	ErrMissingClosingParen     = errors.New("missing closing paren")
-	ErrMissingIn               = errors.New("missing in keyword")
-	ErrMissingIdentifier       = errors.New("missing identifier")
-	ErrMissingComma            = errors.New("missing comma")
-	ErrInvalidSimpleExpression = errors.New("invalid simple expression")
+	ErrMissingTerminator           = errors.New("missing terminator")
+	ErrMissingOpeningParen         = errors.New("missing opening paren")
+	ErrMissingClosingParen         = errors.New("missing closing paren")
+	ErrMissingClosingDoubleBracket = errors.New("missing closing double-bracket")
+	ErrMissingIn                   = errors.New("missing in keyword")
+	ErrMissingIdentifier           = errors.New("missing identifier")
+	ErrMissingComma                = errors.New("missing comma")
+	ErrInvalidSimpleExpression     = errors.New("invalid simple expression")
 )
