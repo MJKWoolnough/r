@@ -48,7 +48,31 @@ func (f FunctionDefinition) printSource(w io.Writer, v bool) {}
 
 func (i IfControl) printSource(w io.Writer, v bool) {}
 
-func (i Index) printSource(w io.Writer, v bool) {}
+func (i Index) printSource(w io.Writer, v bool) {
+	if !i.Double {
+		io.WriteString(w, "[")
+
+		if len(i.Args) > 0 {
+			i.Args[0].printSource(w, v)
+
+			for _, a := range i.Args[1:] {
+				if v {
+					io.WriteString(w, ", ")
+				} else {
+					io.WriteString(w, ",")
+				}
+
+				a.printSource(w, v)
+			}
+		}
+
+		io.WriteString(w, "]")
+	} else if len(i.Args) == 1 {
+		io.WriteString(w, "[[")
+		i.Args[0].printSource(w, v)
+		io.WriteString(w, "]]")
+	}
+}
 
 func (i IndexOrCallExpression) printSource(w io.Writer, v bool) {
 	if i.SimpleExpression != nil {
