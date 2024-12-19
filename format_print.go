@@ -6,7 +6,13 @@ func (a AdditionExpression) printSource(w io.Writer, v bool) {}
 
 func (a AndExpression) printSource(w io.Writer, v bool) {}
 
-func (a Arg) printSource(w io.Writer, v bool) {}
+func (a Arg) printSource(w io.Writer, v bool) {
+	if a.Ellipsis != nil {
+		io.WriteString(w, a.Ellipsis.Data)
+	} else if a.QueryExpression != nil {
+		a.QueryExpression.printSource(w, v)
+	}
+}
 
 func (a ArgList) printSource(w io.Writer, v bool) {}
 
