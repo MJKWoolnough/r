@@ -126,7 +126,14 @@ func (r RelationalExpression) printSource(w io.Writer, v bool) {}
 
 func (r RepeatControl) printSource(w io.Writer, v bool) {}
 
-func (s ScopeExpression) printSource(w io.Writer, v bool) {}
+func (s ScopeExpression) printSource(w io.Writer, v bool) {
+	s.IndexOrCallExpression.printSource(w, v)
+
+	if s.ScopeExpression != nil {
+		io.WriteString(w, "::")
+		s.ScopeExpression.printSource(w, v)
+	}
+}
 
 func (s SequenceExpression) printSource(w io.Writer, v bool) {}
 
