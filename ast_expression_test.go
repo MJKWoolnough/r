@@ -654,6 +654,28 @@ func TestCall(t *testing.T) {
 				Tokens: tk[:7],
 			}
 		}},
+		{"(in)", func(t *test, tk Tokens) { // 6
+			t.Err = Error{
+				Err: Error{
+					Err: wrapQueryExpressionError(Error{
+						Err:     ErrInvalidSimpleExpression,
+						Parsing: "SimpleExpression",
+						Token:   tk[1],
+					}),
+					Parsing: "Arg",
+					Token:   tk[1],
+				},
+				Parsing: "Call",
+				Token:   tk[1],
+			}
+		}},
+		{"(a b)", func(t *test, tk Tokens) { // 7
+			t.Err = Error{
+				Err:     ErrMissingComma,
+				Parsing: "Call",
+				Token:   tk[3],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var c Call
 
