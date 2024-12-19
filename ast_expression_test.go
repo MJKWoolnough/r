@@ -684,3 +684,29 @@ func TestCall(t *testing.T) {
 		return c, err
 	})
 }
+
+func TestArg(t *testing.T) {
+	doTests(t, []sourceFn{
+		{"a", func(t *test, tk Tokens) { // 1
+			t.Output = Arg{
+				QueryExpression: WrapQuery(&SimpleExpression{
+					Identifier: &tk[0],
+					Tokens:     tk[:1],
+				}),
+				Tokens: tk[:1],
+			}
+		}},
+		{"...", func(t *test, tk Tokens) { // 2
+			t.Output = Arg{
+				Ellipsis: &tk[0],
+				Tokens:   tk[:1],
+			}
+		}},
+	}, func(t *test) (Type, error) {
+		var a Arg
+
+		err := a.parse(&t.Tokens)
+
+		return a, err
+	})
+}
