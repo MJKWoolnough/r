@@ -229,6 +229,40 @@ func TestScopeExpression(t *testing.T) {
 				Tokens: tk[:5],
 			}
 		}},
+		{"in", func(t *test, tk Tokens) { // 5
+			t.Err = Error{
+				Err: Error{
+					Err: Error{
+						Err:     ErrInvalidSimpleExpression,
+						Parsing: "SimpleExpression",
+						Token:   tk[0],
+					},
+					Parsing: "IndexOrCallExpression",
+					Token:   tk[0],
+				},
+				Parsing: "ScopeExpression",
+				Token:   tk[0],
+			}
+		}},
+		{"a::in", func(t *test, tk Tokens) { // 6
+			t.Err = Error{
+				Err: Error{
+					Err: Error{
+						Err: Error{
+							Err:     ErrInvalidSimpleExpression,
+							Parsing: "SimpleExpression",
+							Token:   tk[2],
+						},
+						Parsing: "IndexOrCallExpression",
+						Token:   tk[2],
+					},
+					Parsing: "ScopeExpression",
+					Token:   tk[2],
+				},
+				Parsing: "ScopeExpression",
+				Token:   tk[2],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var se ScopeExpression
 
