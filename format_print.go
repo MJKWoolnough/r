@@ -14,7 +14,25 @@ func (a Argument) printSource(w io.Writer, v bool) {}
 
 func (a AssignmentExpression) printSource(w io.Writer, v bool) {}
 
-func (c Call) printSource(w io.Writer, v bool) {}
+func (c Call) printSource(w io.Writer, v bool) {
+	io.WriteString(w, "(")
+
+	if len(c.Args) > 0 {
+		c.Args[0].printSource(w, v)
+
+		for _, a := range c.Args[1:] {
+			if v {
+				io.WriteString(w, ", ")
+			} else {
+				io.WriteString(w, ",")
+			}
+
+			a.printSource(w, v)
+		}
+	}
+
+	io.WriteString(w, ")")
+}
 
 func (c CompoundExpression) printSource(w io.Writer, v bool) {
 	if len(c.Expressions) == 0 {
