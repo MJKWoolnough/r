@@ -272,6 +272,71 @@ func TestSubsetExpression(t *testing.T) {
 				Tokens: tk[:5],
 			}
 		}},
+		{"in", func(t *test, tk Tokens) { // 6
+			t.Err = Error{
+				Err: Error{
+					Err: Error{
+						Err: Error{
+							Err:     ErrInvalidSimpleExpression,
+							Parsing: "SimpleExpression",
+							Token:   tk[0],
+						},
+						Parsing: "IndexOrCallExpression",
+						Token:   tk[0],
+					},
+					Parsing: "ScopeExpression",
+					Token:   tk[0],
+				},
+				Parsing: "SubsetExpression",
+				Token:   tk[0],
+			}
+		}},
+		{"a$in", func(t *test, tk Tokens) { // 7
+			t.Err = Error{
+				Err: Error{
+					Err: Error{
+						Err: Error{
+							Err: Error{
+								Err:     ErrInvalidSimpleExpression,
+								Parsing: "SimpleExpression",
+								Token:   tk[2],
+							},
+							Parsing: "IndexOrCallExpression",
+							Token:   tk[2],
+						},
+						Parsing: "ScopeExpression",
+						Token:   tk[2],
+					},
+					Parsing: "SubsetExpression",
+					Token:   tk[2],
+				},
+				Parsing: "SubsetExpression",
+				Token:   tk[2],
+			}
+		}},
+		{"a@in", func(t *test, tk Tokens) { // 8
+			t.Err = Error{
+				Err: Error{
+					Err: Error{
+						Err: Error{
+							Err: Error{
+								Err:     ErrInvalidSimpleExpression,
+								Parsing: "SimpleExpression",
+								Token:   tk[2],
+							},
+							Parsing: "IndexOrCallExpression",
+							Token:   tk[2],
+						},
+						Parsing: "ScopeExpression",
+						Token:   tk[2],
+					},
+					Parsing: "SubsetExpression",
+					Token:   tk[2],
+				},
+				Parsing: "SubsetExpression",
+				Token:   tk[2],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var se SubsetExpression
 
