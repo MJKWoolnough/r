@@ -153,7 +153,19 @@ func (s SimpleExpression) printSource(w io.Writer, v bool) {
 	}
 }
 
-func (s SubsetExpression) printSource(w io.Writer, v bool) {}
+func (s SubsetExpression) printSource(w io.Writer, v bool) {
+	s.ScopeExpression.printSource(w, v)
+
+	if s.SubsetExpression != nil && s.SubsetType != SubsetNone {
+		if s.SubsetType == SubsetList {
+			io.WriteString(w, "$")
+		} else {
+			io.WriteString(w, "@")
+		}
+
+		s.SubsetExpression.printSource(w, v)
+	}
+}
 
 func (u UnaryExpression) printSource(w io.Writer, v bool) {}
 
