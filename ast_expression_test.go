@@ -139,6 +139,136 @@ func TestCompoundExpression(t *testing.T) {
 	})
 }
 
+func TestUnaryExpression(t *testing.T) {
+	doTests(t, []sourceFn{
+		{"a", func(t *test, tk Tokens) { // 1
+			t.Output = UnaryExpression{
+				ExponentiationExpression: ExponentiationExpression{
+					SubsetExpression: SubsetExpression{
+						ScopeExpression: ScopeExpression{
+							IndexOrCallExpression: IndexOrCallExpression{
+								SimpleExpression: &SimpleExpression{
+									Identifier: &tk[0],
+									Tokens:     tk[:1],
+								},
+								Tokens: tk[:1],
+							},
+							Tokens: tk[:1],
+						},
+						Tokens: tk[:1],
+					},
+					Tokens: tk[:1],
+				},
+				Tokens: tk[:1],
+			}
+		}},
+		{"+a", func(t *test, tk Tokens) { // 2
+			t.Output = UnaryExpression{
+				UnaryType: []UnaryType{
+					UnaryAdd,
+				},
+				ExponentiationExpression: ExponentiationExpression{
+					SubsetExpression: SubsetExpression{
+						ScopeExpression: ScopeExpression{
+							IndexOrCallExpression: IndexOrCallExpression{
+								SimpleExpression: &SimpleExpression{
+									Identifier: &tk[1],
+									Tokens:     tk[1:2],
+								},
+								Tokens: tk[1:2],
+							},
+							Tokens: tk[1:2],
+						},
+						Tokens: tk[1:2],
+					},
+					Tokens: tk[1:2],
+				},
+				Tokens: tk[:2],
+			}
+		}},
+		{"-a", func(t *test, tk Tokens) { // 3
+			t.Output = UnaryExpression{
+				UnaryType: []UnaryType{
+					UnaryMinus,
+				},
+				ExponentiationExpression: ExponentiationExpression{
+					SubsetExpression: SubsetExpression{
+						ScopeExpression: ScopeExpression{
+							IndexOrCallExpression: IndexOrCallExpression{
+								SimpleExpression: &SimpleExpression{
+									Identifier: &tk[1],
+									Tokens:     tk[1:2],
+								},
+								Tokens: tk[1:2],
+							},
+							Tokens: tk[1:2],
+						},
+						Tokens: tk[1:2],
+					},
+					Tokens: tk[1:2],
+				},
+				Tokens: tk[:2],
+			}
+		}},
+		{"+ a", func(t *test, tk Tokens) { // 4
+			t.Output = UnaryExpression{
+				UnaryType: []UnaryType{
+					UnaryAdd,
+				},
+				ExponentiationExpression: ExponentiationExpression{
+					SubsetExpression: SubsetExpression{
+						ScopeExpression: ScopeExpression{
+							IndexOrCallExpression: IndexOrCallExpression{
+								SimpleExpression: &SimpleExpression{
+									Identifier: &tk[2],
+									Tokens:     tk[2:3],
+								},
+								Tokens: tk[2:3],
+							},
+							Tokens: tk[2:3],
+						},
+						Tokens: tk[2:3],
+					},
+					Tokens: tk[2:3],
+				},
+				Tokens: tk[:3],
+			}
+		}},
+		{"+- + a", func(t *test, tk Tokens) { // 4
+			t.Output = UnaryExpression{
+				UnaryType: []UnaryType{
+					UnaryAdd,
+					UnaryMinus,
+					UnaryAdd,
+				},
+				ExponentiationExpression: ExponentiationExpression{
+					SubsetExpression: SubsetExpression{
+						ScopeExpression: ScopeExpression{
+							IndexOrCallExpression: IndexOrCallExpression{
+								SimpleExpression: &SimpleExpression{
+									Identifier: &tk[5],
+									Tokens:     tk[5:6],
+								},
+								Tokens: tk[5:6],
+							},
+							Tokens: tk[5:6],
+						},
+						Tokens: tk[5:6],
+					},
+					Tokens: tk[5:6],
+				},
+				Tokens: tk[:6],
+			}
+		}},
+	}, func(t *test) (Type, error) {
+		var ue UnaryExpression
+
+		err := ue.parse(&t.Tokens)
+
+		return ue, err
+	})
+}
+
 func TestExponentiationExpression(t *testing.T) {
 	doTests(t, []sourceFn{
 		{"a", func(t *test, tk Tokens) { // 1
