@@ -282,8 +282,6 @@ func (s SubsetType) printType(w io.Writer, _ bool) {
 
 func (u UnaryType) String() string {
 	switch u {
-	case UnaryNone:
-		return "UnaryNone"
 	case UnaryAdd:
 		return "UnaryAdd"
 	case UnaryMinus:

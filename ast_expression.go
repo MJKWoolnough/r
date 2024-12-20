@@ -961,8 +961,7 @@ func (se *SequenceExpression) parse(r *rParser) error {
 type UnaryType uint8
 
 const (
-	UnaryNone UnaryType = iota
-	UnaryAdd
+	UnaryAdd UnaryType = iota
 	UnaryMinus
 )
 
