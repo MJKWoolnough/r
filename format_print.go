@@ -58,7 +58,14 @@ func (c CompoundExpression) printSource(w io.Writer, v bool) {
 	io.WriteString(w, "}")
 }
 
-func (e ExponentiationExpression) printSource(w io.Writer, v bool) {}
+func (e ExponentiationExpression) printSource(w io.Writer, v bool) {
+	e.SubsetExpression.printSource(w, v)
+
+	if e.ExponentiationExpression != nil {
+		io.WriteString(w, "^")
+		e.ExponentiationExpression.printSource(w, v)
+	}
+}
 
 func (e Expression) printSource(w io.Writer, v bool) {}
 
