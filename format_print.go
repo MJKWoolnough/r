@@ -174,6 +174,17 @@ func (s SubsetExpression) printSource(w io.Writer, v bool) {
 	}
 }
 
-func (u UnaryExpression) printSource(w io.Writer, v bool) {}
+func (u UnaryExpression) printSource(w io.Writer, v bool) {
+	for _, t := range u.UnaryType {
+		switch t {
+		case UnaryAdd:
+			io.WriteString(w, "+")
+		case UnaryMinus:
+			io.WriteString(w, "-")
+		}
+	}
+
+	u.ExponentiationExpression.printSource(w, v)
+}
 
 func (wc WhileControl) printSource(w io.Writer, v bool) {}
