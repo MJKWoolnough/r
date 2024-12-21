@@ -899,7 +899,7 @@ func (p *PipeOrSpecialExpression) parse(r *rParser) error {
 
 	s.AcceptRunWhitespaceNoNewLine()
 
-	if s.AcceptToken(parser.Token{}) || s.Accept(TokenSpecialOperator) {
+	if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "|>"}) || s.Accept(TokenSpecialOperator) {
 		p.Operator = s.GetLastToken()
 
 		s.AcceptRunWhitespaceNoNewLine()
