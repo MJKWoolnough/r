@@ -125,7 +125,23 @@ func (n NotExpression) printSource(w io.Writer, v bool) {}
 
 func (o OrExpression) printSource(w io.Writer, v bool) {}
 
-func (p PipeOrSpecialExpression) printSource(w io.Writer, v bool) {}
+func (p PipeOrSpecialExpression) printSource(w io.Writer, v bool) {
+	p.SequenceExpression.printSource(w, v)
+
+	if p.Operator != nil && p.PipeOrSpecialExpression != nil {
+		if v {
+			io.WriteString(w, " ")
+		}
+
+		io.WriteString(w, p.Operator.Data)
+
+		if v {
+			io.WriteString(w, " ")
+		}
+
+		p.PipeOrSpecialExpression.printSource(w, v)
+	}
+}
 
 func (q QueryExpression) printSource(w io.Writer, v bool) {}
 
