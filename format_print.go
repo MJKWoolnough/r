@@ -119,7 +119,23 @@ func (i IndexOrCallExpression) printSource(w io.Writer, v bool) {
 	}
 }
 
-func (m MultiplicationExpression) printSource(w io.Writer, v bool) {}
+func (m MultiplicationExpression) printSource(w io.Writer, v bool) {
+	m.PipeOrSpecialExpression.printSource(w, v)
+
+	if m.MultiplicationType != MultiplicationNone && m.MultiplicationExpression != nil {
+		if v {
+			io.WriteString(w, " ")
+		}
+
+		io.WriteString(w, m.MultiplicationType.String())
+
+		if v {
+			io.WriteString(w, " ")
+		}
+
+		m.MultiplicationExpression.printSource(w, v)
+	}
+}
 
 func (n NotExpression) printSource(w io.Writer, v bool) {}
 
