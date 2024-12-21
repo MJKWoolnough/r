@@ -142,7 +142,14 @@ func (s ScopeExpression) printSource(w io.Writer, v bool) {
 	}
 }
 
-func (s SequenceExpression) printSource(w io.Writer, v bool) {}
+func (s SequenceExpression) printSource(w io.Writer, v bool) {
+	s.UnaryExpression.printSource(w, v)
+
+	if s.SequenceExpression != nil {
+		io.WriteString(w, ":")
+		s.SequenceExpression.printSource(w, v)
+	}
+}
 
 func (s SimpleExpression) printSource(w io.Writer, v bool) {
 	if s.Identifier != nil {
