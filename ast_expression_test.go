@@ -495,6 +495,104 @@ func TestRelationalExpression(t *testing.T) {
 				Tokens: tk[:13],
 			}
 		}},
+		{"in", func(t *test, tk Tokens) { // 5
+			t.Err = Error{
+				Err: Error{
+					Err: Error{
+						Err: Error{
+							Err: Error{
+								Err: Error{
+									Err: Error{
+										Err: Error{
+											Err: Error{
+												Err: Error{
+													Err: Error{
+														Err:     ErrInvalidSimpleExpression,
+														Parsing: "SimpleExpression",
+														Token:   tk[0],
+													},
+													Parsing: "IndexOrCallExpression",
+													Token:   tk[0],
+												},
+												Parsing: "ScopeExpression",
+												Token:   tk[0],
+											},
+											Parsing: "SubsetExpression",
+											Token:   tk[0],
+										},
+										Parsing: "ExponentiationExpression",
+										Token:   tk[0],
+									},
+									Parsing: "UnaryExpression",
+									Token:   tk[0],
+								},
+								Parsing: "SequenceExpression",
+								Token:   tk[0],
+							},
+							Parsing: "PipeOrSpecialExpression",
+							Token:   tk[0],
+						},
+						Parsing: "MultiplicationExpression",
+						Token:   tk[0],
+					},
+					Parsing: "AdditionExpression",
+					Token:   tk[0],
+				},
+				Parsing: "RelationalExpression",
+				Token:   tk[0],
+			}
+		}},
+		{"a>in", func(t *test, tk Tokens) { // 6
+			t.Err = Error{
+				Err: Error{
+					Err: Error{
+						Err: Error{
+							Err: Error{
+								Err: Error{
+									Err: Error{
+										Err: Error{
+											Err: Error{
+												Err: Error{
+													Err: Error{
+														Err: Error{
+															Err:     ErrInvalidSimpleExpression,
+															Parsing: "SimpleExpression",
+															Token:   tk[2],
+														},
+														Parsing: "IndexOrCallExpression",
+														Token:   tk[2],
+													},
+													Parsing: "ScopeExpression",
+													Token:   tk[2],
+												},
+												Parsing: "SubsetExpression",
+												Token:   tk[2],
+											},
+											Parsing: "ExponentiationExpression",
+											Token:   tk[2],
+										},
+										Parsing: "UnaryExpression",
+										Token:   tk[2],
+									},
+									Parsing: "SequenceExpression",
+									Token:   tk[2],
+								},
+								Parsing: "PipeOrSpecialExpression",
+								Token:   tk[2],
+							},
+							Parsing: "MultiplicationExpression",
+							Token:   tk[2],
+						},
+						Parsing: "AdditionExpression",
+						Token:   tk[2],
+					},
+					Parsing: "RelationalExpression",
+					Token:   tk[2],
+				},
+				Parsing: "RelationalExpression",
+				Token:   tk[2],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var re RelationalExpression
 
