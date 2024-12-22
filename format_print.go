@@ -177,7 +177,23 @@ func (p PipeOrSpecialExpression) printSource(w io.Writer, v bool) {
 
 func (q QueryExpression) printSource(w io.Writer, v bool) {}
 
-func (r RelationalExpression) printSource(w io.Writer, v bool) {}
+func (r RelationalExpression) printSource(w io.Writer, v bool) {
+	r.AdditionExpression.printSource(w, v)
+
+	if r.RelationalOperator != RelationalNone && r.RelationalExpression != nil {
+		if v {
+			io.WriteString(w, " ")
+		}
+
+		io.WriteString(w, r.RelationalOperator.String())
+
+		if v {
+			io.WriteString(w, " ")
+		}
+
+		r.RelationalExpression.printSource(w, v)
+	}
+}
 
 func (r RepeatControl) printSource(w io.Writer, v bool) {}
 
