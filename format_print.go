@@ -2,7 +2,23 @@ package r
 
 import "io"
 
-func (a AdditionExpression) printSource(w io.Writer, v bool) {}
+func (a AdditionExpression) printSource(w io.Writer, v bool) {
+	a.MultiplicationExpression.printSource(w, v)
+
+	if a.AdditionType != AdditionNone && a.AdditionExpression != nil {
+		if v {
+			io.WriteString(w, " ")
+		}
+
+		io.WriteString(w, a.AdditionType.String())
+
+		if v {
+			io.WriteString(w, " ")
+		}
+
+		a.AdditionExpression.printSource(w, v)
+	}
+}
 
 func (a AndExpression) printSource(w io.Writer, v bool) {}
 
