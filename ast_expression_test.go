@@ -300,6 +300,57 @@ func TestNotExpression(t *testing.T) {
 				Tokens: tk[:6],
 			}
 		}},
+		{"in", func(t *test, tk Tokens) { // 5
+			t.Err = Error{
+				Err: Error{
+					Err: Error{
+						Err: Error{
+							Err: Error{
+								Err: Error{
+									Err: Error{
+										Err: Error{
+											Err: Error{
+												Err: Error{
+													Err: Error{
+														Err: Error{
+															Err:     ErrInvalidSimpleExpression,
+															Parsing: "SimpleExpression",
+															Token:   tk[0],
+														},
+														Parsing: "IndexOrCallExpression",
+														Token:   tk[0],
+													},
+													Parsing: "ScopeExpression",
+													Token:   tk[0],
+												},
+												Parsing: "SubsetExpression",
+												Token:   tk[0],
+											},
+											Parsing: "ExponentiationExpression",
+											Token:   tk[0],
+										},
+										Parsing: "UnaryExpression",
+										Token:   tk[0],
+									},
+									Parsing: "SequenceExpression",
+									Token:   tk[0],
+								},
+								Parsing: "PipeOrSpecialExpression",
+								Token:   tk[0],
+							},
+							Parsing: "MultiplicationExpression",
+							Token:   tk[0],
+						},
+						Parsing: "AdditionExpression",
+						Token:   tk[0],
+					},
+					Parsing: "RelationalExpression",
+					Token:   tk[0],
+				},
+				Parsing: "NotExpression",
+				Token:   tk[0],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var ne NotExpression
 
