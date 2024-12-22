@@ -692,6 +692,7 @@ type NotExpression struct {
 func (n *NotExpression) parse(r *rParser) error {
 	for r.AcceptToken(parser.Token{Type: TokenOperator, Data: "!"}) {
 		n.Nots++
+
 		r.AcceptRunWhitespaceNoNewLine()
 	}
 
