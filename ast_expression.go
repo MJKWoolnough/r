@@ -671,7 +671,7 @@ func (a *AndExpression) parse(r *rParser) error {
 		s = r.NewGoal()
 		a.AndExpression = new(AndExpression)
 
-		if err := a.NotExpression.parse(&s); err != nil {
+		if err := a.AndExpression.parse(&s); err != nil {
 			return r.Error("AndExpression", err)
 		}
 
