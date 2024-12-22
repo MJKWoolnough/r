@@ -153,7 +153,13 @@ func (m MultiplicationExpression) printSource(w io.Writer, v bool) {
 	}
 }
 
-func (n NotExpression) printSource(w io.Writer, v bool) {}
+func (n NotExpression) printSource(w io.Writer, v bool) {
+	for range n.Nots {
+		io.WriteString(w, "!")
+	}
+
+	n.RelationalExpression.printSource(w, v)
+}
 
 func (o OrExpression) printSource(w io.Writer, v bool) {}
 
