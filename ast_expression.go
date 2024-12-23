@@ -495,8 +495,20 @@ func (q *QueryExpression) parse(r *rParser) error {
 	return nil
 }
 
+type AssignmentType uint8
+
+const (
+	AssignmentNone AssignmentType = iota
+	AssignmentEquals
+	AssignmentLeftAssign
+	AssignmentRightAssign
+	AssignmentLeftParentAssign
+	AssignmentRightParentAssign
+)
+
 type AssignmentExpression struct {
 	FormulaeExpression   FormulaeExpression
+	AssignmentType       AssignmentType
 	AssignmentExpression *AssignmentExpression
 	Tokens               Tokens
 }
@@ -514,7 +526,19 @@ func (a *AssignmentExpression) parse(r *rParser) error {
 
 	s.AcceptRunWhitespaceNoNewLine()
 
-	if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "="}) || s.AcceptToken(parser.Token{Type: TokenOperator, Data: "<-"}) || s.AcceptToken(parser.Token{Type: TokenOperator, Data: "<<-"}) || s.AcceptToken(parser.Token{Type: TokenOperator, Data: "->"}) || s.AcceptToken(parser.Token{Type: TokenOperator, Data: "->>"}) {
+	if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "="}) {
+		a.AssignmentType = AssignmentEquals
+	} else if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "<-"}) {
+		a.AssignmentType = AssignmentLeftAssign
+	} else if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "->"}) {
+		a.AssignmentType = AssignmentRightAssign
+	} else if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "<<-"}) {
+		a.AssignmentType = AssignmentLeftParentAssign
+	} else if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "->>"}) {
+		a.AssignmentType = AssignmentRightParentAssign
+	}
+
+	if a.AssignmentType != AssignmentNone {
 		s.AcceptRunWhitespaceNoNewLine()
 
 		r.Score(s)
