@@ -20,7 +20,15 @@ func (a AdditionExpression) printSource(w io.Writer, v bool) {
 	}
 }
 
-func (a AndExpression) printSource(w io.Writer, v bool) {}
+func (a AndExpression) printSource(w io.Writer, v bool) {
+	a.NotExpression.printSource(w, v)
+
+	if a.AndType != AndNone && a.AndExpression != nil {
+		io.WriteString(w, a.AndType.String())
+
+		a.AndExpression.printSource(w, v)
+	}
+}
 
 func (a Arg) printSource(w io.Writer, v bool) {
 	if a.Ellipsis != nil {
