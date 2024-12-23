@@ -385,6 +385,132 @@ func TestFormulaeExpression(t *testing.T) {
 				Tokens: tk[:3],
 			}
 		}},
+		{"in", func(t *test, tk Tokens) { // 5
+			t.Err = Error{
+				Err: Error{
+					Err: Error{
+						Err: Error{
+							Err: Error{
+								Err: Error{
+									Err: Error{
+										Err: Error{
+											Err: Error{
+												Err: Error{
+													Err: Error{
+														Err: Error{
+															Err: Error{
+																Err: Error{
+																	Err: Error{
+																		Err:     ErrInvalidSimpleExpression,
+																		Parsing: "SimpleExpression",
+																		Token:   tk[0],
+																	},
+																	Parsing: "IndexOrCallExpression",
+																	Token:   tk[0],
+																},
+																Parsing: "ScopeExpression",
+																Token:   tk[0],
+															},
+															Parsing: "SubsetExpression",
+															Token:   tk[0],
+														},
+														Parsing: "ExponentiationExpression",
+														Token:   tk[0],
+													},
+													Parsing: "UnaryExpression",
+													Token:   tk[0],
+												},
+												Parsing: "SequenceExpression",
+												Token:   tk[0],
+											},
+											Parsing: "PipeOrSpecialExpression",
+											Token:   tk[0],
+										},
+										Parsing: "MultiplicationExpression",
+										Token:   tk[0],
+									},
+									Parsing: "AdditionExpression",
+									Token:   tk[0],
+								},
+								Parsing: "RelationalExpression",
+								Token:   tk[0],
+							},
+							Parsing: "NotExpression",
+							Token:   tk[0],
+						},
+						Parsing: "AndExpression",
+						Token:   tk[0],
+					},
+					Parsing: "OrExpression",
+					Token:   tk[0],
+				},
+				Parsing: "FormulaeExpression",
+				Token:   tk[0],
+			}
+		}},
+		{"~in", func(t *test, tk Tokens) { // 6
+			t.Err = Error{
+				Err: Error{
+					Err: Error{
+						Err: Error{
+							Err: Error{
+								Err: Error{
+									Err: Error{
+										Err: Error{
+											Err: Error{
+												Err: Error{
+													Err: Error{
+														Err: Error{
+															Err: Error{
+																Err: Error{
+																	Err: Error{
+																		Err:     ErrInvalidSimpleExpression,
+																		Parsing: "SimpleExpression",
+																		Token:   tk[1],
+																	},
+																	Parsing: "IndexOrCallExpression",
+																	Token:   tk[1],
+																},
+																Parsing: "ScopeExpression",
+																Token:   tk[1],
+															},
+															Parsing: "SubsetExpression",
+															Token:   tk[1],
+														},
+														Parsing: "ExponentiationExpression",
+														Token:   tk[1],
+													},
+													Parsing: "UnaryExpression",
+													Token:   tk[1],
+												},
+												Parsing: "SequenceExpression",
+												Token:   tk[1],
+											},
+											Parsing: "PipeOrSpecialExpression",
+											Token:   tk[1],
+										},
+										Parsing: "MultiplicationExpression",
+										Token:   tk[1],
+									},
+									Parsing: "AdditionExpression",
+									Token:   tk[1],
+								},
+								Parsing: "RelationalExpression",
+								Token:   tk[1],
+							},
+							Parsing: "NotExpression",
+							Token:   tk[1],
+						},
+						Parsing: "AndExpression",
+						Token:   tk[1],
+					},
+					Parsing: "OrExpression",
+					Token:   tk[1],
+				},
+				Parsing: "FormulaeExpression",
+				Token:   tk[1],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var fe FormulaeExpression
 
