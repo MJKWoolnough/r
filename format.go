@@ -153,6 +153,29 @@ func format(f formatter, s fmt.State, v rune) {
 	}
 }
 
+func (a AssignmentType) String() string {
+	switch a {
+	case AssignmentNone:
+		return "AssignmentNone"
+	case AssignmentEquals:
+		return "AssignmentEquals"
+	case AssignmentLeftAssign:
+		return "AssignmentLeftAssign"
+	case AssignmentRightAssign:
+		return "AssignmentRightAssign"
+	case AssignmentLeftParentAssign:
+		return "AssignmentLeftParentAssign"
+	case AssignmentRightParentAssign:
+		return "AssignmentRightParentAssign"
+	default:
+		return "Unknown"
+	}
+}
+
+func (a AssignmentType) printType(w io.Writer, _ bool) {
+	io.WriteString(w, a.String())
+}
+
 func (a AdditionType) String() string {
 	switch a {
 	case AdditionNone:
