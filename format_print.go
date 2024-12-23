@@ -169,7 +169,15 @@ func (n NotExpression) printSource(w io.Writer, v bool) {
 	n.RelationalExpression.printSource(w, v)
 }
 
-func (o OrExpression) printSource(w io.Writer, v bool) {}
+func (o OrExpression) printSource(w io.Writer, v bool) {
+	o.AndExpression.printSource(w, v)
+
+	if o.OrType != OrNone && o.OrExpression != nil {
+		io.WriteString(w, o.OrType.String())
+
+		o.OrExpression.printSource(w, v)
+	}
+}
 
 func (p PipeOrSpecialExpression) printSource(w io.Writer, v bool) {
 	p.SequenceExpression.printSource(w, v)
