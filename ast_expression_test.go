@@ -139,6 +139,418 @@ func TestCompoundExpression(t *testing.T) {
 	})
 }
 
+func TestOrExpression(t *testing.T) {
+	doTests(t, []sourceFn{
+		{"a", func(t *test, tk Tokens) { // 1
+			t.Output = OrExpression{
+				AndExpression: AndExpression{
+					NotExpression: NotExpression{
+						RelationalExpression: RelationalExpression{
+							AdditionExpression: AdditionExpression{
+								MultiplicationExpression: MultiplicationExpression{
+									PipeOrSpecialExpression: PipeOrSpecialExpression{
+										SequenceExpression: SequenceExpression{
+											UnaryExpression: UnaryExpression{
+												ExponentiationExpression: ExponentiationExpression{
+													SubsetExpression: SubsetExpression{
+														ScopeExpression: ScopeExpression{
+															IndexOrCallExpression: IndexOrCallExpression{
+																SimpleExpression: &SimpleExpression{
+																	Identifier: &tk[0],
+																	Tokens:     tk[:1],
+																},
+																Tokens: tk[:1],
+															},
+															Tokens: tk[:1],
+														},
+														Tokens: tk[:1],
+													},
+													Tokens: tk[:1],
+												},
+												Tokens: tk[:1],
+											},
+											Tokens: tk[:1],
+										},
+										Tokens: tk[:1],
+									},
+									Tokens: tk[:1],
+								},
+								Tokens: tk[:1],
+							},
+							Tokens: tk[:1],
+						},
+						Tokens: tk[:1],
+					},
+					Tokens: tk[:1],
+				},
+				Tokens: tk[:1],
+			}
+		}},
+		{"a|b", func(t *test, tk Tokens) { // 2
+			t.Output = OrExpression{
+				AndExpression: AndExpression{
+					NotExpression: NotExpression{
+						RelationalExpression: RelationalExpression{
+							AdditionExpression: AdditionExpression{
+								MultiplicationExpression: MultiplicationExpression{
+									PipeOrSpecialExpression: PipeOrSpecialExpression{
+										SequenceExpression: SequenceExpression{
+											UnaryExpression: UnaryExpression{
+												ExponentiationExpression: ExponentiationExpression{
+													SubsetExpression: SubsetExpression{
+														ScopeExpression: ScopeExpression{
+															IndexOrCallExpression: IndexOrCallExpression{
+																SimpleExpression: &SimpleExpression{
+																	Identifier: &tk[0],
+																	Tokens:     tk[:1],
+																},
+																Tokens: tk[:1],
+															},
+															Tokens: tk[:1],
+														},
+														Tokens: tk[:1],
+													},
+													Tokens: tk[:1],
+												},
+												Tokens: tk[:1],
+											},
+											Tokens: tk[:1],
+										},
+										Tokens: tk[:1],
+									},
+									Tokens: tk[:1],
+								},
+								Tokens: tk[:1],
+							},
+							Tokens: tk[:1],
+						},
+						Tokens: tk[:1],
+					},
+					Tokens: tk[:1],
+				},
+				OrType: OrVectorized,
+				OrExpression: &OrExpression{
+					AndExpression: AndExpression{
+						NotExpression: NotExpression{
+							RelationalExpression: RelationalExpression{
+								AdditionExpression: AdditionExpression{
+									MultiplicationExpression: MultiplicationExpression{
+										PipeOrSpecialExpression: PipeOrSpecialExpression{
+											SequenceExpression: SequenceExpression{
+												UnaryExpression: UnaryExpression{
+													ExponentiationExpression: ExponentiationExpression{
+														SubsetExpression: SubsetExpression{
+															ScopeExpression: ScopeExpression{
+																IndexOrCallExpression: IndexOrCallExpression{
+																	SimpleExpression: &SimpleExpression{
+																		Identifier: &tk[2],
+																		Tokens:     tk[2:3],
+																	},
+																	Tokens: tk[2:3],
+																},
+																Tokens: tk[2:3],
+															},
+															Tokens: tk[2:3],
+														},
+														Tokens: tk[2:3],
+													},
+													Tokens: tk[2:3],
+												},
+												Tokens: tk[2:3],
+											},
+											Tokens: tk[2:3],
+										},
+										Tokens: tk[2:3],
+									},
+									Tokens: tk[2:3],
+								},
+								Tokens: tk[2:3],
+							},
+							Tokens: tk[2:3],
+						},
+						Tokens: tk[2:3],
+					},
+					Tokens: tk[2:3],
+				},
+				Tokens: tk[:3],
+			}
+		}},
+		{"a | b", func(t *test, tk Tokens) { // 3
+			t.Output = OrExpression{
+				AndExpression: AndExpression{
+					NotExpression: NotExpression{
+						RelationalExpression: RelationalExpression{
+							AdditionExpression: AdditionExpression{
+								MultiplicationExpression: MultiplicationExpression{
+									PipeOrSpecialExpression: PipeOrSpecialExpression{
+										SequenceExpression: SequenceExpression{
+											UnaryExpression: UnaryExpression{
+												ExponentiationExpression: ExponentiationExpression{
+													SubsetExpression: SubsetExpression{
+														ScopeExpression: ScopeExpression{
+															IndexOrCallExpression: IndexOrCallExpression{
+																SimpleExpression: &SimpleExpression{
+																	Identifier: &tk[0],
+																	Tokens:     tk[:1],
+																},
+																Tokens: tk[:1],
+															},
+															Tokens: tk[:1],
+														},
+														Tokens: tk[:1],
+													},
+													Tokens: tk[:1],
+												},
+												Tokens: tk[:1],
+											},
+											Tokens: tk[:1],
+										},
+										Tokens: tk[:1],
+									},
+									Tokens: tk[:1],
+								},
+								Tokens: tk[:1],
+							},
+							Tokens: tk[:1],
+						},
+						Tokens: tk[:1],
+					},
+					Tokens: tk[:1],
+				},
+				OrType: OrVectorized,
+				OrExpression: &OrExpression{
+					AndExpression: AndExpression{
+						NotExpression: NotExpression{
+							RelationalExpression: RelationalExpression{
+								AdditionExpression: AdditionExpression{
+									MultiplicationExpression: MultiplicationExpression{
+										PipeOrSpecialExpression: PipeOrSpecialExpression{
+											SequenceExpression: SequenceExpression{
+												UnaryExpression: UnaryExpression{
+													ExponentiationExpression: ExponentiationExpression{
+														SubsetExpression: SubsetExpression{
+															ScopeExpression: ScopeExpression{
+																IndexOrCallExpression: IndexOrCallExpression{
+																	SimpleExpression: &SimpleExpression{
+																		Identifier: &tk[4],
+																		Tokens:     tk[4:5],
+																	},
+																	Tokens: tk[4:5],
+																},
+																Tokens: tk[4:5],
+															},
+															Tokens: tk[4:5],
+														},
+														Tokens: tk[4:5],
+													},
+													Tokens: tk[4:5],
+												},
+												Tokens: tk[4:5],
+											},
+											Tokens: tk[4:5],
+										},
+										Tokens: tk[4:5],
+									},
+									Tokens: tk[4:5],
+								},
+								Tokens: tk[4:5],
+							},
+							Tokens: tk[4:5],
+						},
+						Tokens: tk[4:5],
+					},
+					Tokens: tk[4:5],
+				},
+				Tokens: tk[:5],
+			}
+		}},
+		{"a||b", func(t *test, tk Tokens) { // 4
+			t.Output = OrExpression{
+				AndExpression: AndExpression{
+					NotExpression: NotExpression{
+						RelationalExpression: RelationalExpression{
+							AdditionExpression: AdditionExpression{
+								MultiplicationExpression: MultiplicationExpression{
+									PipeOrSpecialExpression: PipeOrSpecialExpression{
+										SequenceExpression: SequenceExpression{
+											UnaryExpression: UnaryExpression{
+												ExponentiationExpression: ExponentiationExpression{
+													SubsetExpression: SubsetExpression{
+														ScopeExpression: ScopeExpression{
+															IndexOrCallExpression: IndexOrCallExpression{
+																SimpleExpression: &SimpleExpression{
+																	Identifier: &tk[0],
+																	Tokens:     tk[:1],
+																},
+																Tokens: tk[:1],
+															},
+															Tokens: tk[:1],
+														},
+														Tokens: tk[:1],
+													},
+													Tokens: tk[:1],
+												},
+												Tokens: tk[:1],
+											},
+											Tokens: tk[:1],
+										},
+										Tokens: tk[:1],
+									},
+									Tokens: tk[:1],
+								},
+								Tokens: tk[:1],
+							},
+							Tokens: tk[:1],
+						},
+						Tokens: tk[:1],
+					},
+					Tokens: tk[:1],
+				},
+				OrType: OrNotVectorized,
+				OrExpression: &OrExpression{
+					AndExpression: AndExpression{
+						NotExpression: NotExpression{
+							RelationalExpression: RelationalExpression{
+								AdditionExpression: AdditionExpression{
+									MultiplicationExpression: MultiplicationExpression{
+										PipeOrSpecialExpression: PipeOrSpecialExpression{
+											SequenceExpression: SequenceExpression{
+												UnaryExpression: UnaryExpression{
+													ExponentiationExpression: ExponentiationExpression{
+														SubsetExpression: SubsetExpression{
+															ScopeExpression: ScopeExpression{
+																IndexOrCallExpression: IndexOrCallExpression{
+																	SimpleExpression: &SimpleExpression{
+																		Identifier: &tk[2],
+																		Tokens:     tk[2:3],
+																	},
+																	Tokens: tk[2:3],
+																},
+																Tokens: tk[2:3],
+															},
+															Tokens: tk[2:3],
+														},
+														Tokens: tk[2:3],
+													},
+													Tokens: tk[2:3],
+												},
+												Tokens: tk[2:3],
+											},
+											Tokens: tk[2:3],
+										},
+										Tokens: tk[2:3],
+									},
+									Tokens: tk[2:3],
+								},
+								Tokens: tk[2:3],
+							},
+							Tokens: tk[2:3],
+						},
+						Tokens: tk[2:3],
+					},
+					Tokens: tk[2:3],
+				},
+				Tokens: tk[:3],
+			}
+		}},
+		{"a || b", func(t *test, tk Tokens) { // 6
+			t.Output = OrExpression{
+				AndExpression: AndExpression{
+					NotExpression: NotExpression{
+						RelationalExpression: RelationalExpression{
+							AdditionExpression: AdditionExpression{
+								MultiplicationExpression: MultiplicationExpression{
+									PipeOrSpecialExpression: PipeOrSpecialExpression{
+										SequenceExpression: SequenceExpression{
+											UnaryExpression: UnaryExpression{
+												ExponentiationExpression: ExponentiationExpression{
+													SubsetExpression: SubsetExpression{
+														ScopeExpression: ScopeExpression{
+															IndexOrCallExpression: IndexOrCallExpression{
+																SimpleExpression: &SimpleExpression{
+																	Identifier: &tk[0],
+																	Tokens:     tk[:1],
+																},
+																Tokens: tk[:1],
+															},
+															Tokens: tk[:1],
+														},
+														Tokens: tk[:1],
+													},
+													Tokens: tk[:1],
+												},
+												Tokens: tk[:1],
+											},
+											Tokens: tk[:1],
+										},
+										Tokens: tk[:1],
+									},
+									Tokens: tk[:1],
+								},
+								Tokens: tk[:1],
+							},
+							Tokens: tk[:1],
+						},
+						Tokens: tk[:1],
+					},
+					Tokens: tk[:1],
+				},
+				OrType: OrNotVectorized,
+				OrExpression: &OrExpression{
+					AndExpression: AndExpression{
+						NotExpression: NotExpression{
+							RelationalExpression: RelationalExpression{
+								AdditionExpression: AdditionExpression{
+									MultiplicationExpression: MultiplicationExpression{
+										PipeOrSpecialExpression: PipeOrSpecialExpression{
+											SequenceExpression: SequenceExpression{
+												UnaryExpression: UnaryExpression{
+													ExponentiationExpression: ExponentiationExpression{
+														SubsetExpression: SubsetExpression{
+															ScopeExpression: ScopeExpression{
+																IndexOrCallExpression: IndexOrCallExpression{
+																	SimpleExpression: &SimpleExpression{
+																		Identifier: &tk[4],
+																		Tokens:     tk[4:5],
+																	},
+																	Tokens: tk[4:5],
+																},
+																Tokens: tk[4:5],
+															},
+															Tokens: tk[4:5],
+														},
+														Tokens: tk[4:5],
+													},
+													Tokens: tk[4:5],
+												},
+												Tokens: tk[4:5],
+											},
+											Tokens: tk[4:5],
+										},
+										Tokens: tk[4:5],
+									},
+									Tokens: tk[4:5],
+								},
+								Tokens: tk[4:5],
+							},
+							Tokens: tk[4:5],
+						},
+						Tokens: tk[4:5],
+					},
+					Tokens: tk[4:5],
+				},
+				Tokens: tk[:5],
+			}
+		}},
+	}, func(t *test) (Type, error) {
+		var oe OrExpression
+
+		err := oe.parse(&t.Tokens)
+
+		return oe, err
+	})
+}
+
 func TestAndExpression(t *testing.T) {
 	doTests(t, []sourceFn{
 		{"a", func(t *test, tk Tokens) { // 1
