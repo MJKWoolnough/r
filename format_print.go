@@ -97,7 +97,25 @@ func (f FlowControl) printSource(w io.Writer, v bool) {}
 
 func (f ForControl) printSource(w io.Writer, v bool) {}
 
-func (f FormulaeExpression) printSource(w io.Writer, v bool) {}
+func (f FormulaeExpression) printSource(w io.Writer, v bool) {
+	if f.OrExpression != nil {
+		f.OrExpression.printSource(w, v)
+
+		if v && f.FormulaeExpression != nil {
+			io.WriteString(w, " ")
+		}
+	}
+
+	if f.FormulaeExpression != nil {
+		io.WriteString(w, "~")
+
+		if v {
+			io.WriteString(w, " ")
+		}
+
+		f.FormulaeExpression.printSource(w, v)
+	}
+}
 
 func (f FunctionDefinition) printSource(w io.Writer, v bool) {}
 
