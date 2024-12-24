@@ -13,151 +13,156 @@ func WrapQuery(p QueryWrappable) *QueryExpression {
 
 	switch p := p.(type) {
 	case *AssignmentExpression:
-		q.AssignmentExpression = *p
-
-		goto AssignmentExpression
-	case AssignmentExpression:
 		q.AssignmentExpression = p
 
 		goto AssignmentExpression
-	case *FormulaeExpression:
-		q.AssignmentExpression.FormulaeExpression = *p
+	case AssignmentExpression:
+		q.AssignmentExpression = &p
 
-		goto FormulaeExpression
-	case FormulaeExpression:
-		q.AssignmentExpression.FormulaeExpression = p
-
-		goto FormulaeExpression
-	case *OrExpression:
-		q.AssignmentExpression.FormulaeExpression.OrExpression = p
-
-		goto OrExpression
-	case OrExpression:
-		q.AssignmentExpression.FormulaeExpression.OrExpression = &p
-
-		goto OrExpression
+		goto AssignmentExpression
 	default:
-		q.AssignmentExpression.FormulaeExpression.OrExpression = new(OrExpression)
+		q.AssignmentExpression = new(AssignmentExpression)
 
 		switch p := p.(type) {
-		case *AndExpression:
-			q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression = *p
+		case *FormulaeExpression:
+			q.AssignmentExpression.FormulaeExpression = *p
 
-			goto AndExpression
-		case AndExpression:
-			q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression = p
+			goto FormulaeExpression
+		case FormulaeExpression:
+			q.AssignmentExpression.FormulaeExpression = p
 
-			goto AndExpression
-		case *NotExpression:
-			q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression = *p
+			goto FormulaeExpression
+		case *OrExpression:
+			q.AssignmentExpression.FormulaeExpression.OrExpression = p
 
-			goto NotExpression
-		case NotExpression:
-			q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression = p
+			goto OrExpression
+		case OrExpression:
+			q.AssignmentExpression.FormulaeExpression.OrExpression = &p
 
-			goto NotExpression
-		case *RelationalExpression:
-			q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression = *p
+			goto OrExpression
+		default:
+			q.AssignmentExpression.FormulaeExpression.OrExpression = new(OrExpression)
 
-			goto RelationalExpression
-		case RelationalExpression:
-			q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression = p
+			switch p := p.(type) {
+			case *AndExpression:
+				q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression = *p
 
-			goto RelationalExpression
-		case *AdditionExpression:
-			q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression = *p
+				goto AndExpression
+			case AndExpression:
+				q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression = p
 
-			goto AdditionExpression
-		case AdditionExpression:
-			q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression = p
+				goto AndExpression
+			case *NotExpression:
+				q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression = *p
 
-			goto AdditionExpression
-		case *MultiplicationExpression:
-			q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression = *p
+				goto NotExpression
+			case NotExpression:
+				q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression = p
 
-			goto MultiplicationExpression
-		case MultiplicationExpression:
-			q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression = p
+				goto NotExpression
+			case *RelationalExpression:
+				q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression = *p
 
-			goto MultiplicationExpression
-		case *PipeOrSpecialExpression:
-			q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression = *p
+				goto RelationalExpression
+			case RelationalExpression:
+				q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression = p
 
-			goto PipeOrSpecialExpression
-		case PipeOrSpecialExpression:
-			q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression = p
+				goto RelationalExpression
+			case *AdditionExpression:
+				q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression = *p
 
-			goto PipeOrSpecialExpression
-		case *SequenceExpression:
-			q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression = *p
+				goto AdditionExpression
+			case AdditionExpression:
+				q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression = p
 
-			goto SequenceExpression
-		case SequenceExpression:
-			q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression = p
+				goto AdditionExpression
+			case *MultiplicationExpression:
+				q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression = *p
 
-			goto SequenceExpression
-		case *UnaryExpression:
-			q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression = *p
+				goto MultiplicationExpression
+			case MultiplicationExpression:
+				q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression = p
 
-			goto UnaryExpression
-		case UnaryExpression:
-			q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression = p
+				goto MultiplicationExpression
+			case *PipeOrSpecialExpression:
+				q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression = *p
 
-			goto UnaryExpression
-		case *ExponentiationExpression:
-			q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression.ExponentiationExpression = *p
+				goto PipeOrSpecialExpression
+			case PipeOrSpecialExpression:
+				q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression = p
 
-			goto ExponentiationExpression
-		case ExponentiationExpression:
-			q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression.ExponentiationExpression = p
+				goto PipeOrSpecialExpression
+			case *SequenceExpression:
+				q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression = *p
 
-			goto ExponentiationExpression
-		case *SubsetExpression:
-			q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression.ExponentiationExpression.SubsetExpression = *p
+				goto SequenceExpression
+			case SequenceExpression:
+				q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression = p
 
-			goto SubsetExpression
-		case SubsetExpression:
-			q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression.ExponentiationExpression.SubsetExpression = p
+				goto SequenceExpression
+			case *UnaryExpression:
+				q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression = *p
 
-			goto SubsetExpression
-		case *ScopeExpression:
-			q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression.ExponentiationExpression.SubsetExpression.ScopeExpression = *p
+				goto UnaryExpression
+			case UnaryExpression:
+				q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression = p
 
-			goto ScopeExpression
-		case ScopeExpression:
-			q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression.ExponentiationExpression.SubsetExpression.ScopeExpression = p
+				goto UnaryExpression
+			case *ExponentiationExpression:
+				q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression.ExponentiationExpression = *p
 
-			goto ScopeExpression
-		case *IndexOrCallExpression:
-			q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression.ExponentiationExpression.SubsetExpression.ScopeExpression.IndexOrCallExpression = *p
+				goto ExponentiationExpression
+			case ExponentiationExpression:
+				q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression.ExponentiationExpression = p
 
-			goto IndexOrCallExpression
-		case IndexOrCallExpression:
-			q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression.ExponentiationExpression.SubsetExpression.ScopeExpression.IndexOrCallExpression = p
+				goto ExponentiationExpression
+			case *SubsetExpression:
+				q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression.ExponentiationExpression.SubsetExpression = *p
 
-			goto IndexOrCallExpression
-		case *SimpleExpression:
-			q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression.ExponentiationExpression.SubsetExpression.ScopeExpression.IndexOrCallExpression.SimpleExpression = p
+				goto SubsetExpression
+			case SubsetExpression:
+				q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression.ExponentiationExpression.SubsetExpression = p
 
-			goto SimpleExpression
-		case SimpleExpression:
-			q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression.ExponentiationExpression.SubsetExpression.ScopeExpression.IndexOrCallExpression.SimpleExpression = &p
+				goto SubsetExpression
+			case *ScopeExpression:
+				q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression.ExponentiationExpression.SubsetExpression.ScopeExpression = *p
 
-			goto SimpleExpression
-		case *CompoundExpression:
-			q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression.ExponentiationExpression.SubsetExpression.ScopeExpression.IndexOrCallExpression.SimpleExpression = &SimpleExpression{
-				CompoundExpression: p,
-				Tokens:             p.Tokens,
+				goto ScopeExpression
+			case ScopeExpression:
+				q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression.ExponentiationExpression.SubsetExpression.ScopeExpression = p
+
+				goto ScopeExpression
+			case *IndexOrCallExpression:
+				q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression.ExponentiationExpression.SubsetExpression.ScopeExpression.IndexOrCallExpression = *p
+
+				goto IndexOrCallExpression
+			case IndexOrCallExpression:
+				q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression.ExponentiationExpression.SubsetExpression.ScopeExpression.IndexOrCallExpression = p
+
+				goto IndexOrCallExpression
+			case *SimpleExpression:
+				q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression.ExponentiationExpression.SubsetExpression.ScopeExpression.IndexOrCallExpression.SimpleExpression = p
+
+				goto SimpleExpression
+			case SimpleExpression:
+				q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression.ExponentiationExpression.SubsetExpression.ScopeExpression.IndexOrCallExpression.SimpleExpression = &p
+
+				goto SimpleExpression
+			case *CompoundExpression:
+				q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression.ExponentiationExpression.SubsetExpression.ScopeExpression.IndexOrCallExpression.SimpleExpression = &SimpleExpression{
+					CompoundExpression: p,
+					Tokens:             p.Tokens,
+				}
+
+				goto SimpleExpression
+			case CompoundExpression:
+				q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression.ExponentiationExpression.SubsetExpression.ScopeExpression.IndexOrCallExpression.SimpleExpression = &SimpleExpression{
+					CompoundExpression: &p,
+					Tokens:             p.Tokens,
+				}
+
+				goto SimpleExpression
 			}
-
-			goto SimpleExpression
-		case CompoundExpression:
-			q.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression.ExponentiationExpression.SubsetExpression.ScopeExpression.IndexOrCallExpression.SimpleExpression = &SimpleExpression{
-				CompoundExpression: &p,
-				Tokens:             p.Tokens,
-			}
-
-			goto SimpleExpression
 		}
 	}
 
@@ -203,7 +208,7 @@ func UnwrapQuery(q *QueryExpression) QueryWrappable {
 	} else if q.QueryExpression != nil {
 		return q
 	} else if q.AssignmentExpression.AssignmentExpression != nil {
-		return &q.AssignmentExpression
+		return q.AssignmentExpression
 	} else if q.AssignmentExpression.FormulaeExpression.FormulaeExpression != nil {
 		return &q.AssignmentExpression.FormulaeExpression
 	} else if q.AssignmentExpression.FormulaeExpression.OrExpression == nil {

@@ -561,8 +561,12 @@ func (f *QueryExpression) printType(w io.Writer, v bool) {
 	pp.Print("\nQueryType: ")
 	f.QueryType.printType(&pp, v)
 
-	pp.Print("\nAssignmentExpression: ")
-	f.AssignmentExpression.printType(&pp, v)
+	if f.AssignmentExpression != nil {
+		pp.Print("\nAssignmentExpression: ")
+		f.AssignmentExpression.printType(&pp, v)
+	} else if v {
+		pp.Print("\nAssignmentExpression: nil")
+	}
 
 	if f.QueryExpression != nil {
 		pp.Print("\nQueryExpression: ")

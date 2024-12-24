@@ -441,7 +441,7 @@ const (
 
 type QueryExpression struct {
 	QueryType            QueryType
-	AssignmentExpression AssignmentExpression
+	AssignmentExpression *AssignmentExpression
 	QueryExpression      *QueryExpression
 	Tokens               Tokens
 }
@@ -462,6 +462,7 @@ func (q *QueryExpression) parse(r *rParser) error {
 		r.Score(s)
 	} else {
 		s := r.NewGoal()
+		q.AssignmentExpression = new(AssignmentExpression)
 
 		if err := q.AssignmentExpression.parse(&s); err != nil {
 			return r.Error("QueryExpression", err)
