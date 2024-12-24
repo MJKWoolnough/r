@@ -311,7 +311,7 @@ func TestQueryExpression(t *testing.T) {
 				Tokens: tk[:3],
 			}
 		}},
-		{"a?b", func(t *test, tk Tokens) { // 3
+		{"a?b", func(t *test, tk Tokens) { // 4
 			t.Output = QueryExpression{
 				QueryType: QueryBinary,
 				AssignmentExpression: &AssignmentExpression{
@@ -418,7 +418,7 @@ func TestQueryExpression(t *testing.T) {
 				Tokens: tk[:3],
 			}
 		}},
-		{"a ? b", func(t *test, tk Tokens) { // 3
+		{"a ? b", func(t *test, tk Tokens) { // 5
 			t.Output = QueryExpression{
 				QueryType: QueryBinary,
 				AssignmentExpression: &AssignmentExpression{
@@ -525,6 +525,223 @@ func TestQueryExpression(t *testing.T) {
 				Tokens: tk[:5],
 			}
 		}},
+		{"in", func(t *test, tk Tokens) { // 6
+			t.Err = Error{
+				Err: Error{
+					Err: Error{
+						Err: Error{
+							Err: Error{
+								Err: Error{
+									Err: Error{
+										Err: Error{
+											Err: Error{
+												Err: Error{
+													Err: Error{
+														Err: Error{
+															Err: Error{
+																Err: Error{
+																	Err: Error{
+																		Err: Error{
+																			Err: Error{
+																				Err:     ErrInvalidSimpleExpression,
+																				Parsing: "SimpleExpression",
+																				Token:   tk[0],
+																			},
+																			Parsing: "IndexOrCallExpression",
+																			Token:   tk[0],
+																		},
+																		Parsing: "ScopeExpression",
+																		Token:   tk[0],
+																	},
+																	Parsing: "SubsetExpression",
+																	Token:   tk[0],
+																},
+																Parsing: "ExponentiationExpression",
+																Token:   tk[0],
+															},
+															Parsing: "UnaryExpression",
+															Token:   tk[0],
+														},
+														Parsing: "SequenceExpression",
+														Token:   tk[0],
+													},
+													Parsing: "PipeOrSpecialExpression",
+													Token:   tk[0],
+												},
+												Parsing: "MultiplicationExpression",
+												Token:   tk[0],
+											},
+											Parsing: "AdditionExpression",
+											Token:   tk[0],
+										},
+										Parsing: "RelationalExpression",
+										Token:   tk[0],
+									},
+									Parsing: "NotExpression",
+									Token:   tk[0],
+								},
+								Parsing: "AndExpression",
+								Token:   tk[0],
+							},
+							Parsing: "OrExpression",
+							Token:   tk[0],
+						},
+						Parsing: "FormulaeExpression",
+						Token:   tk[0],
+					},
+					Parsing: "AssignmentExpression",
+					Token:   tk[0],
+				},
+				Parsing: "QueryExpression",
+				Token:   tk[0],
+			}
+		}},
+		{"?in", func(t *test, tk Tokens) { // 7
+			t.Err = Error{
+				Err: Error{
+					Err: Error{
+						Err: Error{
+							Err: Error{
+								Err: Error{
+									Err: Error{
+										Err: Error{
+											Err: Error{
+												Err: Error{
+													Err: Error{
+														Err: Error{
+															Err: Error{
+																Err: Error{
+																	Err: Error{
+																		Err: Error{
+																			Err: Error{
+																				Err:     ErrInvalidSimpleExpression,
+																				Parsing: "SimpleExpression",
+																				Token:   tk[1],
+																			},
+																			Parsing: "IndexOrCallExpression",
+																			Token:   tk[1],
+																		},
+																		Parsing: "ScopeExpression",
+																		Token:   tk[1],
+																	},
+																	Parsing: "SubsetExpression",
+																	Token:   tk[1],
+																},
+																Parsing: "ExponentiationExpression",
+																Token:   tk[1],
+															},
+															Parsing: "UnaryExpression",
+															Token:   tk[1],
+														},
+														Parsing: "SequenceExpression",
+														Token:   tk[1],
+													},
+													Parsing: "PipeOrSpecialExpression",
+													Token:   tk[1],
+												},
+												Parsing: "MultiplicationExpression",
+												Token:   tk[1],
+											},
+											Parsing: "AdditionExpression",
+											Token:   tk[1],
+										},
+										Parsing: "RelationalExpression",
+										Token:   tk[1],
+									},
+									Parsing: "NotExpression",
+									Token:   tk[1],
+								},
+								Parsing: "AndExpression",
+								Token:   tk[1],
+							},
+							Parsing: "OrExpression",
+							Token:   tk[1],
+						},
+						Parsing: "FormulaeExpression",
+						Token:   tk[1],
+					},
+					Parsing: "AssignmentExpression",
+					Token:   tk[1],
+				},
+				Parsing: "QueryExpression",
+				Token:   tk[1],
+			}
+		}},
+		{"a?in", func(t *test, tk Tokens) { // 8
+			t.Err = Error{
+				Err: Error{
+					Err: Error{
+						Err: Error{
+							Err: Error{
+								Err: Error{
+									Err: Error{
+										Err: Error{
+											Err: Error{
+												Err: Error{
+													Err: Error{
+														Err: Error{
+															Err: Error{
+																Err: Error{
+																	Err: Error{
+																		Err: Error{
+																			Err: Error{
+																				Err: Error{
+																					Err:     ErrInvalidSimpleExpression,
+																					Parsing: "SimpleExpression",
+																					Token:   tk[2],
+																				},
+																				Parsing: "IndexOrCallExpression",
+																				Token:   tk[2],
+																			},
+																			Parsing: "ScopeExpression",
+																			Token:   tk[2],
+																		},
+																		Parsing: "SubsetExpression",
+																		Token:   tk[2],
+																	},
+																	Parsing: "ExponentiationExpression",
+																	Token:   tk[2],
+																},
+																Parsing: "UnaryExpression",
+																Token:   tk[2],
+															},
+															Parsing: "SequenceExpression",
+															Token:   tk[2],
+														},
+														Parsing: "PipeOrSpecialExpression",
+														Token:   tk[2],
+													},
+													Parsing: "MultiplicationExpression",
+													Token:   tk[2],
+												},
+												Parsing: "AdditionExpression",
+												Token:   tk[2],
+											},
+											Parsing: "RelationalExpression",
+											Token:   tk[2],
+										},
+										Parsing: "NotExpression",
+										Token:   tk[2],
+									},
+									Parsing: "AndExpression",
+									Token:   tk[2],
+								},
+								Parsing: "OrExpression",
+								Token:   tk[2],
+							},
+							Parsing: "FormulaeExpression",
+							Token:   tk[2],
+						},
+						Parsing: "AssignmentExpression",
+						Token:   tk[2],
+					},
+					Parsing: "QueryExpression",
+					Token:   tk[2],
+				},
+				Parsing: "QueryExpression",
+				Token:   tk[2],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var qe QueryExpression
 
@@ -587,7 +804,7 @@ func TestAssignmentExpression(t *testing.T) {
 				Tokens: tk[:1],
 			}
 		}},
-		{"a=b", func(t *test, tk Tokens) { // 1
+		{"a=b", func(t *test, tk Tokens) { // 2
 			t.Output = AssignmentExpression{
 				FormulaeExpression: FormulaeExpression{
 					OrExpression: &OrExpression{
@@ -688,7 +905,7 @@ func TestAssignmentExpression(t *testing.T) {
 				Tokens: tk[:3],
 			}
 		}},
-		{"a = b", func(t *test, tk Tokens) { // 1
+		{"a = b", func(t *test, tk Tokens) { // 3
 			t.Output = AssignmentExpression{
 				FormulaeExpression: FormulaeExpression{
 					OrExpression: &OrExpression{
@@ -789,7 +1006,7 @@ func TestAssignmentExpression(t *testing.T) {
 				Tokens: tk[:5],
 			}
 		}},
-		{"a<-b", func(t *test, tk Tokens) { // 1
+		{"a<-b", func(t *test, tk Tokens) { // 4
 			t.Output = AssignmentExpression{
 				FormulaeExpression: FormulaeExpression{
 					OrExpression: &OrExpression{
@@ -890,7 +1107,7 @@ func TestAssignmentExpression(t *testing.T) {
 				Tokens: tk[:3],
 			}
 		}},
-		{"a <- b", func(t *test, tk Tokens) { // 1
+		{"a <- b", func(t *test, tk Tokens) { // 5
 			t.Output = AssignmentExpression{
 				FormulaeExpression: FormulaeExpression{
 					OrExpression: &OrExpression{
@@ -991,7 +1208,7 @@ func TestAssignmentExpression(t *testing.T) {
 				Tokens: tk[:5],
 			}
 		}},
-		{"a->b", func(t *test, tk Tokens) { // 1
+		{"a->b", func(t *test, tk Tokens) { // 6
 			t.Output = AssignmentExpression{
 				FormulaeExpression: FormulaeExpression{
 					OrExpression: &OrExpression{
@@ -1092,7 +1309,7 @@ func TestAssignmentExpression(t *testing.T) {
 				Tokens: tk[:3],
 			}
 		}},
-		{"a -> b", func(t *test, tk Tokens) { // 1
+		{"a -> b", func(t *test, tk Tokens) { // 7
 			t.Output = AssignmentExpression{
 				FormulaeExpression: FormulaeExpression{
 					OrExpression: &OrExpression{
@@ -1193,7 +1410,7 @@ func TestAssignmentExpression(t *testing.T) {
 				Tokens: tk[:5],
 			}
 		}},
-		{"a<<-b", func(t *test, tk Tokens) { // 1
+		{"a<<-b", func(t *test, tk Tokens) { // 8
 			t.Output = AssignmentExpression{
 				FormulaeExpression: FormulaeExpression{
 					OrExpression: &OrExpression{
@@ -1294,7 +1511,7 @@ func TestAssignmentExpression(t *testing.T) {
 				Tokens: tk[:3],
 			}
 		}},
-		{"a <<- b", func(t *test, tk Tokens) { // 1
+		{"a <<- b", func(t *test, tk Tokens) { // 9
 			t.Output = AssignmentExpression{
 				FormulaeExpression: FormulaeExpression{
 					OrExpression: &OrExpression{
@@ -1395,7 +1612,7 @@ func TestAssignmentExpression(t *testing.T) {
 				Tokens: tk[:5],
 			}
 		}},
-		{"a->>b", func(t *test, tk Tokens) { // 1
+		{"a->>b", func(t *test, tk Tokens) { // 10
 			t.Output = AssignmentExpression{
 				FormulaeExpression: FormulaeExpression{
 					OrExpression: &OrExpression{
@@ -1496,7 +1713,7 @@ func TestAssignmentExpression(t *testing.T) {
 				Tokens: tk[:3],
 			}
 		}},
-		{"a ->> b", func(t *test, tk Tokens) { // 1
+		{"a ->> b", func(t *test, tk Tokens) { // 11
 			t.Output = AssignmentExpression{
 				FormulaeExpression: FormulaeExpression{
 					OrExpression: &OrExpression{
@@ -1597,7 +1814,7 @@ func TestAssignmentExpression(t *testing.T) {
 				Tokens: tk[:5],
 			}
 		}},
-		{"in", func(t *test, tk Tokens) { // 5
+		{"in", func(t *test, tk Tokens) { // 12
 			t.Err = Error{
 				Err: Error{
 					Err: Error{
@@ -1664,7 +1881,7 @@ func TestAssignmentExpression(t *testing.T) {
 				Token:   tk[0],
 			}
 		}},
-		{"a=in", func(t *test, tk Tokens) { // 6
+		{"a=in", func(t *test, tk Tokens) { // 13
 			t.Err = Error{
 				Err: Error{
 					Err: Error{
@@ -2439,7 +2656,7 @@ func TestOrExpression(t *testing.T) {
 				Tokens: tk[:3],
 			}
 		}},
-		{"a || b", func(t *test, tk Tokens) { // 6
+		{"a || b", func(t *test, tk Tokens) { // 5
 			t.Output = OrExpression{
 				AndExpression: AndExpression{
 					NotExpression: NotExpression{
@@ -2528,7 +2745,7 @@ func TestOrExpression(t *testing.T) {
 				Tokens: tk[:5],
 			}
 		}},
-		{"in", func(t *test, tk Tokens) { // 7
+		{"in", func(t *test, tk Tokens) { // 6
 			t.Err = Error{
 				Err: Error{
 					Err: Error{
@@ -2587,7 +2804,7 @@ func TestOrExpression(t *testing.T) {
 				Token:   tk[0],
 			}
 		}},
-		{"a|in", func(t *test, tk Tokens) { // 6
+		{"a|in", func(t *test, tk Tokens) { // 7
 			t.Err = Error{
 				Err: Error{
 					Err: Error{
@@ -2952,7 +3169,7 @@ func TestAndExpression(t *testing.T) {
 				Tokens: tk[:3],
 			}
 		}},
-		{"a && b", func(t *test, tk Tokens) { // 6
+		{"a && b", func(t *test, tk Tokens) { // 5
 			t.Output = AndExpression{
 				NotExpression: NotExpression{
 					RelationalExpression: RelationalExpression{
@@ -3035,7 +3252,7 @@ func TestAndExpression(t *testing.T) {
 				Tokens: tk[:5],
 			}
 		}},
-		{"in", func(t *test, tk Tokens) { // 7
+		{"in", func(t *test, tk Tokens) { // 6
 			t.Err = Error{
 				Err: Error{
 					Err: Error{
@@ -3090,7 +3307,7 @@ func TestAndExpression(t *testing.T) {
 				Token:   tk[0],
 			}
 		}},
-		{"a&in", func(t *test, tk Tokens) { // 6
+		{"a&in", func(t *test, tk Tokens) { // 7
 			t.Err = Error{
 				Err: Error{
 					Err: Error{
