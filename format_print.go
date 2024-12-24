@@ -10,7 +10,7 @@ func (a AdditionExpression) printSource(w io.Writer, v bool) {
 			io.WriteString(w, " ")
 		}
 
-		io.WriteString(w, a.AdditionType.String())
+		a.AdditionType.printSource(w, v)
 
 		if v {
 			io.WriteString(w, " ")
@@ -24,8 +24,7 @@ func (a AndExpression) printSource(w io.Writer, v bool) {
 	a.NotExpression.printSource(w, v)
 
 	if a.AndType != AndNone && a.AndExpression != nil {
-		io.WriteString(w, a.AndType.String())
-
+		a.AndType.printSource(w, v)
 		a.AndExpression.printSource(w, v)
 	}
 }
@@ -169,7 +168,7 @@ func (m MultiplicationExpression) printSource(w io.Writer, v bool) {
 			io.WriteString(w, " ")
 		}
 
-		io.WriteString(w, m.MultiplicationType.String())
+		m.MultiplicationType.printSource(w, v)
 
 		if v {
 			io.WriteString(w, " ")
@@ -191,8 +190,7 @@ func (o OrExpression) printSource(w io.Writer, v bool) {
 	o.AndExpression.printSource(w, v)
 
 	if o.OrType != OrNone && o.OrExpression != nil {
-		io.WriteString(w, o.OrType.String())
-
+		o.OrType.printSource(w, v)
 		o.OrExpression.printSource(w, v)
 	}
 }
@@ -225,7 +223,7 @@ func (r RelationalExpression) printSource(w io.Writer, v bool) {
 			io.WriteString(w, " ")
 		}
 
-		io.WriteString(w, r.RelationalOperator.String())
+		r.RelationalExpression.printSource(w, v)
 
 		if v {
 			io.WriteString(w, " ")
