@@ -176,6 +176,21 @@ func (a AssignmentType) printType(w io.Writer, _ bool) {
 	io.WriteString(w, a.String())
 }
 
+func (a AssignmentType) printSource(w io.Writer, _ bool) {
+	switch a {
+	case AssignmentEquals:
+		io.WriteString(w, "=")
+	case AssignmentLeftAssign:
+		io.WriteString(w, "<-")
+	case AssignmentRightAssign:
+		io.WriteString(w, "->")
+	case AssignmentLeftParentAssign:
+		io.WriteString(w, "<<-")
+	case AssignmentRightParentAssign:
+		io.WriteString(w, "-->")
+	}
+}
+
 func (a AdditionType) String() string {
 	switch a {
 	case AdditionNone:
@@ -191,6 +206,15 @@ func (a AdditionType) String() string {
 
 func (a AdditionType) printType(w io.Writer, _ bool) {
 	io.WriteString(w, a.String())
+}
+
+func (a AdditionType) printSource(w io.Writer, _ bool) {
+	switch a {
+	case AdditionAdd:
+		io.WriteString(w, "+")
+	case AdditionSubtract:
+		io.WriteString(w, "-")
+	}
 }
 
 func (a AndType) String() string {
@@ -210,6 +234,15 @@ func (a AndType) printType(w io.Writer, _ bool) {
 	io.WriteString(w, a.String())
 }
 
+func (a AndType) printSource(w io.Writer, _ bool) {
+	switch a {
+	case AndVectorized:
+		io.WriteString(w, "&")
+	case AndNotVectorized:
+		io.WriteString(w, "&&")
+	}
+}
+
 func (m MultiplicationType) String() string {
 	switch m {
 	case MultiplicationNone:
@@ -225,6 +258,15 @@ func (m MultiplicationType) String() string {
 
 func (m MultiplicationType) printType(w io.Writer, _ bool) {
 	io.WriteString(w, m.String())
+}
+
+func (m MultiplicationType) printSource(w io.Writer, _ bool) {
+	switch m {
+	case MultiplicationMultiply:
+		io.WriteString(w, "*")
+	case MultiplicationDivide:
+		io.WriteString(w, "/")
+	}
 }
 
 func (o OrType) String() string {
@@ -244,6 +286,15 @@ func (o OrType) printType(w io.Writer, _ bool) {
 	io.WriteString(w, o.String())
 }
 
+func (o OrType) printSource(w io.Writer, _ bool) {
+	switch o {
+	case OrVectorized:
+		io.WriteString(w, "|")
+	case OrNotVectorized:
+		io.WriteString(w, "||")
+	}
+}
+
 func (q QueryType) String() string {
 	switch q {
 	case QueryNone:
@@ -259,6 +310,12 @@ func (q QueryType) String() string {
 
 func (q QueryType) printType(w io.Writer, _ bool) {
 	io.WriteString(w, q.String())
+}
+
+func (q QueryType) printSource(w io.Writer, _ bool) {
+	if q != QueryNone {
+		io.WriteString(w, "?")
+	}
 }
 
 func (r RelationalOperator) String() string {
@@ -286,6 +343,23 @@ func (r RelationalOperator) printType(w io.Writer, _ bool) {
 	io.WriteString(w, r.String())
 }
 
+func (r RelationalOperator) printSource(w io.Writer, _ bool) {
+	switch r {
+	case RelationalGreaterThan:
+		io.WriteString(w, ">")
+	case RelationalGreaterThanOrEqual:
+		io.WriteString(w, ">=")
+	case RelationalLessThan:
+		io.WriteString(w, "<")
+	case RelationalLessThanOrEqual:
+		io.WriteString(w, "<=")
+	case RelationalEqual:
+		io.WriteString(w, "==")
+	case RelationalNotEqual:
+		io.WriteString(w, "!=")
+	}
+}
+
 func (s SubsetType) String() string {
 	switch s {
 	case SubsetNone:
@@ -303,6 +377,15 @@ func (s SubsetType) printType(w io.Writer, _ bool) {
 	io.WriteString(w, s.String())
 }
 
+func (s SubsetType) printSource(w io.Writer, _ bool) {
+	switch s {
+	case SubsetList:
+		io.WriteString(w, "$")
+	case SubsetStructure:
+		io.WriteString(w, "@")
+	}
+}
+
 func (u UnaryType) String() string {
 	switch u {
 	case UnaryAdd:
@@ -316,4 +399,13 @@ func (u UnaryType) String() string {
 
 func (u UnaryType) printType(w io.Writer, _ bool) {
 	io.WriteString(w, u.String())
+}
+
+func (u UnaryType) printsource(w io.Writer, _ bool) {
+	switch u {
+	case UnaryAdd:
+		io.WriteString(w, "+")
+	case UnaryMinus:
+		io.WriteString(w, "-")
+	}
 }
