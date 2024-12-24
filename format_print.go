@@ -220,7 +220,16 @@ func (p PipeOrSpecialExpression) printSource(w io.Writer, v bool) {
 	}
 }
 
-func (q QueryExpression) printSource(w io.Writer, v bool) {}
+func (q QueryExpression) printSource(w io.Writer, v bool) {
+	if q.AssignmentExpression != nil {
+		q.AssignmentExpression.printSource(w, v)
+	}
+
+	if q.QueryType != QueryNone {
+		q.QueryType.printSource(w, v)
+		q.QueryExpression.printSource(w, v)
+	}
+}
 
 func (r RelationalExpression) printSource(w io.Writer, v bool) {
 	r.AdditionExpression.printSource(w, v)
