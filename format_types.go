@@ -138,6 +138,9 @@ func (f *AssignmentExpression) printType(w io.Writer, v bool) {
 	pp.Print("\nFormulaeExpression: ")
 	f.FormulaeExpression.printType(&pp, v)
 
+	pp.Print("\nAssignmentType: ")
+	f.AssignmentType.printType(&pp, v)
+
 	if f.AssignmentExpression != nil {
 		pp.Print("\nAssignmentExpression: ")
 		f.AssignmentExpression.printType(&pp, v)
