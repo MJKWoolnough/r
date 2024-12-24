@@ -41,7 +41,14 @@ func (a ArgList) printSource(w io.Writer, v bool) {}
 
 func (a Argument) printSource(w io.Writer, v bool) {}
 
-func (a AssignmentExpression) printSource(w io.Writer, v bool) {}
+func (a AssignmentExpression) printSource(w io.Writer, v bool) {
+	a.FormulaeExpression.printSource(w, v)
+
+	if a.AssignmentType != AssignmentNone && a.AssignmentExpression != nil {
+		a.AssignmentType.printSource(w, v)
+		a.AssignmentExpression.printSource(w, v)
+	}
+}
 
 func (c Call) printSource(w io.Writer, v bool) {
 	io.WriteString(w, "(")
