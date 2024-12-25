@@ -206,6 +206,24 @@ func TestArgList(t *testing.T) {
 				Tokens: tk[:0],
 			}
 		}},
+		{"in", func(t *test, tk Tokens) { // 6
+			t.Err = Error{
+				Err: Error{
+					Err:     ErrMissingIdentifier,
+					Parsing: "Argument",
+					Token:   tk[0],
+				},
+				Parsing: "ArgList",
+				Token:   tk[0],
+			}
+		}},
+		{"a b", func(t *test, tk Tokens) { // 7
+			t.Err = Error{
+				Err:     ErrMissingTerminator,
+				Parsing: "ArgList",
+				Token:   tk[2],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var al ArgList
 
