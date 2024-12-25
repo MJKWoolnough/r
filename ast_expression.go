@@ -362,30 +362,32 @@ type ArgList struct {
 func (a *ArgList) parse(r *rParser) error {
 	s := r.NewGoal()
 
-	for {
-		var arg Argument
+	if tk := s.Peek(); tk != (parser.Token{Type: TokenGrouping, Data: ")"}) && tk.Type != parser.TokenDone {
+		for {
+			var arg Argument
 
-		if err := arg.parse(&s); err != nil {
-			return r.Error("ArgList", err)
+			if err := arg.parse(&s); err != nil {
+				return r.Error("ArgList", err)
+			}
+
+			r.Score(s)
+			a.Args = append(a.Args, arg)
+
+			s = r.NewGoal()
+
+			s.AcceptRunWhitespaceNoNewLine()
+
+			if tk := s.Peek(); tk == (parser.Token{Type: TokenGrouping, Data: ")"}) || tk.Type == parser.TokenDone {
+				break
+			} else if !s.AcceptToken(parser.Token{Type: TokenExpressionTerminator, Data: ","}) {
+				return s.Error("ArgList", ErrMissingTerminator)
+			}
+
+			s.AcceptRunWhitespaceNoNewLine()
+			r.Score(s)
+
+			s = r.NewGoal()
 		}
-
-		r.Score(s)
-		a.Args = append(a.Args, arg)
-
-		s = r.NewGoal()
-
-		s.AcceptRunWhitespaceNoNewLine()
-
-		if tk := s.Peek(); tk == (parser.Token{Type: TokenGrouping, Data: ")"}) || tk.Type == parser.TokenDone {
-			break
-		} else if !s.AcceptToken(parser.Token{Type: TokenExpressionTerminator, Data: ","}) {
-			return s.Error("ArgList", ErrMissingTerminator)
-		}
-
-		s.AcceptRunWhitespaceNoNewLine()
-		r.Score(s)
-
-		s = r.NewGoal()
 	}
 
 	a.Tokens = r.ToTokens()
