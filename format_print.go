@@ -225,8 +225,17 @@ func (q QueryExpression) printSource(w io.Writer, v bool) {
 		q.AssignmentExpression.printSource(w, v)
 	}
 
-	if q.QueryType != QueryNone {
-		q.QueryType.printSource(w, v)
+	if q.QueryExpression != nil {
+		if v && q.AssignmentExpression != nil {
+			io.WriteString(w, " ")
+		}
+
+		io.WriteString(w, "?")
+
+		if v {
+			io.WriteString(w, " ")
+		}
+
 		q.QueryExpression.printSource(w, v)
 	}
 }

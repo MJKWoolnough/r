@@ -197,7 +197,6 @@ func TestQueryExpression(t *testing.T) {
 		}},
 		{"?a", func(t *test, tk Tokens) { // 2
 			t.Output = QueryExpression{
-				QueryType: QueryUnary,
 				QueryExpression: &QueryExpression{
 					AssignmentExpression: &AssignmentExpression{
 						FormulaeExpression: FormulaeExpression{
@@ -255,7 +254,6 @@ func TestQueryExpression(t *testing.T) {
 		}},
 		{"? a", func(t *test, tk Tokens) { // 3
 			t.Output = QueryExpression{
-				QueryType: QueryUnary,
 				QueryExpression: &QueryExpression{
 					AssignmentExpression: &AssignmentExpression{
 						FormulaeExpression: FormulaeExpression{
@@ -313,7 +311,6 @@ func TestQueryExpression(t *testing.T) {
 		}},
 		{"a?b", func(t *test, tk Tokens) { // 4
 			t.Output = QueryExpression{
-				QueryType: QueryBinary,
 				AssignmentExpression: &AssignmentExpression{
 					FormulaeExpression: FormulaeExpression{
 						OrExpression: &OrExpression{
@@ -420,7 +417,6 @@ func TestQueryExpression(t *testing.T) {
 		}},
 		{"a ? b", func(t *test, tk Tokens) { // 5
 			t.Output = QueryExpression{
-				QueryType: QueryBinary,
 				AssignmentExpression: &AssignmentExpression{
 					FormulaeExpression: FormulaeExpression{
 						OrExpression: &OrExpression{

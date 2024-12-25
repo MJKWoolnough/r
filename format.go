@@ -295,29 +295,6 @@ func (o OrType) printSource(w io.Writer, _ bool) {
 	}
 }
 
-func (q QueryType) String() string {
-	switch q {
-	case QueryNone:
-		return "QueryNone"
-	case QueryUnary:
-		return "QueryUnary"
-	case QueryBinary:
-		return "QueryBinary"
-	default:
-		return "Unknown"
-	}
-}
-
-func (q QueryType) printType(w io.Writer, _ bool) {
-	io.WriteString(w, q.String())
-}
-
-func (q QueryType) printSource(w io.Writer, _ bool) {
-	if q != QueryNone {
-		io.WriteString(w, "?")
-	}
-}
-
 func (r RelationalOperator) String() string {
 	switch r {
 	case RelationalNone:

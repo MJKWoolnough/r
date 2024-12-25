@@ -431,16 +431,7 @@ func (a *Argument) parse(r *rParser) error {
 	return nil
 }
 
-type QueryType uint8
-
-const (
-	QueryNone QueryType = iota
-	QueryUnary
-	QueryBinary
-)
-
 type QueryExpression struct {
-	QueryType            QueryType
 	AssignmentExpression *AssignmentExpression
 	QueryExpression      *QueryExpression
 	Tokens               Tokens
@@ -448,8 +439,6 @@ type QueryExpression struct {
 
 func (q *QueryExpression) parse(r *rParser) error {
 	if r.AcceptToken(parser.Token{Type: TokenOperator, Data: "?"}) {
-		q.QueryType = QueryUnary
-
 		r.AcceptRunWhitespaceNoNewLine()
 
 		s := r.NewGoal()
@@ -476,11 +465,9 @@ func (q *QueryExpression) parse(r *rParser) error {
 
 		if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "?"}) {
 			s.AcceptRunWhitespaceNoNewLine()
-
 			r.Score(s)
 
 			s = r.NewGoal()
-			q.QueryType = QueryBinary
 			q.QueryExpression = new(QueryExpression)
 
 			if err := q.QueryExpression.parse(&s); err != nil {
