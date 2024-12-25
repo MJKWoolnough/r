@@ -370,6 +370,7 @@ func (a *ArgList) parse(r *rParser) error {
 		}
 
 		r.Score(s)
+		a.Args = append(a.Args, arg)
 
 		s = r.NewGoal()
 
