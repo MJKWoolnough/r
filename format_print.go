@@ -37,7 +37,21 @@ func (a Arg) printSource(w io.Writer, v bool) {
 	}
 }
 
-func (a ArgList) printSource(w io.Writer, v bool) {}
+func (a ArgList) printSource(w io.Writer, v bool) {
+	if len(a.Args) > 0 {
+		a.Args[0].printSource(w, v)
+
+		for _, arg := range a.Args[1:] {
+			if v {
+				io.WriteString(w, ", ")
+			} else {
+				io.WriteString(w, ",")
+			}
+
+			arg.printSource(w, v)
+		}
+	}
+}
 
 func (a Argument) printSource(w io.Writer, v bool) {
 	if a.Identifier == nil {
