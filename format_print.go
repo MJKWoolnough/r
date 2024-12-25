@@ -39,7 +39,23 @@ func (a Arg) printSource(w io.Writer, v bool) {
 
 func (a ArgList) printSource(w io.Writer, v bool) {}
 
-func (a Argument) printSource(w io.Writer, v bool) {}
+func (a Argument) printSource(w io.Writer, v bool) {
+	if a.Identifier == nil {
+		return
+	}
+
+	io.WriteString(w, a.Identifier.Data)
+
+	if a.Identifier.Type == TokenIdentifier && a.Default != nil {
+		if v {
+			io.WriteString(w, " = ")
+		} else {
+			io.WriteString(w, "=")
+		}
+
+		a.Default.printSource(w, v)
+	}
+}
 
 func (a AssignmentExpression) printSource(w io.Writer, v bool) {
 	a.FormulaeExpression.printSource(w, v)
