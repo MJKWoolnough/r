@@ -139,6 +139,82 @@ func TestCompoundExpression(t *testing.T) {
 	})
 }
 
+func TestArgList(t *testing.T) {
+	doTests(t, []sourceFn{
+		{"a", func(t *test, tk Tokens) { // 1
+			t.Output = ArgList{
+				Args: []Argument{
+					{
+						Identifier: &tk[0],
+						Tokens:     tk[:1],
+					},
+				},
+				Tokens: tk[:1],
+			}
+		}},
+		{"a,b", func(t *test, tk Tokens) { // 2
+			t.Output = ArgList{
+				Args: []Argument{
+					{
+						Identifier: &tk[0],
+						Tokens:     tk[:1],
+					},
+					{
+						Identifier: &tk[2],
+						Tokens:     tk[2:3],
+					},
+				},
+				Tokens: tk[:3],
+			}
+		}},
+		{"a , b", func(t *test, tk Tokens) { // 3
+			t.Output = ArgList{
+				Args: []Argument{
+					{
+						Identifier: &tk[0],
+						Tokens:     tk[:1],
+					},
+					{
+						Identifier: &tk[4],
+						Tokens:     tk[4:5],
+					},
+				},
+				Tokens: tk[:5],
+			}
+		}},
+		{"a, b, c", func(t *test, tk Tokens) { // 4
+			t.Output = ArgList{
+				Args: []Argument{
+					{
+						Identifier: &tk[0],
+						Tokens:     tk[:1],
+					},
+					{
+						Identifier: &tk[3],
+						Tokens:     tk[3:4],
+					},
+					{
+						Identifier: &tk[6],
+						Tokens:     tk[6:7],
+					},
+				},
+				Tokens: tk[:7],
+			}
+		}},
+		{"", func(t *test, tk Tokens) { // 5
+			t.Output = ArgList{
+				Tokens: tk[:0],
+			}
+		}},
+	}, func(t *test) (Type, error) {
+		var al ArgList
+
+		err := al.parse(&t.Tokens)
+
+		return al, err
+	})
+}
+
 func TestArgument(t *testing.T) {
 	doTests(t, []sourceFn{
 		{"a", func(t *test, tk Tokens) { // 1
