@@ -179,6 +179,28 @@ func TestArgument(t *testing.T) {
 				Tokens:     tk[:1],
 			}
 		}},
+		{"in", func(t *test, tk Tokens) { // 5
+			t.Err = Error{
+				Err:     ErrMissingIdentifier,
+				Parsing: "Argument",
+				Token:   tk[0],
+			}
+		}},
+		{"a=in", func(t *test, tk Tokens) { // 6
+			t.Err = Error{
+				Err: Error{
+					Err: wrapQueryExpressionError(Error{
+						Err:     ErrInvalidSimpleExpression,
+						Parsing: "SimpleExpression",
+						Token:   tk[2],
+					}),
+					Parsing: "Expression",
+					Token:   tk[2],
+				},
+				Parsing: "Argument",
+				Token:   tk[2],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var a Argument
 
