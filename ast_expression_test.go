@@ -139,6 +139,55 @@ func TestCompoundExpression(t *testing.T) {
 	})
 }
 
+func TestArgument(t *testing.T) {
+	doTests(t, []sourceFn{
+		{"a", func(t *test, tk Tokens) { // 1
+			t.Output = Argument{
+				Identifier: &tk[0],
+				Tokens:     tk[:1],
+			}
+		}},
+		{"a=b", func(t *test, tk Tokens) { // 2
+			t.Output = Argument{
+				Identifier: &tk[0],
+				Default: &Expression{
+					QueryExpression: WrapQuery(&SimpleExpression{
+						Identifier: &tk[2],
+						Tokens:     tk[2:3],
+					}),
+					Tokens: tk[2:3],
+				},
+				Tokens: tk[:3],
+			}
+		}},
+		{"a = b", func(t *test, tk Tokens) { // 3
+			t.Output = Argument{
+				Identifier: &tk[0],
+				Default: &Expression{
+					QueryExpression: WrapQuery(&SimpleExpression{
+						Identifier: &tk[4],
+						Tokens:     tk[4:5],
+					}),
+					Tokens: tk[4:5],
+				},
+				Tokens: tk[:5],
+			}
+		}},
+		{"...", func(t *test, tk Tokens) { // 4
+			t.Output = Argument{
+				Identifier: &tk[0],
+				Tokens:     tk[:1],
+			}
+		}},
+	}, func(t *test) (Type, error) {
+		var a Argument
+
+		err := a.parse(&t.Tokens)
+
+		return a, err
+	})
+}
+
 func TestQueryExpression(t *testing.T) {
 	doTests(t, []sourceFn{
 		{"a", func(t *test, tk Tokens) { // 1
