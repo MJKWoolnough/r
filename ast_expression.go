@@ -375,7 +375,7 @@ func (a *ArgList) parse(r *rParser) error {
 
 		s.AcceptRunWhitespaceNoNewLine()
 
-		if s.Peek() == (parser.Token{Type: TokenGrouping, Data: ")"}) {
+		if tk := s.Peek(); tk == (parser.Token{Type: TokenGrouping, Data: ")"}) || tk.Type == parser.TokenDone {
 			break
 		} else if !s.AcceptToken(parser.Token{Type: TokenExpressionTerminator, Data: ","}) {
 			return s.Error("ArgList", ErrMissingTerminator)
