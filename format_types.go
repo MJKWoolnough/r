@@ -611,8 +611,8 @@ func (f *RepeatControl) printType(w io.Writer, v bool) {
 
 	pp.Print("RepeatControl {")
 
-	pp.Print("\nCond: ")
-	f.Cond.printType(&pp, v)
+	pp.Print("\nExpr: ")
+	f.Expr.printType(&pp, v)
 
 	pp.Print("\nTokens: ")
 	f.Tokens.printType(&pp, v)

@@ -229,7 +229,7 @@ func (w *WhileControl) parse(r *rParser) error {
 }
 
 type RepeatControl struct {
-	Cond   FormulaeExpression
+	Expr   Expression
 	Tokens Tokens
 }
 
@@ -239,7 +239,7 @@ func (rc *RepeatControl) parse(r *rParser) error {
 
 	s := r.NewGoal()
 
-	if err := rc.Cond.parse(&s); err != nil {
+	if err := rc.Expr.parse(&s); err != nil {
 		return r.Error("RepeatControl", err)
 	}
 
