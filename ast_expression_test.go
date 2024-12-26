@@ -216,6 +216,43 @@ func TestFunctionDefinition(t *testing.T) {
 				Tokens: tk[:9],
 			}
 		}},
+		{"function a", func(t *test, tk Tokens) { // 5
+			t.Err = Error{
+				Err:     ErrMissingOpeningParen,
+				Parsing: "FunctionDefinition",
+				Token:   tk[2],
+			}
+		}},
+		{"function(in)a", func(t *test, tk Tokens) { // 6
+			t.Err = Error{
+				Err: Error{
+					Err: Error{
+						Err:     ErrMissingIdentifier,
+						Parsing: "Argument",
+						Token:   tk[2],
+					},
+					Parsing: "ArgList",
+					Token:   tk[2],
+				},
+				Parsing: "FunctionDefinition",
+				Token:   tk[2],
+			}
+		}},
+		{"function()in", func(t *test, tk Tokens) { // 7
+			t.Err = Error{
+				Err: Error{
+					Err: wrapQueryExpressionError(Error{
+						Err:     ErrInvalidSimpleExpression,
+						Parsing: "SimpleExpression",
+						Token:   tk[3],
+					}),
+					Parsing: "Expression",
+					Token:   tk[3],
+				},
+				Parsing: "FunctionDefinition",
+				Token:   tk[3],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var fd FunctionDefinition
 
