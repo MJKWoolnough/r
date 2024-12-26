@@ -251,7 +251,7 @@ func (rc *RepeatControl) parse(r *rParser) error {
 }
 
 type ForControl struct {
-	Var    SimpleExpression
+	Var    *Token
 	List   FormulaeExpression
 	Expr   Expression
 	Tokens Tokens
@@ -267,13 +267,12 @@ func (f *ForControl) parse(r *rParser) error {
 
 	r.AcceptRunWhitespace()
 
-	s := r.NewGoal()
-
-	if err := f.Var.parse(&s); err != nil {
-		return r.Error("ForControl", err)
+	if !r.Accept(TokenIdentifier) {
+		return r.Error("ForControl", ErrMissingIdentifier)
 	}
 
-	r.Score(s)
+	f.Var = r.GetLastToken()
+
 	r.AcceptRunWhitespaceNoNewLine()
 
 	if !r.AcceptToken(parser.Token{Type: TokenKeyword, Data: "in"}) {
@@ -282,7 +281,7 @@ func (f *ForControl) parse(r *rParser) error {
 
 	r.AcceptRunWhitespaceNoNewLine()
 
-	s = r.NewGoal()
+	s := r.NewGoal()
 
 	if err := f.List.parse(&s); err != nil {
 		return r.Error("ForControl", err)

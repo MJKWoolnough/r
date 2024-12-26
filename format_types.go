@@ -307,8 +307,12 @@ func (f *ForControl) printType(w io.Writer, v bool) {
 
 	pp.Print("ForControl {")
 
-	pp.Print("\nVar: ")
-	f.Var.printType(&pp, v)
+	if f.Var != nil {
+		pp.Print("\nVar: ")
+		f.Var.printType(&pp, v)
+	} else if v {
+		pp.Print("\nVar: nil")
+	}
 
 	pp.Print("\nList: ")
 	f.List.printType(&pp, v)
