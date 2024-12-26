@@ -334,11 +334,7 @@ func (f *FunctionDefinition) parse(r *rParser) error {
 
 	r.Score(s)
 	r.AcceptRunWhitespaceNoNewLine()
-
-	if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
-		return r.Error("FunctionDefinition", ErrMissingClosingParen)
-	}
-
+	r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"})
 	r.AcceptRunWhitespaceNoNewLine()
 
 	s = r.NewGoal()
