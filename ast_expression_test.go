@@ -139,6 +139,29 @@ func TestCompoundExpression(t *testing.T) {
 	})
 }
 
+func TestRepeatControl(t *testing.T) {
+	doTests(t, []sourceFn{
+		{"repeat a", func(t *test, tk Tokens) { // 1
+			t.Output = RepeatControl{
+				Expr: Expression{
+					QueryExpression: WrapQuery(&SimpleExpression{
+						Identifier: &tk[2],
+						Tokens:     tk[2:3],
+					}),
+					Tokens: tk[2:3],
+				},
+				Tokens: tk[:3],
+			}
+		}},
+	}, func(t *test) (Type, error) {
+		var rc RepeatControl
+
+		err := rc.parse(&t.Tokens)
+
+		return rc, err
+	})
+}
+
 func TestForControl(t *testing.T) {
 	doTests(t, []sourceFn{
 		{"for(a in b)c", func(t *test, tk Tokens) { // 1
