@@ -153,7 +153,18 @@ func (f FormulaeExpression) printSource(w io.Writer, v bool) {
 	}
 }
 
-func (f FunctionDefinition) printSource(w io.Writer, v bool) {}
+func (f FunctionDefinition) printSource(w io.Writer, v bool) {
+	io.WriteString(w, "function(")
+	f.ArgList.printSource(w, v)
+
+	if v {
+		io.WriteString(w, ") ")
+	} else {
+		io.WriteString(w, ")")
+	}
+
+	f.Body.printSource(w, v)
+}
 
 func (i IfControl) printSource(w io.Writer, v bool) {}
 
