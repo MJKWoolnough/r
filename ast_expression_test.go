@@ -175,6 +175,60 @@ func TestForControl(t *testing.T) {
 				Tokens: tk[:10],
 			}
 		}},
+		{"for a", func(t *test, tk Tokens) { // 3
+			t.Err = Error{
+				Err:     ErrMissingOpeningParen,
+				Parsing: "ForControl",
+				Token:   tk[2],
+			}
+		}},
+		{"for(1)", func(t *test, tk Tokens) { // 4
+			t.Err = Error{
+				Err:     ErrMissingIdentifier,
+				Parsing: "ForControl",
+				Token:   tk[2],
+			}
+		}},
+		{"for(a b)", func(t *test, tk Tokens) { // 5
+			t.Err = Error{
+				Err:     ErrMissingIn,
+				Parsing: "ForControl",
+				Token:   tk[4],
+			}
+		}},
+		{"for(a in in)", func(t *test, tk Tokens) { // 6
+			t.Err = Error{
+				Err: wrapQueryExpressionError(Error{
+					Err:     ErrInvalidSimpleExpression,
+					Parsing: "SimpleExpression",
+					Token:   tk[6],
+				}).Err.(Error).Err,
+				Parsing: "ForControl",
+				Token:   tk[6],
+			}
+		}},
+		{"for(a in b c)", func(t *test, tk Tokens) { // 7
+			t.Err = Error{
+				Err:     ErrMissingClosingParen,
+				Parsing: "ForControl",
+				Token:   tk[8],
+			}
+		}},
+		{"for(a in b)in", func(t *test, tk Tokens) { // 8
+			t.Err = Error{
+				Err: Error{
+					Err: wrapQueryExpressionError(Error{
+						Err:     ErrInvalidSimpleExpression,
+						Parsing: "SimpleExpression",
+						Token:   tk[8],
+					}),
+					Parsing: "Expression",
+					Token:   tk[8],
+				},
+				Parsing: "ForControl",
+				Token:   tk[8],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var fc ForControl
 
