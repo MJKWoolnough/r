@@ -139,6 +139,92 @@ func TestCompoundExpression(t *testing.T) {
 	})
 }
 
+func TestFunctionDefinition(t *testing.T) {
+	doTests(t, []sourceFn{
+		{"function()a", func(t *test, tk Tokens) { // 1
+			t.Output = FunctionDefinition{
+				ArgList: ArgList{
+					Tokens: tk[2:2],
+				},
+				Body: Expression{
+					QueryExpression: WrapQuery(&SimpleExpression{
+						Identifier: &tk[3],
+						Tokens:     tk[3:4],
+					}),
+					Tokens: tk[3:4],
+				},
+				Tokens: tk[:4],
+			}
+		}},
+		{"function ( ) a", func(t *test, tk Tokens) { // 2
+			t.Output = FunctionDefinition{
+				ArgList: ArgList{
+					Tokens: tk[3:3],
+				},
+				Body: Expression{
+					QueryExpression: WrapQuery(&SimpleExpression{
+						Identifier: &tk[6],
+						Tokens:     tk[6:7],
+					}),
+					Tokens: tk[6:7],
+				},
+				Tokens: tk[:7],
+			}
+		}},
+		{"function(a)b", func(t *test, tk Tokens) { // 3
+			t.Output = FunctionDefinition{
+				ArgList: ArgList{
+					Args: []Argument{
+						{
+							Identifier: &tk[2],
+							Tokens:     tk[2:3],
+						},
+					},
+					Tokens: tk[2:3],
+				},
+				Body: Expression{
+					QueryExpression: WrapQuery(&SimpleExpression{
+						Identifier: &tk[4],
+						Tokens:     tk[4:5],
+					}),
+					Tokens: tk[4:5],
+				},
+				Tokens: tk[:5],
+			}
+		}},
+		{"function(a, b){}", func(t *test, tk Tokens) { // 4
+			t.Output = FunctionDefinition{
+				ArgList: ArgList{
+					Args: []Argument{
+						{
+							Identifier: &tk[2],
+							Tokens:     tk[2:3],
+						},
+						{
+							Identifier: &tk[5],
+							Tokens:     tk[5:6],
+						},
+					},
+					Tokens: tk[2:6],
+				},
+				Body: Expression{
+					QueryExpression: WrapQuery(&CompoundExpression{
+						Tokens: tk[7:9],
+					}),
+					Tokens: tk[7:9],
+				},
+				Tokens: tk[:9],
+			}
+		}},
+	}, func(t *test) (Type, error) {
+		var fd FunctionDefinition
+
+		err := fd.parse(&t.Tokens)
+
+		return fd, err
+	})
+}
+
 func TestArgList(t *testing.T) {
 	doTests(t, []sourceFn{
 		{"a", func(t *test, tk Tokens) { // 1
