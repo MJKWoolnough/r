@@ -139,6 +139,51 @@ func TestCompoundExpression(t *testing.T) {
 	})
 }
 
+func TestForControl(t *testing.T) {
+	doTests(t, []sourceFn{
+		{"for(a in b)c", func(t *test, tk Tokens) { // 1
+			t.Output = ForControl{
+				Var: &tk[2],
+				List: WrapQuery(&SimpleExpression{
+					Identifier: &tk[6],
+					Tokens:     tk[6:7],
+				}).AssignmentExpression.FormulaeExpression,
+				Expr: Expression{
+					QueryExpression: WrapQuery(&SimpleExpression{
+						Identifier: &tk[8],
+						Tokens:     tk[8:9],
+					}),
+					Tokens: tk[8:9],
+				},
+				Tokens: tk[:9],
+			}
+		}},
+		{"for(a in b) c", func(t *test, tk Tokens) { // 2
+			t.Output = ForControl{
+				Var: &tk[2],
+				List: WrapQuery(&SimpleExpression{
+					Identifier: &tk[6],
+					Tokens:     tk[6:7],
+				}).AssignmentExpression.FormulaeExpression,
+				Expr: Expression{
+					QueryExpression: WrapQuery(&SimpleExpression{
+						Identifier: &tk[9],
+						Tokens:     tk[9:10],
+					}),
+					Tokens: tk[9:10],
+				},
+				Tokens: tk[:10],
+			}
+		}},
+	}, func(t *test) (Type, error) {
+		var fc ForControl
+
+		err := fc.parse(&t.Tokens)
+
+		return fc, err
+	})
+}
+
 func TestFunctionDefinition(t *testing.T) {
 	doTests(t, []sourceFn{
 		{"function()a", func(t *test, tk Tokens) { // 1
