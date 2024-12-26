@@ -131,7 +131,29 @@ func (e Expression) printSource(w io.Writer, v bool) {}
 
 func (f FlowControl) printSource(w io.Writer, v bool) {}
 
-func (f ForControl) printSource(w io.Writer, v bool) {}
+func (f ForControl) printSource(w io.Writer, v bool) {
+	if f.Var == nil || f.Var.Type != TokenIdentifier {
+		return
+	}
+
+	if v {
+		io.WriteString(w, "for (")
+	} else {
+		io.WriteString(w, "for(")
+	}
+
+	io.WriteString(w, f.Var.Data)
+	io.WriteString(w, " in ")
+	f.List.printSource(w, v)
+
+	if v {
+		io.WriteString(w, ") ")
+	} else {
+		io.WriteString(w, ")")
+	}
+
+	f.Expr.printSource(w, v)
+}
 
 func (f FormulaeExpression) printSource(w io.Writer, v bool) {
 	if f.OrExpression != nil {
