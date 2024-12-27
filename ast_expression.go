@@ -172,7 +172,7 @@ func (i *IfControl) parse(r *rParser) error {
 		i.Else = new(Expression)
 
 		if err := i.Else.parse(&t); err != nil {
-			return r.Error("IfControl", err)
+			return s.Error("IfControl", err)
 		}
 
 		s.Score(t)
