@@ -139,6 +139,49 @@ func TestCompoundExpression(t *testing.T) {
 	})
 }
 
+func TestWhileControl(t *testing.T) {
+	doTests(t, []sourceFn{
+		{"while(a)b", func(t *test, tk Tokens) { // 1
+			t.Output = WhileControl{
+				Cond: WrapQuery(&SimpleExpression{
+					Identifier: &tk[2],
+					Tokens:     tk[2:3],
+				}).AssignmentExpression.FormulaeExpression,
+				Expr: Expression{
+					QueryExpression: WrapQuery(&SimpleExpression{
+						Identifier: &tk[4],
+						Tokens:     tk[4:5],
+					}),
+					Tokens: tk[4:5],
+				},
+				Tokens: tk[:5],
+			}
+		}},
+		{"while ( a ) b", func(t *test, tk Tokens) { // 2
+			t.Output = WhileControl{
+				Cond: WrapQuery(&SimpleExpression{
+					Identifier: &tk[4],
+					Tokens:     tk[4:5],
+				}).AssignmentExpression.FormulaeExpression,
+				Expr: Expression{
+					QueryExpression: WrapQuery(&SimpleExpression{
+						Identifier: &tk[8],
+						Tokens:     tk[8:9],
+					}),
+					Tokens: tk[8:9],
+				},
+				Tokens: tk[:9],
+			}
+		}},
+	}, func(t *test) (Type, error) {
+		var wc WhileControl
+
+		err := wc.parse(&t.Tokens)
+
+		return wc, err
+	})
+}
+
 func TestRepeatControl(t *testing.T) {
 	doTests(t, []sourceFn{
 		{"repeat a", func(t *test, tk Tokens) { // 1
