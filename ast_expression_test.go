@@ -173,6 +173,46 @@ func TestWhileControl(t *testing.T) {
 				Tokens: tk[:9],
 			}
 		}},
+		{"while a", func(t *test, tk Tokens) { // 3
+			t.Err = Error{
+				Err:     ErrMissingOpeningParen,
+				Parsing: "WhileControl",
+				Token:   tk[2],
+			}
+		}},
+		{"while(in)", func(t *test, tk Tokens) { // 4
+			t.Err = Error{
+				Err: wrapQueryExpressionError(Error{
+					Err:     ErrInvalidSimpleExpression,
+					Parsing: "SimpleExpression",
+					Token:   tk[2],
+				}).Err.(Error).Err,
+				Parsing: "WhileControl",
+				Token:   tk[2],
+			}
+		}},
+		{"while(a b)", func(t *test, tk Tokens) { // 5
+			t.Err = Error{
+				Err:     ErrMissingClosingParen,
+				Parsing: "WhileControl",
+				Token:   tk[4],
+			}
+		}},
+		{"while(a)in", func(t *test, tk Tokens) { // 6
+			t.Err = Error{
+				Err: Error{
+					Err: wrapQueryExpressionError(Error{
+						Err:     ErrInvalidSimpleExpression,
+						Parsing: "SimpleExpression",
+						Token:   tk[4],
+					}),
+					Parsing: "Expression",
+					Token:   tk[4],
+				},
+				Parsing: "WhileControl",
+				Token:   tk[4],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var wc WhileControl
 
