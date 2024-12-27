@@ -176,7 +176,7 @@ func (i *IfControl) parse(r *rParser) error {
 		}
 
 		s.Score(t)
-		r.Score(t)
+		r.Score(s)
 	}
 
 	i.Tokens = r.ToTokens()
