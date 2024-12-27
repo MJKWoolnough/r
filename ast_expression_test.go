@@ -153,6 +153,21 @@ func TestRepeatControl(t *testing.T) {
 				Tokens: tk[:3],
 			}
 		}},
+		{"repeat in", func(t *test, tk Tokens) { // 2
+			t.Err = Error{
+				Err: Error{
+					Err: wrapQueryExpressionError(Error{
+						Err:     ErrInvalidSimpleExpression,
+						Parsing: "SimpleExpression",
+						Token:   tk[2],
+					}),
+					Parsing: "Expression",
+					Token:   tk[2],
+				},
+				Parsing: "RepeatControl",
+				Token:   tk[2],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var rc RepeatControl
 
