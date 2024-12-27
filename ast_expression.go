@@ -130,7 +130,7 @@ type IfControl struct {
 
 func (i *IfControl) parse(r *rParser) error {
 	r.AcceptToken(parser.Token{Type: TokenKeyword, Data: "if"})
-	r.AcceptRunWhitespaceNoNewLine()
+	r.AcceptRunWhitespace()
 
 	if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "("}) {
 		return r.Error("IfControl", ErrMissingOpeningParen)
@@ -145,13 +145,13 @@ func (i *IfControl) parse(r *rParser) error {
 	}
 
 	r.Score(s)
-	r.AcceptRunWhitespaceNoNewLine()
+	r.AcceptRunWhitespace()
 
 	if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
 		return r.Error("IfControl", ErrMissingClosingParen)
 	}
 
-	r.AcceptRunWhitespaceNoNewLine()
+	r.AcceptRunWhitespace()
 
 	s = r.NewGoal()
 
@@ -163,10 +163,10 @@ func (i *IfControl) parse(r *rParser) error {
 
 	s = r.NewGoal()
 
-	s.AcceptRunWhitespaceNoNewLine()
+	s.AcceptRunWhitespace()
 
 	if s.AcceptToken(parser.Token{Type: TokenKeyword, Data: "else"}) {
-		s.AcceptRunWhitespaceNoNewLine()
+		s.AcceptRunWhitespace()
 
 		t := s.NewGoal()
 		i.Else = new(Expression)
@@ -192,7 +192,7 @@ type WhileControl struct {
 
 func (w *WhileControl) parse(r *rParser) error {
 	r.AcceptToken(parser.Token{Type: TokenKeyword, Data: "while"})
-	r.AcceptRunWhitespaceNoNewLine()
+	r.AcceptRunWhitespace()
 
 	if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "("}) {
 		return r.Error("WhileControl", ErrMissingOpeningParen)
@@ -207,13 +207,13 @@ func (w *WhileControl) parse(r *rParser) error {
 	}
 
 	r.Score(s)
-	r.AcceptRunWhitespaceNoNewLine()
+	r.AcceptRunWhitespace()
 
 	if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
 		return r.Error("WhileControl", ErrMissingClosingParen)
 	}
 
-	r.AcceptRunWhitespaceNoNewLine()
+	r.AcceptRunWhitespace()
 
 	s = r.NewGoal()
 
@@ -235,7 +235,7 @@ type RepeatControl struct {
 
 func (rc *RepeatControl) parse(r *rParser) error {
 	r.AcceptToken(parser.Token{Type: TokenKeyword, Data: "repeat"})
-	r.AcceptRunWhitespaceNoNewLine()
+	r.AcceptRunWhitespace()
 
 	s := r.NewGoal()
 
@@ -259,7 +259,7 @@ type ForControl struct {
 
 func (f *ForControl) parse(r *rParser) error {
 	r.AcceptToken(parser.Token{Type: TokenKeyword, Data: "for"})
-	r.AcceptRunWhitespaceNoNewLine()
+	r.AcceptRunWhitespace()
 
 	if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "("}) {
 		return r.Error("ForControl", ErrMissingOpeningParen)
@@ -273,13 +273,13 @@ func (f *ForControl) parse(r *rParser) error {
 
 	f.Var = r.GetLastToken()
 
-	r.AcceptRunWhitespaceNoNewLine()
+	r.AcceptRunWhitespace()
 
 	if !r.AcceptToken(parser.Token{Type: TokenKeyword, Data: "in"}) {
 		return r.Error("ForControl", ErrMissingIn)
 	}
 
-	r.AcceptRunWhitespaceNoNewLine()
+	r.AcceptRunWhitespace()
 
 	s := r.NewGoal()
 
@@ -288,13 +288,13 @@ func (f *ForControl) parse(r *rParser) error {
 	}
 
 	r.Score(s)
-	r.AcceptRunWhitespaceNoNewLine()
+	r.AcceptRunWhitespace()
 
 	if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
 		return r.Error("ForControl", ErrMissingClosingParen)
 	}
 
-	r.AcceptRunWhitespaceNoNewLine()
+	r.AcceptRunWhitespace()
 
 	s = r.NewGoal()
 
@@ -317,7 +317,7 @@ type FunctionDefinition struct {
 
 func (f *FunctionDefinition) parse(r *rParser) error {
 	r.AcceptToken(parser.Token{Type: TokenKeyword, Data: "function"})
-	r.AcceptRunWhitespaceNoNewLine()
+	r.AcceptRunWhitespace()
 
 	if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "("}) {
 		return r.Error("FunctionDefinition", ErrMissingOpeningParen)
@@ -332,9 +332,9 @@ func (f *FunctionDefinition) parse(r *rParser) error {
 	}
 
 	r.Score(s)
-	r.AcceptRunWhitespaceNoNewLine()
+	r.AcceptRunWhitespace()
 	r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"})
-	r.AcceptRunWhitespaceNoNewLine()
+	r.AcceptRunWhitespace()
 
 	s = r.NewGoal()
 
@@ -370,7 +370,7 @@ func (a *ArgList) parse(r *rParser) error {
 
 			s = r.NewGoal()
 
-			s.AcceptRunWhitespaceNoNewLine()
+			s.AcceptRunWhitespace()
 
 			if tk := s.Peek(); tk == (parser.Token{Type: TokenGrouping, Data: ")"}) || tk.Type == parser.TokenDone {
 				break
@@ -378,7 +378,7 @@ func (a *ArgList) parse(r *rParser) error {
 				return s.Error("ArgList", ErrMissingTerminator)
 			}
 
-			s.AcceptRunWhitespaceNoNewLine()
+			s.AcceptRunWhitespace()
 			r.Score(s)
 
 			s = r.NewGoal()
@@ -406,10 +406,10 @@ func (a *Argument) parse(r *rParser) error {
 	if a.Identifier.Type == TokenIdentifier {
 		s := r.NewGoal()
 
-		s.AcceptRunWhitespaceNoNewLine()
+		s.AcceptRunWhitespace()
 
 		if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "="}) {
-			s.AcceptRunWhitespaceNoNewLine()
+			s.AcceptRunWhitespace()
 
 			r.Score(s)
 
@@ -437,7 +437,7 @@ type QueryExpression struct {
 
 func (q *QueryExpression) parse(r *rParser) error {
 	if r.AcceptToken(parser.Token{Type: TokenOperator, Data: "?"}) {
-		r.AcceptRunWhitespaceNoNewLine()
+		r.AcceptRunWhitespace()
 
 		s := r.NewGoal()
 		q.QueryExpression = new(QueryExpression)
@@ -462,7 +462,7 @@ func (q *QueryExpression) parse(r *rParser) error {
 		s.AcceptRunWhitespaceNoNewLine()
 
 		if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "?"}) {
-			s.AcceptRunWhitespaceNoNewLine()
+			s.AcceptRunWhitespace()
 			r.Score(s)
 
 			s = r.NewGoal()
@@ -525,7 +525,7 @@ func (a *AssignmentExpression) parse(r *rParser) error {
 	}
 
 	if a.AssignmentType != AssignmentNone {
-		s.AcceptRunWhitespaceNoNewLine()
+		s.AcceptRunWhitespace()
 
 		r.Score(s)
 
@@ -568,7 +568,7 @@ func (f *FormulaeExpression) parse(r *rParser) error {
 	}
 
 	if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "~"}) {
-		s.AcceptRunWhitespaceNoNewLine()
+		s.AcceptRunWhitespace()
 
 		r.Score(s)
 
@@ -703,7 +703,7 @@ func (n *NotExpression) parse(r *rParser) error {
 	for r.AcceptToken(parser.Token{Type: TokenOperator, Data: "!"}) {
 		n.Nots++
 
-		r.AcceptRunWhitespaceNoNewLine()
+		r.AcceptRunWhitespace()
 	}
 
 	s := r.NewGoal()
@@ -766,7 +766,7 @@ func (re *RelationalExpression) parse(r *rParser) error {
 	}
 
 	if re.RelationalOperator != RelationalNone {
-		s.AcceptRunWhitespaceNoNewLine()
+		s.AcceptRunWhitespace()
 		r.Score(s)
 
 		s = r.NewGoal()
@@ -819,7 +819,7 @@ func (a *AdditionExpression) parse(r *rParser) error {
 	}
 
 	if a.AdditionType != AdditionNone {
-		s.AcceptRunWhitespaceNoNewLine()
+		s.AcceptRunWhitespace()
 		r.Score(s)
 
 		s = r.NewGoal()
@@ -872,7 +872,7 @@ func (m *MultiplicationExpression) parse(r *rParser) error {
 	}
 
 	if m.MultiplicationType != MultiplicationNone {
-		s.AcceptRunWhitespaceNoNewLine()
+		s.AcceptRunWhitespace()
 		r.Score(s)
 
 		s = r.NewGoal()
@@ -913,7 +913,7 @@ func (p *PipeOrSpecialExpression) parse(r *rParser) error {
 	if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "|>"}) || s.Accept(TokenSpecialOperator) {
 		p.Operator = s.GetLastToken()
 
-		s.AcceptRunWhitespaceNoNewLine()
+		s.AcceptRunWhitespace()
 		r.Score(s)
 
 		s = r.NewGoal()
@@ -951,7 +951,7 @@ func (se *SequenceExpression) parse(r *rParser) error {
 	s.AcceptRunWhitespaceNoNewLine()
 
 	if s.AcceptToken(parser.Token{Type: TokenOperator, Data: ":"}) {
-		s.AcceptRunWhitespaceNoNewLine()
+		s.AcceptRunWhitespace()
 		r.Score(s)
 
 		s = r.NewGoal()
@@ -986,10 +986,10 @@ func (u *UnaryExpression) parse(r *rParser) error {
 	for {
 		if r.AcceptToken(parser.Token{Type: TokenOperator, Data: "+"}) {
 			u.UnaryType = append(u.UnaryType, UnaryAdd)
-			r.AcceptRunWhitespaceNoNewLine()
+			r.AcceptRunWhitespace()
 		} else if r.AcceptToken(parser.Token{Type: TokenOperator, Data: "-"}) {
 			u.UnaryType = append(u.UnaryType, UnaryMinus)
-			r.AcceptRunWhitespaceNoNewLine()
+			r.AcceptRunWhitespace()
 		} else {
 			break
 		}
@@ -1028,7 +1028,7 @@ func (e *ExponentiationExpression) parse(r *rParser) error {
 	s.AcceptRunWhitespaceNoNewLine()
 
 	if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "^"}) {
-		s.AcceptRunWhitespaceNoNewLine()
+		s.AcceptRunWhitespace()
 		r.Score(s)
 
 		s = r.NewGoal()
@@ -1081,7 +1081,7 @@ func (se *SubsetExpression) parse(r *rParser) error {
 	}
 
 	if se.SubsetType != SubsetNone {
-		s.AcceptRunWhitespaceNoNewLine()
+		s.AcceptRunWhitespace()
 		r.Score(s)
 
 		s = r.NewGoal()
@@ -1119,7 +1119,7 @@ func (se *ScopeExpression) parse(r *rParser) error {
 	s.AcceptRunWhitespaceNoNewLine()
 
 	if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "::"}) {
-		s.AcceptRunWhitespaceNoNewLine()
+		s.AcceptRunWhitespace()
 		r.Score(s)
 
 		s = r.NewGoal()
@@ -1221,7 +1221,7 @@ func (a *SimpleExpression) parse(r *rParser) error {
 	} else if r.Accept(TokenEllipsis) {
 		a.Ellipsis = r.GetLastToken()
 	} else if r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "("}) {
-		r.AcceptRunWhitespaceNoNewLine()
+		r.AcceptRunWhitespace()
 
 		s := r.NewGoal()
 		a.ParenthesizedExpression = new(Expression)
@@ -1231,7 +1231,7 @@ func (a *SimpleExpression) parse(r *rParser) error {
 		}
 
 		r.Score(s)
-		r.AcceptRunWhitespaceNoNewLine()
+		r.AcceptRunWhitespace()
 
 		if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
 			return r.Error("SimpleExpression", ErrMissingClosingParen)
@@ -1267,7 +1267,7 @@ func (i *Index) parse(r *rParser) error {
 		r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "["})
 	}
 
-	r.AcceptRunWhitespaceNoNewLine()
+	r.AcceptRunWhitespace()
 
 	if i.Double || !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "]"}) {
 		for {
@@ -1282,7 +1282,7 @@ func (i *Index) parse(r *rParser) error {
 			i.Args = append(i.Args, h)
 
 			r.Score(s)
-			r.AcceptRunWhitespaceNoNewLine()
+			r.AcceptRunWhitespace()
 
 			if i.Double {
 				if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "]]"}) {
@@ -1296,7 +1296,7 @@ func (i *Index) parse(r *rParser) error {
 				return r.Error("Index", ErrMissingComma)
 			}
 
-			r.AcceptRunWhitespaceNoNewLine()
+			r.AcceptRunWhitespace()
 		}
 	}
 
@@ -1312,7 +1312,7 @@ type Call struct {
 
 func (c *Call) parse(r *rParser) error {
 	r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "("})
-	r.AcceptRunWhitespaceNoNewLine()
+	r.AcceptRunWhitespace()
 
 	if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
 		for {
@@ -1332,7 +1332,7 @@ func (c *Call) parse(r *rParser) error {
 				c.Args = append(c.Args, a)
 			}
 
-			r.AcceptRunWhitespaceNoNewLine()
+			r.AcceptRunWhitespace()
 
 			if r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
 				break
@@ -1340,7 +1340,7 @@ func (c *Call) parse(r *rParser) error {
 				return r.Error("Call", ErrMissingComma)
 			}
 
-			r.AcceptRunWhitespaceNoNewLine()
+			r.AcceptRunWhitespace()
 		}
 	}
 
