@@ -321,7 +321,10 @@ func (r RelationalExpression) printSource(w io.Writer, v bool) {
 	}
 }
 
-func (r RepeatControl) printSource(w io.Writer, v bool) {}
+func (r RepeatControl) printSource(w io.Writer, v bool) {
+	io.WriteString(w, "repeat ")
+	r.Expr.printSource(w, v)
+}
 
 func (s ScopeExpression) printSource(w io.Writer, v bool) {
 	s.IndexOrCallExpression.printSource(w, v)
