@@ -387,4 +387,20 @@ func (u UnaryExpression) printSource(w io.Writer, v bool) {
 	u.ExponentiationExpression.printSource(w, v)
 }
 
-func (wc WhileControl) printSource(w io.Writer, v bool) {}
+func (wc WhileControl) printSource(w io.Writer, v bool) {
+	if v {
+		io.WriteString(w, "while (")
+	} else {
+		io.WriteString(w, "while(")
+	}
+
+	wc.Cond.printSource(w, v)
+
+	if v {
+		io.WriteString(w, ") ")
+	} else {
+		io.WriteString(w, ")")
+	}
+
+	wc.Expr.printSource(w, v)
+}
