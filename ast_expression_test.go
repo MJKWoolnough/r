@@ -139,6 +139,72 @@ func TestCompoundExpression(t *testing.T) {
 	})
 }
 
+func TestIfControl(t *testing.T) {
+	doTests(t, []sourceFn{
+		{"if(a)b", func(t *test, tk Tokens) { // 1
+			t.Output = IfControl{
+				Cond: WrapQuery(&SimpleExpression{
+					Identifier: &tk[2],
+					Tokens:     tk[2:3],
+				}).AssignmentExpression.FormulaeExpression,
+				Expr: Expression{
+					QueryExpression: WrapQuery(&SimpleExpression{
+						Identifier: &tk[4],
+						Tokens:     tk[4:5],
+					}),
+					Tokens: tk[4:5],
+				},
+				Tokens: tk[:5],
+			}
+		}},
+		{"if ( a ) b", func(t *test, tk Tokens) { // 2
+			t.Output = IfControl{
+				Cond: WrapQuery(&SimpleExpression{
+					Identifier: &tk[4],
+					Tokens:     tk[4:5],
+				}).AssignmentExpression.FormulaeExpression,
+				Expr: Expression{
+					QueryExpression: WrapQuery(&SimpleExpression{
+						Identifier: &tk[8],
+						Tokens:     tk[8:9],
+					}),
+					Tokens: tk[8:9],
+				},
+				Tokens: tk[:9],
+			}
+		}},
+		{"if ( a ) b else c", func(t *test, tk Tokens) { // 3
+			t.Output = IfControl{
+				Cond: WrapQuery(&SimpleExpression{
+					Identifier: &tk[4],
+					Tokens:     tk[4:5],
+				}).AssignmentExpression.FormulaeExpression,
+				Expr: Expression{
+					QueryExpression: WrapQuery(&SimpleExpression{
+						Identifier: &tk[8],
+						Tokens:     tk[8:9],
+					}),
+					Tokens: tk[8:9],
+				},
+				Else: &Expression{
+					QueryExpression: WrapQuery(&SimpleExpression{
+						Identifier: &tk[12],
+						Tokens:     tk[12:13],
+					}),
+					Tokens: tk[12:13],
+				},
+				Tokens: tk[:13],
+			}
+		}},
+	}, func(t *test) (Type, error) {
+		var ic IfControl
+
+		err := ic.parse(&t.Tokens)
+
+		return ic, err
+	})
+}
+
 func TestWhileControl(t *testing.T) {
 	doTests(t, []sourceFn{
 		{"while(a)b", func(t *test, tk Tokens) { // 1
