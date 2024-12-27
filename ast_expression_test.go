@@ -196,6 +196,61 @@ func TestIfControl(t *testing.T) {
 				Tokens: tk[:13],
 			}
 		}},
+		{"if a", func(t *test, tk Tokens) { // 4
+			t.Err = Error{
+				Err:     ErrMissingOpeningParen,
+				Parsing: "IfControl",
+				Token:   tk[2],
+			}
+		}},
+		{"if(in)", func(t *test, tk Tokens) { // 5
+			t.Err = Error{
+				Err: wrapQueryExpressionError(Error{
+					Err:     ErrInvalidSimpleExpression,
+					Parsing: "SimpleExpression",
+					Token:   tk[2],
+				}).Err.(Error).Err,
+				Parsing: "IfControl",
+				Token:   tk[2],
+			}
+		}},
+		{"if(a b)", func(t *test, tk Tokens) { // 6
+			t.Err = Error{
+				Err:     ErrMissingClosingParen,
+				Parsing: "IfControl",
+				Token:   tk[4],
+			}
+		}},
+		{"if(a)in", func(t *test, tk Tokens) { // 7
+			t.Err = Error{
+				Err: Error{
+					Err: wrapQueryExpressionError(Error{
+						Err:     ErrInvalidSimpleExpression,
+						Parsing: "SimpleExpression",
+						Token:   tk[4],
+					}),
+					Parsing: "Expression",
+					Token:   tk[4],
+				},
+				Parsing: "IfControl",
+				Token:   tk[4],
+			}
+		}},
+		{"if(a)b else in", func(t *test, tk Tokens) { // 8
+			t.Err = Error{
+				Err: Error{
+					Err: wrapQueryExpressionError(Error{
+						Err:     ErrInvalidSimpleExpression,
+						Parsing: "SimpleExpression",
+						Token:   tk[8],
+					}),
+					Parsing: "Expression",
+					Token:   tk[8],
+				},
+				Parsing: "IfControl",
+				Token:   tk[8],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var ic IfControl
 
