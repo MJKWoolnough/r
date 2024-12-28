@@ -214,6 +214,58 @@ func TestFlowControl(t *testing.T) {
 				Tokens: tk[:9],
 			}
 		}},
+		{"if a", func(t *test, tk Tokens) { // 5
+			t.Err = Error{
+				Err: Error{
+					Err:     ErrMissingOpeningParen,
+					Parsing: "IfControl",
+					Token:   tk[2],
+				},
+				Parsing: "FlowControl",
+				Token:   tk[0],
+			}
+		}},
+		{"while a", func(t *test, tk Tokens) { // 6
+			t.Err = Error{
+				Err: Error{
+					Err:     ErrMissingOpeningParen,
+					Parsing: "WhileControl",
+					Token:   tk[2],
+				},
+				Parsing: "FlowControl",
+				Token:   tk[0],
+			}
+		}},
+		{"repeat in", func(t *test, tk Tokens) { // 7
+			t.Err = Error{
+				Err: Error{
+					Err: Error{
+						Err: wrapQueryExpressionError(Error{
+							Err:     ErrInvalidSimpleExpression,
+							Parsing: "SimpleExpression",
+							Token:   tk[2],
+						}),
+						Parsing: "Expression",
+						Token:   tk[2],
+					},
+					Parsing: "RepeatControl",
+					Token:   tk[2],
+				},
+				Parsing: "FlowControl",
+				Token:   tk[0],
+			}
+		}},
+		{"for a", func(t *test, tk Tokens) { // 8
+			t.Err = Error{
+				Err: Error{
+					Err:     ErrMissingOpeningParen,
+					Parsing: "ForControl",
+					Token:   tk[2],
+				},
+				Parsing: "FlowControl",
+				Token:   tk[0],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var fc FlowControl
 
