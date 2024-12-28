@@ -1314,23 +1314,29 @@ func (c *Call) parse(r *rParser) error {
 	r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "("})
 	r.AcceptRunWhitespace()
 
+	for r.AcceptToken(parser.Token{Type: TokenExpressionTerminator, Data: ","}) {
+		r.AcceptRunWhitespace()
+
+		c.Args = append(c.Args, Arg{})
+
+		if r.Peek() == (parser.Token{Type: TokenGrouping, Data: ")"}) {
+			break
+		}
+	}
+
 	if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
 		for {
-			if tk := r.Peek(); tk == (parser.Token{Type: TokenExpressionTerminator, Data: ","}) || tk == (parser.Token{Type: TokenGrouping, Data: ")"}) {
-				c.Args = append(c.Args, Arg{})
-			} else {
-				s := r.NewGoal()
+			s := r.NewGoal()
 
-				var a Arg
+			var a Arg
 
-				if err := a.parse(&s); err != nil {
-					return r.Error("Call", err)
-				}
-
-				r.Score(s)
-
-				c.Args = append(c.Args, a)
+			if err := a.parse(&s); err != nil {
+				return r.Error("Call", err)
 			}
+
+			r.Score(s)
+
+			c.Args = append(c.Args, a)
 
 			r.AcceptRunWhitespace()
 
@@ -1341,7 +1347,27 @@ func (c *Call) parse(r *rParser) error {
 			}
 
 			r.AcceptRunWhitespace()
+
+			for r.AcceptToken(parser.Token{Type: TokenExpressionTerminator, Data: ","}) {
+				r.AcceptRunWhitespace()
+
+				c.Args = append(c.Args, Arg{})
+
+				if r.Peek() == (parser.Token{Type: TokenGrouping, Data: ")"}) {
+					break
+				}
+			}
+
+			if r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
+				c.Args = append(c.Args, Arg{})
+
+				break
+			}
 		}
+	}
+
+	for len(c.Args) > 0 && c.Args[len(c.Args)-1].Tokens == nil {
+		c.Args = c.Args[:len(c.Args)-1]
 	}
 
 	c.Tokens = r.ToTokens()
