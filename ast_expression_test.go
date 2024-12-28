@@ -2,6 +2,66 @@ package r
 
 import "testing"
 
+func TestExpression(t *testing.T) {
+	doTests(t, []sourceFn{
+		{"if(a)b", func(t *test, tk Tokens) { // 1
+			t.Output = Expression{
+				FlowControl: &FlowControl{
+					IfControl: &IfControl{
+						Cond: WrapQuery(&SimpleExpression{
+							Identifier: &tk[2],
+							Tokens:     tk[2:3],
+						}).AssignmentExpression.FormulaeExpression,
+						Expr: Expression{
+							QueryExpression: WrapQuery(&SimpleExpression{
+								Identifier: &tk[4],
+								Tokens:     tk[4:5],
+							}),
+							Tokens: tk[4:5],
+						},
+						Tokens: tk[:5],
+					},
+					Tokens: tk[:5],
+				},
+				Tokens: tk[:5],
+			}
+		}},
+		{"function()a", func(t *test, tk Tokens) { // 2
+			t.Output = Expression{
+				FunctionDefinition: &FunctionDefinition{
+					ArgList: ArgList{
+						Tokens: tk[2:2],
+					},
+					Body: Expression{
+						QueryExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[3],
+							Tokens:     tk[3:4],
+						}),
+						Tokens: tk[3:4],
+					},
+					Tokens: tk[:4],
+				},
+				Tokens: tk[:4],
+			}
+		}},
+		{"a", func(t *test, tk Tokens) { // 3
+			t.Output = Expression{
+				QueryExpression: WrapQuery(&SimpleExpression{
+					Identifier: &tk[0],
+					Tokens:     tk[:1],
+				}),
+				Tokens: tk[:1],
+			}
+		}},
+	}, func(t *test) (Type, error) {
+		var e Expression
+
+		err := e.parse(&t.Tokens)
+
+		return e, err
+	})
+}
+
 func TestCompoundExpression(t *testing.T) {
 	doTests(t, []sourceFn{
 		{"{a}", func(t *test, tk Tokens) { // 1
