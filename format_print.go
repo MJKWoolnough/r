@@ -127,7 +127,15 @@ func (e ExponentiationExpression) printSource(w io.Writer, v bool) {
 	}
 }
 
-func (e Expression) printSource(w io.Writer, v bool) {}
+func (e Expression) printSource(w io.Writer, v bool) {
+	if e.FlowControl != nil {
+		e.FlowControl.printSource(w, v)
+	} else if e.FunctionDefinition != nil {
+		e.FunctionDefinition.printSource(w, v)
+	} else if e.QueryExpression != nil {
+		e.QueryExpression.printSource(w, v)
+	}
+}
 
 func (f FlowControl) printSource(w io.Writer, v bool) {
 	if f.IfControl != nil {
