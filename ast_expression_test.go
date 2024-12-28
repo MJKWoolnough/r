@@ -139,6 +139,90 @@ func TestCompoundExpression(t *testing.T) {
 	})
 }
 
+func TestFlowControl(t *testing.T) {
+	doTests(t, []sourceFn{
+		{"if(a)b", func(t *test, tk Tokens) { // 1
+			t.Output = FlowControl{
+				IfControl: &IfControl{
+					Cond: WrapQuery(&SimpleExpression{
+						Identifier: &tk[2],
+						Tokens:     tk[2:3],
+					}).AssignmentExpression.FormulaeExpression,
+					Expr: Expression{
+						QueryExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[4],
+							Tokens:     tk[4:5],
+						}),
+						Tokens: tk[4:5],
+					},
+					Tokens: tk[:5],
+				},
+				Tokens: tk[:5],
+			}
+		}},
+		{"while(a)b", func(t *test, tk Tokens) { // 2
+			t.Output = FlowControl{
+				WhileControl: &WhileControl{
+					Cond: WrapQuery(&SimpleExpression{
+						Identifier: &tk[2],
+						Tokens:     tk[2:3],
+					}).AssignmentExpression.FormulaeExpression,
+					Expr: Expression{
+						QueryExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[4],
+							Tokens:     tk[4:5],
+						}),
+						Tokens: tk[4:5],
+					},
+					Tokens: tk[:5],
+				},
+				Tokens: tk[:5],
+			}
+		}},
+		{"repeat a", func(t *test, tk Tokens) { // 3
+			t.Output = FlowControl{
+				RepeatControl: &RepeatControl{
+					Expr: Expression{
+						QueryExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[2],
+							Tokens:     tk[2:3],
+						}),
+						Tokens: tk[2:3],
+					},
+					Tokens: tk[:3],
+				},
+				Tokens: tk[:3],
+			}
+		}},
+		{"for(a in b)c", func(t *test, tk Tokens) { // 4
+			t.Output = FlowControl{
+				ForControl: &ForControl{
+					Var: &tk[2],
+					List: WrapQuery(&SimpleExpression{
+						Identifier: &tk[6],
+						Tokens:     tk[6:7],
+					}).AssignmentExpression.FormulaeExpression,
+					Expr: Expression{
+						QueryExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[8],
+							Tokens:     tk[8:9],
+						}),
+						Tokens: tk[8:9],
+					},
+					Tokens: tk[:9],
+				},
+				Tokens: tk[:9],
+			}
+		}},
+	}, func(t *test) (Type, error) {
+		var fc FlowControl
+
+		err := fc.parse(&t.Tokens)
+
+		return fc, err
+	})
+}
+
 func TestIfControl(t *testing.T) {
 	doTests(t, []sourceFn{
 		{"if(a)b", func(t *test, tk Tokens) { // 1
