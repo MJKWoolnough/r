@@ -7380,7 +7380,115 @@ func TestCall(t *testing.T) {
 				Tokens: tk[:7],
 			}
 		}},
-		{"(in)", func(t *test, tk Tokens) { // 6
+		{"(,)", func(t *test, tk Tokens) { // 6
+			t.Output = Call{
+				Args:   []Arg{},
+				Tokens: tk[:3],
+			}
+		}},
+		{"(a,)", func(t *test, tk Tokens) { // 7
+			t.Output = Call{
+				Args: []Arg{
+					{
+						QueryExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[1],
+							Tokens:     tk[1:2],
+						}),
+						Tokens: tk[1:2],
+					},
+				},
+				Tokens: tk[:4],
+			}
+		}},
+		{"(,a)", func(t *test, tk Tokens) { // 8
+			t.Output = Call{
+				Args: []Arg{
+					{},
+					{
+						QueryExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[2],
+							Tokens:     tk[2:3],
+						}),
+						Tokens: tk[2:3],
+					},
+				},
+				Tokens: tk[:4],
+			}
+		}},
+		{"(,,)", func(t *test, tk Tokens) { // 9
+			t.Output = Call{
+				Args:   []Arg{},
+				Tokens: tk[:4],
+			}
+		}},
+		{"(a,,)", func(t *test, tk Tokens) { // 10
+			t.Output = Call{
+				Args: []Arg{
+					{
+						QueryExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[1],
+							Tokens:     tk[1:2],
+						}),
+						Tokens: tk[1:2],
+					},
+				},
+				Tokens: tk[:5],
+			}
+		}},
+		{"(,,a)", func(t *test, tk Tokens) { // 11
+			t.Output = Call{
+				Args: []Arg{
+					{},
+					{},
+					{
+						QueryExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[3],
+							Tokens:     tk[3:4],
+						}),
+						Tokens: tk[3:4],
+					},
+				},
+				Tokens: tk[:5],
+			}
+		}},
+		{"(,a,)", func(t *test, tk Tokens) { // 12
+			t.Output = Call{
+				Args: []Arg{
+					{},
+					{
+						QueryExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[2],
+							Tokens:     tk[2:3],
+						}),
+						Tokens: tk[2:3],
+					},
+				},
+				Tokens: tk[:5],
+			}
+		}},
+		{"(a,,b)", func(t *test, tk Tokens) { // 13
+			t.Output = Call{
+				Args: []Arg{
+					{
+						QueryExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[1],
+							Tokens:     tk[1:2],
+						}),
+						Tokens: tk[1:2],
+					},
+					{},
+					{
+						QueryExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[4],
+							Tokens:     tk[4:5],
+						}),
+						Tokens: tk[4:5],
+					},
+				},
+				Tokens: tk[:6],
+			}
+		}},
+		{"(in)", func(t *test, tk Tokens) { // 14
 			t.Err = Error{
 				Err: Error{
 					Err: wrapQueryExpressionError(Error{
@@ -7395,7 +7503,7 @@ func TestCall(t *testing.T) {
 				Token:   tk[1],
 			}
 		}},
-		{"(a b)", func(t *test, tk Tokens) { // 7
+		{"(a b)", func(t *test, tk Tokens) { // 15
 			t.Err = Error{
 				Err:     ErrMissingComma,
 				Parsing: "Call",
