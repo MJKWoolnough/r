@@ -129,7 +129,17 @@ func (e ExponentiationExpression) printSource(w io.Writer, v bool) {
 
 func (e Expression) printSource(w io.Writer, v bool) {}
 
-func (f FlowControl) printSource(w io.Writer, v bool) {}
+func (f FlowControl) printSource(w io.Writer, v bool) {
+	if f.IfControl != nil {
+		f.IfControl.printSource(w, v)
+	} else if f.WhileControl != nil {
+		f.WhileControl.printSource(w, v)
+	} else if f.RepeatControl != nil {
+		f.RepeatControl.printSource(w, v)
+	} else if f.ForControl != nil {
+		f.ForControl.printSource(w, v)
+	}
+}
 
 func (f ForControl) printSource(w io.Writer, v bool) {
 	if f.Var == nil || f.Var.Type != TokenIdentifier {
