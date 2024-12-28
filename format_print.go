@@ -188,7 +188,28 @@ func (f FunctionDefinition) printSource(w io.Writer, v bool) {
 	f.Body.printSource(w, v)
 }
 
-func (i IfControl) printSource(w io.Writer, v bool) {}
+func (i IfControl) printSource(w io.Writer, v bool) {
+	if v {
+		io.WriteString(w, "if (")
+	} else {
+		io.WriteString(w, "if(")
+	}
+
+	i.Cond.printSource(w, v)
+
+	if v {
+		io.WriteString(w, ") ")
+	} else {
+		io.WriteString(w, ") ")
+	}
+
+	i.Expr.printSource(w, v)
+
+	if i.Else != nil {
+		io.WriteString(w, " else ")
+		i.Else.printSource(w, v)
+	}
+}
 
 func (i Index) printSource(w io.Writer, v bool) {
 	if !i.Double {
