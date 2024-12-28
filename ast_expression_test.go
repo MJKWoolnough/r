@@ -7132,6 +7132,40 @@ func TestSimpleExpression(t *testing.T) {
 				Token:   tk[3],
 			}
 		}},
+		{"(in)", func(t *test, tk Tokens) { // 16
+			t.Err = Error{
+				Err: Error{
+					Err: wrapQueryExpressionError(Error{
+						Err:     ErrInvalidSimpleExpression,
+						Parsing: "SimpleExpression",
+						Token:   tk[1],
+					}),
+					Parsing: "Expression",
+					Token:   tk[1],
+				},
+				Parsing: "SimpleExpression",
+				Token:   tk[1],
+			}
+		}},
+		{"{in}", func(t *test, tk Tokens) { // 17
+			t.Err = Error{
+				Err: Error{
+					Err: Error{
+						Err: wrapQueryExpressionError(Error{
+							Err:     ErrInvalidSimpleExpression,
+							Parsing: "SimpleExpression",
+							Token:   tk[1],
+						}),
+						Parsing: "Expression",
+						Token:   tk[1],
+					},
+					Parsing: "CompoundExpression",
+					Token:   tk[1],
+				},
+				Parsing: "SimpleExpression",
+				Token:   tk[0],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var se SimpleExpression
 
