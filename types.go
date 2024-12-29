@@ -32,6 +32,8 @@ func (ExponentiationExpression) rType() {}
 
 func (Expression) rType() {}
 
+func (File) rType() {}
+
 func (FlowControl) rType() {}
 
 func (ForControl) rType() {}

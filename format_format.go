@@ -125,6 +125,18 @@ func (f Expression) Format(s fmt.State, v rune) {
 }
 
 // Format implements the fmt.Formatter interface
+func (f File) Format(s fmt.State, v rune) {
+	if v == 'v' && s.Flag('#') {
+		type X = File
+		type File X
+
+		fmt.Fprintf(s, "%#v", File(f))
+	} else {
+		format(&f, s, v)
+	}
+}
+
+// Format implements the fmt.Formatter interface
 func (f FlowControl) Format(s fmt.State, v rune) {
 	if v == 'v' && s.Flag('#') {
 		type X = FlowControl

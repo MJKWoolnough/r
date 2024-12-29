@@ -263,6 +263,34 @@ func (f *Expression) printType(w io.Writer, v bool) {
 	io.WriteString(w, "\n}")
 }
 
+func (f *File) printType(w io.Writer, v bool) {
+	pp := indentPrinter{w}
+
+	pp.Print("File {")
+
+	if f.Statements == nil {
+		pp.Print("\nStatements: nil")
+	} else if len(f.Statements) > 0 {
+		pp.Print("\nStatements: [")
+
+		ipp := indentPrinter{&pp}
+
+		for n, e := range f.Statements {
+			ipp.Printf("\n%d: ", n)
+			e.printType(&ipp, v)
+		}
+
+		pp.Print("\n]")
+	} else if v {
+		pp.Print("\nStatements: []")
+	}
+
+	pp.Print("\nTokens: ")
+	f.Tokens.printType(&pp, v)
+
+	io.WriteString(w, "\n}")
+}
+
 func (f *FlowControl) printType(w io.Writer, v bool) {
 	pp := indentPrinter{w}
 
