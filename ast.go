@@ -1,7 +1,11 @@
 // Package r implements an R tokeniser and parser.
 package r
 
-import "vimagination.zapto.org/parser"
+import (
+	"errors"
+
+	"vimagination.zapto.org/parser"
+)
 
 // File represents a parsed R file.
 type File struct {
@@ -26,20 +30,27 @@ func Parse(t Tokeniser) (*File, error) {
 
 func (f *File) parse(r *rParser) error {
 	for r.AcceptRunWhitespace() != parser.TokenDone {
-		var s Expression
+		var e Expression
 
-		q := r.NewGoal()
+		s := r.NewGoal()
 
-		if err := s.parse(&q); err != nil {
+		if err := e.parse(&s); err != nil {
 			return r.Error("File", err)
 		}
 
-		f.Statements = append(f.Statements, s)
+		f.Statements = append(f.Statements, e)
 
-		r.Score(q)
+		r.Score(s)
+		r.AcceptRunWhitespaceNoNewLine()
+
+		if !r.AcceptToken(parser.Token{Type: TokenExpressionTerminator, Data: ";"}) && !r.Accept(TokenLineTerminator) && r.Peek().Type != parser.TokenDone {
+			return r.Error("File", ErrMissingStatementTerminator)
+		}
 	}
 
 	f.Tokens = r.ToTokens()
 
 	return nil
 }
+
+var ErrMissingStatementTerminator = errors.New("missing statement terminator")
