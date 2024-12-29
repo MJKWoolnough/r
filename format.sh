@@ -1,7 +1,11 @@
 #!/bin/bash
 
 types() {
-	grep "type .* struct {" "ast_expression.go" | cut -d' ' -f2 | sort;
+	for file in ast.go ast_expression.go; do
+		while read type; do
+			echo "$type" "$file";
+		done < <(grep "type .* struct {" "$file" | cut -d' ' -f2);
+	done | sort;
 }
 
 {
@@ -13,7 +17,7 @@ package r
 import "io"
 HEREDOC
 
-	while read type; do
+	while read type file; do
 		echo -e "\nfunc (f *$type) printType(w io.Writer, v bool) {";
 		echo "	pp := indentPrinter{w}";
 		echo;
@@ -60,7 +64,7 @@ HEREDOC
 				echo "	pp.Print(\"\\n$fieldName: \")";
 				echo "	f.$fieldName.printType(&pp, v)";
 			fi;
-		done < <(sed '/^type '$type' struct {$/,/^}$/!d;//d' "ast_expression.go");
+		done < <(sed '/^type '$type' struct {$/,/^}$/!d;//d' "$file");
 
 		echo;
 		echo "	io.WriteString(w, \"\n}\")";
@@ -77,7 +81,7 @@ package r
 import "fmt"
 HEREDOC
 
-	while read type; do
+	while read type _; do
 		echo -e "\n// Format implements the fmt.Formatter interface";
 		echo "func (f $type) Format(s fmt.State, v rune) {";
 		echo "	if v == 'v' && s.Flag('#') {";
