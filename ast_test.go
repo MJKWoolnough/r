@@ -244,6 +244,28 @@ func TestFile(t *testing.T) {
 				Tokens: tk[:3],
 			}
 		}},
+		{"in", func(t *test, tk Tokens) { // 4
+			t.Err = Error{
+				Err: Error{
+					Err: wrapQueryExpressionError(Error{
+						Err:     ErrInvalidSimpleExpression,
+						Parsing: "SimpleExpression",
+						Token:   tk[0],
+					}),
+					Parsing: "Expression",
+					Token:   tk[0],
+				},
+				Parsing: "File",
+				Token:   tk[0],
+			}
+		}},
+		{"a b", func(t *test, tk Tokens) { // 4
+			t.Err = Error{
+				Err:     ErrMissingStatementTerminator,
+				Parsing: "File",
+				Token:   tk[2],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var f File
 
