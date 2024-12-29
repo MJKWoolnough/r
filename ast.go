@@ -2,8 +2,6 @@
 package r
 
 import (
-	"errors"
-
 	"vimagination.zapto.org/parser"
 )
 
@@ -52,5 +50,3 @@ func (f *File) parse(r *rParser) error {
 
 	return nil
 }
-
-var ErrMissingStatementTerminator = errors.New("missing statement terminator")

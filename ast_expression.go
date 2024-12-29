@@ -1,8 +1,6 @@
 package r
 
 import (
-	"errors"
-
 	"vimagination.zapto.org/parser"
 )
 
@@ -1371,14 +1369,3 @@ func (a *Arg) parse(r *rParser) error {
 
 	return nil
 }
-
-var (
-	ErrMissingTerminator           = errors.New("missing terminator")
-	ErrMissingOpeningParen         = errors.New("missing opening paren")
-	ErrMissingClosingParen         = errors.New("missing closing paren")
-	ErrMissingClosingDoubleBracket = errors.New("missing closing double-bracket")
-	ErrMissingIn                   = errors.New("missing in keyword")
-	ErrMissingIdentifier           = errors.New("missing identifier")
-	ErrMissingComma                = errors.New("missing comma")
-	ErrInvalidSimpleExpression     = errors.New("invalid simple expression")
-)
