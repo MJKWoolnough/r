@@ -7403,7 +7403,9 @@ func TestCall(t *testing.T) {
 		{"(,a)", func(t *test, tk Tokens) { // 8
 			t.Output = Call{
 				Args: []Arg{
-					{},
+					{
+						Tokens: tk[1:1],
+					},
 					{
 						QueryExpression: WrapQuery(&SimpleExpression{
 							Identifier: &tk[2],
@@ -7438,8 +7440,12 @@ func TestCall(t *testing.T) {
 		{"(,,a)", func(t *test, tk Tokens) { // 11
 			t.Output = Call{
 				Args: []Arg{
-					{},
-					{},
+					{
+						Tokens: tk[1:1],
+					},
+					{
+						Tokens: tk[2:2],
+					},
 					{
 						QueryExpression: WrapQuery(&SimpleExpression{
 							Identifier: &tk[3],
@@ -7454,7 +7460,9 @@ func TestCall(t *testing.T) {
 		{"(,a,)", func(t *test, tk Tokens) { // 12
 			t.Output = Call{
 				Args: []Arg{
-					{},
+					{
+						Tokens: tk[1:1],
+					},
 					{
 						QueryExpression: WrapQuery(&SimpleExpression{
 							Identifier: &tk[2],
@@ -7476,7 +7484,9 @@ func TestCall(t *testing.T) {
 						}),
 						Tokens: tk[1:2],
 					},
-					{},
+					{
+						Tokens: tk[3:3],
+					},
 					{
 						QueryExpression: WrapQuery(&SimpleExpression{
 							Identifier: &tk[4],

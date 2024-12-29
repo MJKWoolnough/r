@@ -1314,59 +1314,31 @@ func (c *Call) parse(r *rParser) error {
 	r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "("})
 	r.AcceptRunWhitespace()
 
-	for r.AcceptToken(parser.Token{Type: TokenExpressionTerminator, Data: ","}) {
+	for !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
+		s := r.NewGoal()
+
+		var a Arg
+
+		if err := a.parse(&s); err != nil {
+			return r.Error("Call", err)
+		}
+
+		r.Score(s)
+
+		c.Args = append(c.Args, a)
+
 		r.AcceptRunWhitespace()
 
-		c.Args = append(c.Args, Arg{})
-
-		if r.Peek() == (parser.Token{Type: TokenGrouping, Data: ")"}) {
+		if r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
 			break
+		} else if !r.AcceptToken(parser.Token{Type: TokenExpressionTerminator, Data: ","}) {
+			return r.Error("Call", ErrMissingComma)
 		}
+
+		r.AcceptRunWhitespace()
 	}
 
-	if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
-		for {
-			s := r.NewGoal()
-
-			var a Arg
-
-			if err := a.parse(&s); err != nil {
-				return r.Error("Call", err)
-			}
-
-			r.Score(s)
-
-			c.Args = append(c.Args, a)
-
-			r.AcceptRunWhitespace()
-
-			if r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
-				break
-			} else if !r.AcceptToken(parser.Token{Type: TokenExpressionTerminator, Data: ","}) {
-				return r.Error("Call", ErrMissingComma)
-			}
-
-			r.AcceptRunWhitespace()
-
-			for r.AcceptToken(parser.Token{Type: TokenExpressionTerminator, Data: ","}) {
-				r.AcceptRunWhitespace()
-
-				c.Args = append(c.Args, Arg{})
-
-				if r.Peek() == (parser.Token{Type: TokenGrouping, Data: ")"}) {
-					break
-				}
-			}
-
-			if r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
-				c.Args = append(c.Args, Arg{})
-
-				break
-			}
-		}
-	}
-
-	for len(c.Args) > 0 && c.Args[len(c.Args)-1].Tokens == nil {
+	for len(c.Args) > 0 && len(c.Args[len(c.Args)-1].Tokens) == 0 {
 		c.Args = c.Args[:len(c.Args)-1]
 	}
 
@@ -1384,7 +1356,7 @@ type Arg struct {
 func (a *Arg) parse(r *rParser) error {
 	if r.Accept(TokenEllipsis) {
 		a.Ellipsis = r.GetLastToken()
-	} else {
+	} else if tk := r.Peek(); tk != (parser.Token{Type: TokenGrouping, Data: ")"}) && tk != (parser.Token{Type: TokenExpressionTerminator, Data: ","}) && tk.Type != parser.TokenDone {
 		s := r.NewGoal()
 		a.QueryExpression = new(QueryExpression)
 
