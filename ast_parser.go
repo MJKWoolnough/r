@@ -80,10 +80,6 @@ func (r *rParser) Score(k rParser) {
 
 func (r *rParser) next() Token {
 	l := len(*r)
-	if l == cap(*r) {
-		return (*r)[l-1]
-	}
-
 	*r = (*r)[:l+1]
 	tk := (*r)[l]
 
