@@ -137,6 +137,13 @@ func (e Expression) printSource(w io.Writer, v bool) {
 	}
 }
 
+func (f File) printSource(w io.Writer, v bool) {
+	for _, e := range f.Statements {
+		e.printSource(w, v)
+		io.WriteString(w, "\n")
+	}
+}
+
 func (f FlowControl) printSource(w io.Writer, v bool) {
 	if f.IfControl != nil {
 		f.IfControl.printSource(w, v)
