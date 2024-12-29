@@ -7546,7 +7546,12 @@ func TestArg(t *testing.T) {
 				Tokens:   tk[:1],
 			}
 		}},
-		{"in", func(t *test, tk Tokens) { // 3
+		{"", func(t *test, tk Tokens) { // 3
+			t.Output = Arg{
+				Tokens: tk[:0],
+			}
+		}},
+		{"in", func(t *test, tk Tokens) { // 4
 			t.Err = Error{
 				Err: wrapQueryExpressionError(Error{
 					Err:     ErrInvalidSimpleExpression,
