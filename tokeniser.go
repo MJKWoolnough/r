@@ -18,6 +18,7 @@ const (
 	identifierCont  = "_.0123456789ABCDEFGHIJKLMNOPQRSTUVQXYZabcdefghijklmnopqrstuvwxyz"
 )
 
+// TokenType IDs
 const (
 	TokenWhitespace parser.TokenType = iota
 	TokenLineTerminator
@@ -38,6 +39,9 @@ const (
 	TokenGrouping
 )
 
+// SetTokeniser sets the initial tokeniser state of a parser.Tokeniser.
+//
+// Used if you want to manually tokeniser R source code.
 func SetTokeniser(t *parser.Tokeniser) *parser.Tokeniser {
 	t.TokeniserState(new(rTokeniser).expression)
 
