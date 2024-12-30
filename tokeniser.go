@@ -1,7 +1,6 @@
 package r
 
 import (
-	"errors"
 	"io"
 	"strconv"
 
@@ -376,10 +375,3 @@ func (r *rTokeniser) operator(t *parser.Tokeniser) (parser.Token, parser.TokenFu
 
 	return t.Return(TokenOperator, r.expression)
 }
-
-var (
-	ErrInvalidString    = errors.New("invalid string")
-	ErrInvalidNumber    = errors.New("invalid number")
-	ErrInvalidOperator  = errors.New("invalid operator")
-	ErrInvalidCharacter = errors.New("invalid character")
-)

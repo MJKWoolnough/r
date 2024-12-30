@@ -4,7 +4,11 @@ import "errors"
 
 // Errors
 var (
+	ErrInvalidCharacter            = errors.New("invalid character")
+	ErrInvalidNumber               = errors.New("invalid number")
+	ErrInvalidOperator             = errors.New("invalid operator")
 	ErrInvalidSimpleExpression     = errors.New("invalid simple expression")
+	ErrInvalidString               = errors.New("invalid string")
 	ErrMissingClosingDoubleBracket = errors.New("missing closing double-bracket")
 	ErrMissingClosingParen         = errors.New("missing closing paren")
 	ErrMissingComma                = errors.New("missing comma")
