@@ -1,5 +1,7 @@
 package r
 
+// QueryWrappable represents the types that can be wrapped with WrapQuery and
+// unwrapped with UnwrapQuery.
 type QueryWrappable interface {
 	Type
 	queryWrappable()
