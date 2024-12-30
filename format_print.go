@@ -24,7 +24,16 @@ func (a AndExpression) printSource(w io.Writer, v bool) {
 	a.NotExpression.printSource(w, v)
 
 	if a.AndType != AndNone && a.AndExpression != nil {
+		if v {
+			io.WriteString(w, " ")
+		}
+
 		a.AndType.printSource(w, v)
+
+		if v {
+			io.WriteString(w, " ")
+		}
+
 		a.AndExpression.printSource(w, v)
 	}
 }
