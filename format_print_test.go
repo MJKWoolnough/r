@@ -39,6 +39,26 @@ func TestPrintSource(t *testing.T) {
 			"a&b&&c\n",
 			"a & b && c\n",
 		},
+		{ // 7
+			"a(b)",
+			"a(b)\n",
+			"a(b)\n",
+		},
+		{ // 8
+			"a ( ... )",
+			"a(...)\n",
+			"a(...)\n",
+		},
+		{ // 9
+			"a(..1)",
+			"a(..1)\n",
+			"a(..1)\n",
+		},
+		{ // 10
+			"a(,b)",
+			"a(,b)\n",
+			"a(, b)\n",
+		},
 	} {
 		for m, input := range test {
 			tk := parser.NewStringTokeniser(input)
