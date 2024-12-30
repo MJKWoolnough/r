@@ -8,7 +8,23 @@ import (
 )
 
 func TestPrintSource(t *testing.T) {
-	for n, test := range [...][3]string{} {
+	for n, test := range [...][3]string{
+		{ // 1
+			"a+b",
+			"a+b\n",
+			"a + b\n",
+		},
+		{ // 2
+			"a-b",
+			"a-b\n",
+			"a - b\n",
+		},
+		{ // 3
+			"a + b-c",
+			"a+b-c\n",
+			"a + b - c\n",
+		},
+	} {
 		for m, input := range test {
 			tk := parser.NewStringTokeniser(input)
 
