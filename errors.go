@@ -2,6 +2,7 @@ package r
 
 import "errors"
 
+// Errors
 var (
 	ErrInvalidSimpleExpression     = errors.New("invalid simple expression")
 	ErrMissingClosingDoubleBracket = errors.New("missing closing double-bracket")
