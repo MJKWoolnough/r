@@ -153,6 +153,7 @@ func format(f formatter, s fmt.State, v rune) {
 	}
 }
 
+// String implements the fmt.Stringer interface.
 func (a AssignmentType) String() string {
 	switch a {
 	case AssignmentNone:
@@ -191,6 +192,7 @@ func (a AssignmentType) printSource(w io.Writer, _ bool) {
 	}
 }
 
+// String implements the fmt.Stringer interface.
 func (a AdditionType) String() string {
 	switch a {
 	case AdditionNone:
@@ -217,6 +219,7 @@ func (a AdditionType) printSource(w io.Writer, _ bool) {
 	}
 }
 
+// String implements the fmt.Stringer interface.
 func (a AndType) String() string {
 	switch a {
 	case AndNone:
@@ -243,6 +246,7 @@ func (a AndType) printSource(w io.Writer, _ bool) {
 	}
 }
 
+// String implements the fmt.Stringer interface.
 func (m MultiplicationType) String() string {
 	switch m {
 	case MultiplicationNone:
@@ -269,6 +273,7 @@ func (m MultiplicationType) printSource(w io.Writer, _ bool) {
 	}
 }
 
+// String implements the fmt.Stringer interface.
 func (o OrType) String() string {
 	switch o {
 	case OrNone:
@@ -295,6 +300,7 @@ func (o OrType) printSource(w io.Writer, _ bool) {
 	}
 }
 
+// String implements the fmt.Stringer interface.
 func (r RelationalOperator) String() string {
 	switch r {
 	case RelationalNone:
@@ -337,6 +343,7 @@ func (r RelationalOperator) printSource(w io.Writer, _ bool) {
 	}
 }
 
+// String implements the fmt.Stringer interface.
 func (s SubsetType) String() string {
 	switch s {
 	case SubsetNone:
@@ -363,6 +370,7 @@ func (s SubsetType) printSource(w io.Writer, _ bool) {
 	}
 }
 
+// String implements the fmt.Stringer interface.
 func (u UnaryType) String() string {
 	switch u {
 	case UnaryAdd:
