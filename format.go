@@ -188,7 +188,7 @@ func (a AssignmentType) printSource(w io.Writer, _ bool) {
 	case AssignmentLeftParentAssign:
 		io.WriteString(w, "<<-")
 	case AssignmentRightParentAssign:
-		io.WriteString(w, "-->")
+		io.WriteString(w, "->>")
 	}
 }
 
