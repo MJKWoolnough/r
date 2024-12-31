@@ -104,6 +104,21 @@ func TestPrintSource(t *testing.T) {
 			"a->>b\n",
 			"a ->> b\n",
 		},
+		{ // 20
+			"{}",
+			"{}\n",
+			"{}\n",
+		},
+		{ // 21
+			"{a}",
+			"{\n\ta\n}\n",
+			"{\n\ta\n}\n",
+		},
+		{ // 22
+			"{a;b}",
+			"{\n\ta\n\tb\n}\n",
+			"{\n\ta\n\tb\n}\n",
+		},
 	} {
 		for m, input := range test {
 			tk := parser.NewStringTokeniser(input)
