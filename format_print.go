@@ -84,7 +84,16 @@ func (a AssignmentExpression) printSource(w io.Writer, v bool) {
 	a.FormulaeExpression.printSource(w, v)
 
 	if a.AssignmentType != AssignmentNone && a.AssignmentExpression != nil {
+		if v {
+			io.WriteString(w, " ")
+		}
+
 		a.AssignmentType.printSource(w, v)
+
+		if v {
+			io.WriteString(w, " ")
+		}
+
 		a.AssignmentExpression.printSource(w, v)
 	}
 }
