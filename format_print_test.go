@@ -229,6 +229,31 @@ func TestPrintSource(t *testing.T) {
 			"a%b%c\n",
 			"a %b% c\n",
 		},
+		{ // 45
+			"a?b",
+			"a?b\n",
+			"a ? b\n",
+		},
+		{ // 46
+			"a??b",
+			"a??b\n",
+			"a ?? b\n",
+		},
+		{ // 47
+			"?a",
+			"?a\n",
+			"? a\n",
+		},
+		{ // 48
+			"??a",
+			"??a\n",
+			"?? a\n",
+		},
+		{ // 49
+			"???a",
+			"???a\n",
+			"??? a\n",
+		},
 	} {
 		for m, input := range test {
 			tk := parser.NewStringTokeniser(input)
