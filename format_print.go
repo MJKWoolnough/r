@@ -367,7 +367,7 @@ func (q QueryExpression) printSource(w io.Writer, v bool) {
 
 		io.WriteString(w, "?")
 
-		if v {
+		if v && q.QueryExpression.AssignmentExpression != nil {
 			io.WriteString(w, " ")
 		}
 
