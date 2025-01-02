@@ -194,10 +194,25 @@ func TestPrintSource(t *testing.T) {
 			"!a\n",
 			"!a\n",
 		},
-		{ // 37
+		{ // 38
 			"!!!!a",
 			"!!!!a\n",
 			"!!!!a\n",
+		},
+		{ // 39
+			"a|b",
+			"a|b\n",
+			"a | b\n",
+		},
+		{ // 40
+			"a||b",
+			"a||b\n",
+			"a || b\n",
+		},
+		{ // 41
+			"a | b||c",
+			"a|b||c\n",
+			"a | b || c\n",
 		},
 	} {
 		for m, input := range test {
