@@ -214,6 +214,21 @@ func TestPrintSource(t *testing.T) {
 			"a|b||c\n",
 			"a | b || c\n",
 		},
+		{ // 42
+			"a|>b",
+			"a|>b\n",
+			"a |> b\n",
+		},
+		{ // 43
+			"a%%b",
+			"a%%b\n",
+			"a %% b\n",
+		},
+		{ // 44
+			"a%b%c",
+			"a%b%c\n",
+			"a %b% c\n",
+		},
 	} {
 		for m, input := range test {
 			tk := parser.NewStringTokeniser(input)
