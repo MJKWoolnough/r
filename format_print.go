@@ -242,7 +242,7 @@ func (i IfControl) printSource(w io.Writer, v bool) {
 	if v {
 		io.WriteString(w, ") ")
 	} else {
-		io.WriteString(w, ") ")
+		io.WriteString(w, ")")
 	}
 
 	i.Expr.printSource(w, v)
