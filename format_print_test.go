@@ -159,6 +159,21 @@ func TestPrintSource(t *testing.T) {
 			"if(a)b else c\n",
 			"if (a) b else c\n",
 		},
+		{ // 31
+			"a[0]",
+			"a[0]\n",
+			"a[0]\n",
+		},
+		{ // 32
+			"a[b,c]",
+			"a[b,c]\n",
+			"a[b, c]\n",
+		},
+		{ // 33
+			"a[[0]]",
+			"a[[0]]\n",
+			"a[[0]]\n",
+		},
 	} {
 		for m, input := range test {
 			tk := parser.NewStringTokeniser(input)
