@@ -323,7 +323,16 @@ func (o OrExpression) printSource(w io.Writer, v bool) {
 	o.AndExpression.printSource(w, v)
 
 	if o.OrType != OrNone && o.OrExpression != nil {
+		if v {
+			io.WriteString(w, " ")
+		}
+
 		o.OrType.printSource(w, v)
+
+		if v {
+			io.WriteString(w, " ")
+		}
+
 		o.OrExpression.printSource(w, v)
 	}
 }
