@@ -63,20 +63,18 @@ func (a ArgList) printSource(w io.Writer, v bool) {
 }
 
 func (a Argument) printSource(w io.Writer, v bool) {
-	if a.Identifier == nil {
-		return
-	}
+	if a.Identifier != nil {
+		io.WriteString(w, a.Identifier.Data)
 
-	io.WriteString(w, a.Identifier.Data)
+		if a.Identifier.Type == TokenIdentifier && a.Default != nil {
+			if v {
+				io.WriteString(w, " = ")
+			} else {
+				io.WriteString(w, "=")
+			}
 
-	if a.Identifier.Type == TokenIdentifier && a.Default != nil {
-		if v {
-			io.WriteString(w, " = ")
-		} else {
-			io.WriteString(w, "=")
+			a.Default.printSource(w, v)
 		}
-
-		a.Default.printSource(w, v)
 	}
 }
 
@@ -174,27 +172,25 @@ func (f FlowControl) printSource(w io.Writer, v bool) {
 }
 
 func (f ForControl) printSource(w io.Writer, v bool) {
-	if f.Var == nil || f.Var.Type != TokenIdentifier {
-		return
+	if f.Var != nil && f.Var.Type == TokenIdentifier {
+		if v {
+			io.WriteString(w, "for (")
+		} else {
+			io.WriteString(w, "for(")
+		}
+
+		io.WriteString(w, f.Var.Data)
+		io.WriteString(w, " in ")
+		f.List.printSource(w, v)
+
+		if v {
+			io.WriteString(w, ") ")
+		} else {
+			io.WriteString(w, ")")
+		}
+
+		f.Expr.printSource(w, v)
 	}
-
-	if v {
-		io.WriteString(w, "for (")
-	} else {
-		io.WriteString(w, "for(")
-	}
-
-	io.WriteString(w, f.Var.Data)
-	io.WriteString(w, " in ")
-	f.List.printSource(w, v)
-
-	if v {
-		io.WriteString(w, ") ")
-	} else {
-		io.WriteString(w, ")")
-	}
-
-	f.Expr.printSource(w, v)
 }
 
 func (f FormulaeExpression) printSource(w io.Writer, v bool) {
