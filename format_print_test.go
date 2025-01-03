@@ -309,6 +309,16 @@ func TestPrintSource(t *testing.T) {
 			"a@b\n",
 			"a@b\n",
 		},
+		{ // 61
+			"+a",
+			"+a\n",
+			"+a\n",
+		},
+		{ // 62
+			"-a",
+			"-a\n",
+			"-a\n",
+		},
 	} {
 		for m, input := range test {
 			tk := parser.NewStringTokeniser(input)
