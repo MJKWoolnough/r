@@ -383,7 +383,7 @@ func (r RelationalExpression) printSource(w io.Writer, v bool) {
 			io.WriteString(w, " ")
 		}
 
-		r.RelationalExpression.printSource(w, v)
+		r.RelationalOperator.printSource(w, v)
 
 		if v {
 			io.WriteString(w, " ")
