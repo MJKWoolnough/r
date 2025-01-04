@@ -1965,3 +1965,17 @@ func TestUnwrapQuery(t *testing.T) {
 		}
 	}
 }
+
+func TestUnwrapQueryExtra(t *testing.T) {
+	if res := UnwrapQuery(nil); res != nil {
+		t.Errorf("test 1: expecting nil, got %v", res)
+	}
+
+	if res := UnwrapQuery(WrapQuery(&FormulaeExpression{})); res != nil {
+		t.Errorf("test 2: expecting nil, got %v", res)
+	}
+
+	if res := UnwrapQuery(WrapQuery(&IndexOrCallExpression{})); res != nil {
+		t.Errorf("test 3: expecting nil, got %v", res)
+	}
+}
