@@ -4,6 +4,8 @@ import (
 	"vimagination.zapto.org/parser"
 )
 
+// Expression represents either a FlowControl, FunctionDefinition, or
+// QueryExpression.
 type Expression struct {
 	FlowControl        *FlowControl
 	FunctionDefinition *FunctionDefinition
@@ -40,6 +42,8 @@ func (e *Expression) parse(r *rParser) error {
 	return nil
 }
 
+// CompoundExpression represents a series of expressions, wrapped in braces,
+// and seperated by semi-colons, commas, and newlines.
 type CompoundExpression struct {
 	Expressions []Expression
 	Tokens      Tokens
@@ -77,6 +81,7 @@ func (c *CompoundExpression) parse(r *rParser) error {
 	return nil
 }
 
+// FlowControl represents an If-, While-, Repeat-, or For-Control.
 type FlowControl struct {
 	IfControl     *IfControl
 	WhileControl  *WhileControl
@@ -119,6 +124,7 @@ func (f *FlowControl) parse(r *rParser) error {
 	return nil
 }
 
+// IfControl represents a conditional branch and optional else.
 type IfControl struct {
 	Cond   FormulaeExpression
 	Expr   Expression
@@ -182,6 +188,7 @@ func (i *IfControl) parse(r *rParser) error {
 	return nil
 }
 
+// WhileControl represents a looping branch with a single condition.
 type WhileControl struct {
 	Cond   FormulaeExpression
 	Expr   Expression
@@ -226,6 +233,7 @@ func (w *WhileControl) parse(r *rParser) error {
 	return nil
 }
 
+// RepeatControl represents a looping branch.
 type RepeatControl struct {
 	Expr   Expression
 	Tokens Tokens
@@ -248,6 +256,7 @@ func (rc *RepeatControl) parse(r *rParser) error {
 	return nil
 }
 
+// ForControl represents a looping branch over an expression.
 type ForControl struct {
 	Var    *Token
 	List   FormulaeExpression
@@ -307,6 +316,7 @@ func (f *ForControl) parse(r *rParser) error {
 	return nil
 }
 
+// FunctionDefinition represents a defined function.
 type FunctionDefinition struct {
 	ArgList ArgList
 	Body    Expression
@@ -347,6 +357,7 @@ func (f *FunctionDefinition) parse(r *rParser) error {
 	return nil
 }
 
+// ArgList represents a series af arguments accepted by a FunctionDefinition.
 type ArgList struct {
 	Args   []Argument
 	Tokens Tokens
@@ -394,6 +405,8 @@ type Argument struct {
 	Tokens     Tokens
 }
 
+// Argument represents a single param accepted by a FunctionDefinition and a
+// possible default value.
 func (a *Argument) parse(r *rParser) error {
 	if !r.Accept(TokenIdentifier) && !r.AcceptToken(parser.Token{Type: TokenEllipsis, Data: "..."}) {
 		return r.Error("Argument", ErrMissingIdentifier)
@@ -427,6 +440,7 @@ func (a *Argument) parse(r *rParser) error {
 	return nil
 }
 
+// QueryExpression represents a help command.
 type QueryExpression struct {
 	AssignmentExpression *AssignmentExpression
 	QueryExpression      *QueryExpression
@@ -479,6 +493,7 @@ func (q *QueryExpression) parse(r *rParser) error {
 	return nil
 }
 
+// AssignmentType defines the type of assignment in AssignmentExpression.
 type AssignmentType uint8
 
 const (
@@ -490,6 +505,7 @@ const (
 	AssignmentRightParentAssign
 )
 
+// AssignmentExpression represents a binding of an expression value.
 type AssignmentExpression struct {
 	FormulaeExpression   FormulaeExpression
 	AssignmentType       AssignmentType
@@ -542,6 +558,7 @@ func (a *AssignmentExpression) parse(r *rParser) error {
 	return nil
 }
 
+// FormulaeExpression represents a model formula.
 type FormulaeExpression struct {
 	OrExpression       *OrExpression
 	FormulaeExpression *FormulaeExpression
@@ -585,6 +602,7 @@ func (f *FormulaeExpression) parse(r *rParser) error {
 	return nil
 }
 
+// OrType defines the type of an OrExpression.
 type OrType uint8
 
 const (
@@ -593,6 +611,7 @@ const (
 	OrNotVectorized
 )
 
+// OrExpression represents one of two Or expressions.
 type OrExpression struct {
 	AndExpression AndExpression
 	OrType        OrType
@@ -638,6 +657,7 @@ func (o *OrExpression) parse(r *rParser) error {
 	return nil
 }
 
+// AndType defines the type of an AndExpression.
 type AndType uint8
 
 const (
@@ -646,6 +666,7 @@ const (
 	AndNotVectorized
 )
 
+// AndExpression represents one of two And expressions.
 type AndExpression struct {
 	NotExpression NotExpression
 	AndType       AndType
@@ -691,6 +712,7 @@ func (a *AndExpression) parse(r *rParser) error {
 	return nil
 }
 
+// NotExpression represents a possibly negated expression.
 type NotExpression struct {
 	Nots                 uint
 	RelationalExpression RelationalExpression
@@ -717,6 +739,8 @@ func (n *NotExpression) parse(r *rParser) error {
 	return nil
 }
 
+// RelationalOperator defines the type of relationship for a
+// RelationalExpression.
 type RelationalOperator uint8
 
 const (
@@ -729,6 +753,8 @@ const (
 	RelationalNotEqual
 )
 
+// RelationalExpression represents a logical relationship between two
+// expressions.
 type RelationalExpression struct {
 	AdditionExpression   AdditionExpression
 	RelationalOperator   RelationalOperator
@@ -782,6 +808,7 @@ func (re *RelationalExpression) parse(r *rParser) error {
 	return nil
 }
 
+// AdditionType determines the type of a AdditionExpression.
 type AdditionType uint8
 
 const (
@@ -790,6 +817,8 @@ const (
 	AdditionSubtract
 )
 
+// AdditionExpression represents a binary adding or subtracting of two
+// expressions.
 type AdditionExpression struct {
 	MultiplicationExpression MultiplicationExpression
 	AdditionType             AdditionType
@@ -835,6 +864,7 @@ func (a *AdditionExpression) parse(r *rParser) error {
 	return nil
 }
 
+// MultiplicationType determines the type of a MultiplicationExpression.
 type MultiplicationType uint8
 
 const (
@@ -850,6 +880,8 @@ type MultiplicationExpression struct {
 	Tokens                   Tokens
 }
 
+// MultiplicationExpression represents a binary multiplication or division of
+// two expressions.
 func (m *MultiplicationExpression) parse(r *rParser) error {
 	s := r.NewGoal()
 
@@ -888,6 +920,8 @@ func (m *MultiplicationExpression) parse(r *rParser) error {
 	return nil
 }
 
+// PipeOrSpecialExpression represetns either a pipe (|>) or special (%%) binary
+// operation.
 type PipeOrSpecialExpression struct {
 	SequenceExpression      SequenceExpression
 	Operator                *Token
@@ -929,6 +963,7 @@ func (p *PipeOrSpecialExpression) parse(r *rParser) error {
 	return nil
 }
 
+// SequenceExpression represents a sequencing operation.
 type SequenceExpression struct {
 	UnaryExpression    UnaryExpression
 	SequenceExpression *SequenceExpression
@@ -967,6 +1002,7 @@ func (se *SequenceExpression) parse(r *rParser) error {
 	return nil
 }
 
+// UnaryType determines the type of operation in a UnaryExpression.
 type UnaryType uint8
 
 const (
@@ -974,6 +1010,7 @@ const (
 	UnaryMinus
 )
 
+// UnaryExpression represents a unary addition or subtraction.
 type UnaryExpression struct {
 	UnaryType                []UnaryType
 	ExponentiationExpression ExponentiationExpression
@@ -1006,6 +1043,7 @@ func (u *UnaryExpression) parse(r *rParser) error {
 	return nil
 }
 
+// ExponentiationExpression represents a exponentiation operation.
 type ExponentiationExpression struct {
 	SubsetExpression         SubsetExpression
 	ExponentiationExpression *ExponentiationExpression
@@ -1044,6 +1082,7 @@ func (e *ExponentiationExpression) parse(r *rParser) error {
 	return nil
 }
 
+// SubsetType determines the type of a SubsetExpression.
 type SubsetType uint8
 
 const (
@@ -1052,6 +1091,7 @@ const (
 	SubsetStructure
 )
 
+// SubsetExpression represents a subsetting operation.
 type SubsetExpression struct {
 	ScopeExpression  ScopeExpression
 	SubsetType       SubsetType
@@ -1097,6 +1137,7 @@ func (se *SubsetExpression) parse(r *rParser) error {
 	return nil
 }
 
+// ScopeExpression represents a scoping operation.
 type ScopeExpression struct {
 	IndexOrCallExpression IndexOrCallExpression
 	ScopeExpression       *ScopeExpression
@@ -1135,6 +1176,8 @@ func (se *ScopeExpression) parse(r *rParser) error {
 	return nil
 }
 
+// IndexOrCallExpression represents a possible indexing or function calling
+// operation.
 type IndexOrCallExpression struct {
 	SimpleExpression      *SimpleExpression
 	IndexOrCallExpression *IndexOrCallExpression
@@ -1202,6 +1245,8 @@ Loop:
 	return nil
 }
 
+// SimpleExpression represents either an Identifier, a Constant, an Ellipsis, a
+// ParenthesizedExpression, or a CompoundExpression.
 type SimpleExpression struct {
 	Identifier              *Token
 	Constant                *Token
@@ -1252,6 +1297,7 @@ func (a *SimpleExpression) parse(r *rParser) error {
 	return nil
 }
 
+// Index represents either a single or double bracketed indexing operation.
 type Index struct {
 	Double bool
 	Args   []QueryExpression
@@ -1303,6 +1349,7 @@ func (i *Index) parse(r *rParser) error {
 	return nil
 }
 
+// Call represents the arguments passed to a function.
 type Call struct {
 	Args   []Arg
 	Tokens Tokens
@@ -1345,6 +1392,7 @@ func (c *Call) parse(r *rParser) error {
 	return nil
 }
 
+// Arg represents a single argument passed to a function.
 type Arg struct {
 	QueryExpression *QueryExpression
 	Ellipsis        *Token
