@@ -186,6 +186,27 @@ func wrapQueryExpressionError(err Error) Error {
 	return err
 }
 
+func TestParseErrors(t *testing.T) {
+	const (
+		err1 = "Tokens: error at position 2 (1:2):\nunexpected EOF"
+		err2 = "File: error at position 3 (1:3):\nmissing statement terminator"
+	)
+
+	tk := parser.NewStringTokeniser("(")
+	if _, err := Parse(&tk); err == nil {
+		t.Error("test 1: expecting non-nil error")
+	} else if m := err.Error(); m != err1 {
+		t.Errorf("test 1: expecting error %q, got %q", err1, m)
+	}
+
+	tk = parser.NewStringTokeniser("a b")
+	if _, err := Parse(&tk); err == nil {
+		t.Error("test 2: expecting non-nil error")
+	} else if m := err.Error(); m != err2 {
+		t.Errorf("test 2: expecting error %q, got %q", err2, m)
+	}
+}
+
 func TestFile(t *testing.T) {
 	doTests(t, []sourceFn{
 		{"a", func(t *test, tk Tokens) { // 1
