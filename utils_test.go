@@ -1102,3 +1102,866 @@ func TestWrapQuery(t *testing.T) {
 		}
 	}
 }
+
+func TestUnwrapQuery(t *testing.T) {
+	tks := Tokens{
+		{
+			Token: parser.Token{
+				Type: TokenIdentifier,
+				Data: "a",
+			},
+		},
+		{
+			Token: parser.Token{
+				Type: TokenIdentifier,
+				Data: "b",
+			},
+		},
+	}
+	identA := &tks[0]
+	identB := &tks[1]
+
+	for n, test := range [...]QueryWrappable{
+		&CompoundExpression{ // 1
+			Expressions: []Expression{
+				{
+					QueryExpression: WrapQuery(&SimpleExpression{
+						Identifier: identA,
+						Tokens:     tks[:1],
+					}),
+					Tokens: tks[:1],
+				},
+			},
+			Tokens: tks[:1],
+		},
+		&SimpleExpression{ // 2
+			Identifier: identA,
+			Tokens:     tks[:1],
+		},
+		&IndexOrCallExpression{ // 3
+			IndexOrCallExpression: &IndexOrCallExpression{
+				SimpleExpression: &SimpleExpression{
+					Identifier: identA,
+					Tokens:     tks[:1],
+				},
+			},
+			Call: &Call{
+				Args: []Arg{
+					{
+						QueryExpression: WrapQuery(&SimpleExpression{
+							Identifier: identB,
+							Tokens:     tks[1:2],
+						}),
+						Tokens: tks[1:2],
+					},
+				},
+				Tokens: tks[1:2],
+			},
+			Tokens: tks[:2],
+		},
+		&IndexOrCallExpression{ // 4
+			IndexOrCallExpression: &IndexOrCallExpression{
+				SimpleExpression: &SimpleExpression{
+					Identifier: identA,
+					Tokens:     tks[:1],
+				},
+			},
+			Index: &Index{
+				Args: []QueryExpression{
+					*WrapQuery(&SimpleExpression{
+						Identifier: identB,
+						Tokens:     tks[1:2],
+					}),
+				},
+				Tokens: tks[1:2],
+			},
+			Tokens: tks[:2],
+		},
+		&ScopeExpression{ // 5
+			IndexOrCallExpression: IndexOrCallExpression{
+				SimpleExpression: &SimpleExpression{
+					Identifier: identA,
+					Tokens:     tks[:1],
+				},
+				Tokens: tks[:1],
+			},
+			ScopeExpression: &ScopeExpression{
+				IndexOrCallExpression: IndexOrCallExpression{
+					SimpleExpression: &SimpleExpression{
+						Identifier: identB,
+						Tokens:     tks[1:2],
+					},
+					Tokens: tks[1:2],
+				},
+				Tokens: tks[1:2],
+			},
+			Tokens: tks[:2],
+		},
+		&SubsetExpression{ // 6
+			ScopeExpression: ScopeExpression{
+				IndexOrCallExpression: IndexOrCallExpression{
+					SimpleExpression: &SimpleExpression{
+						Identifier: identA,
+						Tokens:     tks[:1],
+					},
+					Tokens: tks[:1],
+				},
+				Tokens: tks[:1],
+			},
+			SubsetExpression: &SubsetExpression{
+				ScopeExpression: ScopeExpression{
+					IndexOrCallExpression: IndexOrCallExpression{
+						SimpleExpression: &SimpleExpression{
+							Identifier: identB,
+							Tokens:     tks[1:2],
+						},
+						Tokens: tks[1:2],
+					},
+					Tokens: tks[1:2],
+				},
+				Tokens: tks[1:2],
+			},
+			Tokens: tks[:2],
+		},
+		&ExponentiationExpression{ // 7
+			SubsetExpression: SubsetExpression{
+				ScopeExpression: ScopeExpression{
+					IndexOrCallExpression: IndexOrCallExpression{
+						SimpleExpression: &SimpleExpression{
+							Identifier: identA,
+							Tokens:     tks[:1],
+						},
+						Tokens: tks[:1],
+					},
+					Tokens: tks[:1],
+				},
+				Tokens: tks[:1],
+			},
+			ExponentiationExpression: &ExponentiationExpression{
+				SubsetExpression: SubsetExpression{
+					ScopeExpression: ScopeExpression{
+						IndexOrCallExpression: IndexOrCallExpression{
+							SimpleExpression: &SimpleExpression{
+								Identifier: identB,
+								Tokens:     tks[1:2],
+							},
+							Tokens: tks[1:2],
+						},
+						Tokens: tks[1:2],
+					},
+					Tokens: tks[1:2],
+				},
+				Tokens: tks[1:2],
+			},
+			Tokens: tks[:2],
+		},
+		&UnaryExpression{ // 8
+			UnaryType: []UnaryType{UnaryAdd},
+			ExponentiationExpression: ExponentiationExpression{
+				SubsetExpression: SubsetExpression{
+					ScopeExpression: ScopeExpression{
+						IndexOrCallExpression: IndexOrCallExpression{
+							SimpleExpression: &SimpleExpression{
+								Identifier: identA,
+								Tokens:     tks[:1],
+							},
+							Tokens: tks[:1],
+						},
+						Tokens: tks[:1],
+					},
+					Tokens: tks[:1],
+				},
+				Tokens: tks[:1],
+			},
+			Tokens: tks[:1],
+		},
+		&SequenceExpression{ // 9
+			UnaryExpression: UnaryExpression{
+				ExponentiationExpression: ExponentiationExpression{
+					SubsetExpression: SubsetExpression{
+						ScopeExpression: ScopeExpression{
+							IndexOrCallExpression: IndexOrCallExpression{
+								SimpleExpression: &SimpleExpression{
+									Identifier: identA,
+									Tokens:     tks[:1],
+								},
+								Tokens: tks[:1],
+							},
+							Tokens: tks[:1],
+						},
+						Tokens: tks[:1],
+					},
+					Tokens: tks[:1],
+				},
+				Tokens: tks[:1],
+			},
+			SequenceExpression: &SequenceExpression{
+				UnaryExpression: UnaryExpression{
+					ExponentiationExpression: ExponentiationExpression{
+						SubsetExpression: SubsetExpression{
+							ScopeExpression: ScopeExpression{
+								IndexOrCallExpression: IndexOrCallExpression{
+									SimpleExpression: &SimpleExpression{
+										Identifier: identB,
+										Tokens:     tks[1:2],
+									},
+									Tokens: tks[1:2],
+								},
+								Tokens: tks[1:2],
+							},
+							Tokens: tks[1:2],
+						},
+						Tokens: tks[1:2],
+					},
+					Tokens: tks[1:2],
+				},
+				Tokens: tks[:2],
+			},
+		},
+		&PipeOrSpecialExpression{ // 10
+			SequenceExpression: SequenceExpression{
+				UnaryExpression: UnaryExpression{
+					ExponentiationExpression: ExponentiationExpression{
+						SubsetExpression: SubsetExpression{
+							ScopeExpression: ScopeExpression{
+								IndexOrCallExpression: IndexOrCallExpression{
+									SimpleExpression: &SimpleExpression{
+										Identifier: identA,
+										Tokens:     tks[:1],
+									},
+									Tokens: tks[:1],
+								},
+								Tokens: tks[:1],
+							},
+							Tokens: tks[:1],
+						},
+						Tokens: tks[:1],
+					},
+					Tokens: tks[:1],
+				},
+				Tokens: tks[:1],
+			},
+			PipeOrSpecialExpression: &PipeOrSpecialExpression{
+				SequenceExpression: SequenceExpression{
+					UnaryExpression: UnaryExpression{
+						ExponentiationExpression: ExponentiationExpression{
+							SubsetExpression: SubsetExpression{
+								ScopeExpression: ScopeExpression{
+									IndexOrCallExpression: IndexOrCallExpression{
+										SimpleExpression: &SimpleExpression{
+											Identifier: identB,
+											Tokens:     tks[1:2],
+										},
+										Tokens: tks[1:2],
+									},
+									Tokens: tks[1:2],
+								},
+								Tokens: tks[1:2],
+							},
+							Tokens: tks[1:2],
+						},
+						Tokens: tks[1:2],
+					},
+					Tokens: tks[1:2],
+				},
+				Tokens: tks[1:2],
+			},
+			Tokens: tks[:2],
+		},
+		&MultiplicationExpression{ // 11
+			PipeOrSpecialExpression: PipeOrSpecialExpression{
+				SequenceExpression: SequenceExpression{
+					UnaryExpression: UnaryExpression{
+						ExponentiationExpression: ExponentiationExpression{
+							SubsetExpression: SubsetExpression{
+								ScopeExpression: ScopeExpression{
+									IndexOrCallExpression: IndexOrCallExpression{
+										SimpleExpression: &SimpleExpression{
+											Identifier: identA,
+											Tokens:     tks[:1],
+										},
+										Tokens: tks[:1],
+									},
+									Tokens: tks[:1],
+								},
+								Tokens: tks[:1],
+							},
+							Tokens: tks[:1],
+						},
+						Tokens: tks[:1],
+					},
+					Tokens: tks[:1],
+				},
+				Tokens: tks[:1],
+			},
+			MultiplicationExpression: &MultiplicationExpression{
+				PipeOrSpecialExpression: PipeOrSpecialExpression{
+					SequenceExpression: SequenceExpression{
+						UnaryExpression: UnaryExpression{
+							ExponentiationExpression: ExponentiationExpression{
+								SubsetExpression: SubsetExpression{
+									ScopeExpression: ScopeExpression{
+										IndexOrCallExpression: IndexOrCallExpression{
+											SimpleExpression: &SimpleExpression{
+												Identifier: identB,
+												Tokens:     tks[1:2],
+											},
+											Tokens: tks[1:2],
+										},
+										Tokens: tks[1:2],
+									},
+									Tokens: tks[1:2],
+								},
+								Tokens: tks[1:2],
+							},
+							Tokens: tks[1:2],
+						},
+						Tokens: tks[1:2],
+					},
+					Tokens: tks[1:2],
+				},
+				Tokens: tks[1:2],
+			},
+			Tokens: tks[:2],
+		},
+		&AdditionExpression{ // 12
+			MultiplicationExpression: MultiplicationExpression{
+				PipeOrSpecialExpression: PipeOrSpecialExpression{
+					SequenceExpression: SequenceExpression{
+						UnaryExpression: UnaryExpression{
+							ExponentiationExpression: ExponentiationExpression{
+								SubsetExpression: SubsetExpression{
+									ScopeExpression: ScopeExpression{
+										IndexOrCallExpression: IndexOrCallExpression{
+											SimpleExpression: &SimpleExpression{
+												Identifier: identA,
+												Tokens:     tks[:1],
+											},
+											Tokens: tks[:1],
+										},
+										Tokens: tks[:1],
+									},
+									Tokens: tks[:1],
+								},
+								Tokens: tks[:1],
+							},
+							Tokens: tks[:1],
+						},
+						Tokens: tks[:1],
+					},
+					Tokens: tks[:1],
+				},
+				Tokens: tks[:1],
+			},
+			AdditionExpression: &AdditionExpression{
+				MultiplicationExpression: MultiplicationExpression{
+					PipeOrSpecialExpression: PipeOrSpecialExpression{
+						SequenceExpression: SequenceExpression{
+							UnaryExpression: UnaryExpression{
+								ExponentiationExpression: ExponentiationExpression{
+									SubsetExpression: SubsetExpression{
+										ScopeExpression: ScopeExpression{
+											IndexOrCallExpression: IndexOrCallExpression{
+												SimpleExpression: &SimpleExpression{
+													Identifier: identB,
+													Tokens:     tks[1:2],
+												},
+												Tokens: tks[1:2],
+											},
+											Tokens: tks[1:2],
+										},
+										Tokens: tks[1:2],
+									},
+									Tokens: tks[1:2],
+								},
+								Tokens: tks[1:2],
+							},
+							Tokens: tks[1:2],
+						},
+						Tokens: tks[1:2],
+					},
+					Tokens: tks[1:2],
+				},
+				Tokens: tks[1:2],
+			},
+			Tokens: tks[:2],
+		},
+		&RelationalExpression{ // 13
+			AdditionExpression: AdditionExpression{
+				MultiplicationExpression: MultiplicationExpression{
+					PipeOrSpecialExpression: PipeOrSpecialExpression{
+						SequenceExpression: SequenceExpression{
+							UnaryExpression: UnaryExpression{
+								ExponentiationExpression: ExponentiationExpression{
+									SubsetExpression: SubsetExpression{
+										ScopeExpression: ScopeExpression{
+											IndexOrCallExpression: IndexOrCallExpression{
+												SimpleExpression: &SimpleExpression{
+													Identifier: identA,
+													Tokens:     tks[:1],
+												},
+												Tokens: tks[:1],
+											},
+											Tokens: tks[:1],
+										},
+										Tokens: tks[:1],
+									},
+									Tokens: tks[:1],
+								},
+								Tokens: tks[:1],
+							},
+							Tokens: tks[:1],
+						},
+						Tokens: tks[:1],
+					},
+					Tokens: tks[:1],
+				},
+				Tokens: tks[:1],
+			},
+			RelationalExpression: &RelationalExpression{
+				AdditionExpression: AdditionExpression{
+					MultiplicationExpression: MultiplicationExpression{
+						PipeOrSpecialExpression: PipeOrSpecialExpression{
+							SequenceExpression: SequenceExpression{
+								UnaryExpression: UnaryExpression{
+									ExponentiationExpression: ExponentiationExpression{
+										SubsetExpression: SubsetExpression{
+											ScopeExpression: ScopeExpression{
+												IndexOrCallExpression: IndexOrCallExpression{
+													SimpleExpression: &SimpleExpression{
+														Identifier: identB,
+														Tokens:     tks[1:2],
+													},
+													Tokens: tks[1:2],
+												},
+												Tokens: tks[1:2],
+											},
+											Tokens: tks[1:2],
+										},
+										Tokens: tks[1:2],
+									},
+									Tokens: tks[1:2],
+								},
+								Tokens: tks[1:2],
+							},
+							Tokens: tks[1:2],
+						},
+						Tokens: tks[1:2],
+					},
+					Tokens: tks[1:2],
+				},
+				Tokens: tks[1:2],
+			},
+			Tokens: tks[:2],
+		},
+		&NotExpression{ // 14
+			Nots: 1,
+			RelationalExpression: RelationalExpression{
+				AdditionExpression: AdditionExpression{
+					MultiplicationExpression: MultiplicationExpression{
+						PipeOrSpecialExpression: PipeOrSpecialExpression{
+							SequenceExpression: SequenceExpression{
+								UnaryExpression: UnaryExpression{
+									ExponentiationExpression: ExponentiationExpression{
+										SubsetExpression: SubsetExpression{
+											ScopeExpression: ScopeExpression{
+												IndexOrCallExpression: IndexOrCallExpression{
+													SimpleExpression: &SimpleExpression{
+														Identifier: identA,
+														Tokens:     tks[:1],
+													},
+													Tokens: tks[:1],
+												},
+												Tokens: tks[:1],
+											},
+											Tokens: tks[:1],
+										},
+										Tokens: tks[:1],
+									},
+									Tokens: tks[:1],
+								},
+								Tokens: tks[:1],
+							},
+							Tokens: tks[:1],
+						},
+						Tokens: tks[:1],
+					},
+					Tokens: tks[:1],
+				},
+				Tokens: tks[:1],
+			},
+			Tokens: tks[:1],
+		},
+		&AndExpression{ // 15
+			NotExpression: NotExpression{
+				RelationalExpression: RelationalExpression{
+					AdditionExpression: AdditionExpression{
+						MultiplicationExpression: MultiplicationExpression{
+							PipeOrSpecialExpression: PipeOrSpecialExpression{
+								SequenceExpression: SequenceExpression{
+									UnaryExpression: UnaryExpression{
+										ExponentiationExpression: ExponentiationExpression{
+											SubsetExpression: SubsetExpression{
+												ScopeExpression: ScopeExpression{
+													IndexOrCallExpression: IndexOrCallExpression{
+														SimpleExpression: &SimpleExpression{
+															Identifier: identA,
+															Tokens:     tks[:1],
+														},
+														Tokens: tks[:1],
+													},
+													Tokens: tks[:1],
+												},
+												Tokens: tks[:1],
+											},
+											Tokens: tks[:1],
+										},
+										Tokens: tks[:1],
+									},
+									Tokens: tks[:1],
+								},
+								Tokens: tks[:1],
+							},
+							Tokens: tks[:1],
+						},
+						Tokens: tks[:1],
+					},
+					Tokens: tks[:1],
+				},
+				Tokens: tks[:1],
+			},
+			AndExpression: &AndExpression{
+				NotExpression: NotExpression{
+					RelationalExpression: RelationalExpression{
+						AdditionExpression: AdditionExpression{
+							MultiplicationExpression: MultiplicationExpression{
+								PipeOrSpecialExpression: PipeOrSpecialExpression{
+									SequenceExpression: SequenceExpression{
+										UnaryExpression: UnaryExpression{
+											ExponentiationExpression: ExponentiationExpression{
+												SubsetExpression: SubsetExpression{
+													ScopeExpression: ScopeExpression{
+														IndexOrCallExpression: IndexOrCallExpression{
+															SimpleExpression: &SimpleExpression{
+																Identifier: identB,
+																Tokens:     tks[1:2],
+															},
+															Tokens: tks[1:2],
+														},
+														Tokens: tks[1:2],
+													},
+													Tokens: tks[1:2],
+												},
+												Tokens: tks[1:2],
+											},
+											Tokens: tks[1:2],
+										},
+										Tokens: tks[1:2],
+									},
+									Tokens: tks[1:2],
+								},
+								Tokens: tks[1:2],
+							},
+							Tokens: tks[1:2],
+						},
+						Tokens: tks[1:2],
+					},
+					Tokens: tks[1:2],
+				},
+				Tokens: tks[1:2],
+			},
+			Tokens: tks[:2],
+		},
+		&OrExpression{ // 16
+			AndExpression: AndExpression{
+				NotExpression: NotExpression{
+					RelationalExpression: RelationalExpression{
+						AdditionExpression: AdditionExpression{
+							MultiplicationExpression: MultiplicationExpression{
+								PipeOrSpecialExpression: PipeOrSpecialExpression{
+									SequenceExpression: SequenceExpression{
+										UnaryExpression: UnaryExpression{
+											ExponentiationExpression: ExponentiationExpression{
+												SubsetExpression: SubsetExpression{
+													ScopeExpression: ScopeExpression{
+														IndexOrCallExpression: IndexOrCallExpression{
+															SimpleExpression: &SimpleExpression{
+																Identifier: identA,
+																Tokens:     tks[:1],
+															},
+															Tokens: tks[:1],
+														},
+														Tokens: tks[:1],
+													},
+													Tokens: tks[:1],
+												},
+												Tokens: tks[:1],
+											},
+											Tokens: tks[:1],
+										},
+										Tokens: tks[:1],
+									},
+									Tokens: tks[:1],
+								},
+								Tokens: tks[:1],
+							},
+							Tokens: tks[:1],
+						},
+						Tokens: tks[:1],
+					},
+					Tokens: tks[:1],
+				},
+				Tokens: tks[:1],
+			},
+			OrExpression: &OrExpression{
+				AndExpression: AndExpression{
+					NotExpression: NotExpression{
+						RelationalExpression: RelationalExpression{
+							AdditionExpression: AdditionExpression{
+								MultiplicationExpression: MultiplicationExpression{
+									PipeOrSpecialExpression: PipeOrSpecialExpression{
+										SequenceExpression: SequenceExpression{
+											UnaryExpression: UnaryExpression{
+												ExponentiationExpression: ExponentiationExpression{
+													SubsetExpression: SubsetExpression{
+														ScopeExpression: ScopeExpression{
+															IndexOrCallExpression: IndexOrCallExpression{
+																SimpleExpression: &SimpleExpression{
+																	Identifier: identB,
+																	Tokens:     tks[1:2],
+																},
+																Tokens: tks[1:2],
+															},
+															Tokens: tks[1:2],
+														},
+														Tokens: tks[1:2],
+													},
+													Tokens: tks[1:2],
+												},
+												Tokens: tks[1:2],
+											},
+											Tokens: tks[1:2],
+										},
+										Tokens: tks[1:2],
+									},
+									Tokens: tks[1:2],
+								},
+								Tokens: tks[1:2],
+							},
+							Tokens: tks[1:2],
+						},
+						Tokens: tks[1:2],
+					},
+					Tokens: tks[1:2],
+				},
+				Tokens: tks[1:2],
+			},
+			Tokens: tks[:2],
+		},
+		&FormulaeExpression{ // 17
+			FormulaeExpression: &FormulaeExpression{
+				OrExpression: &OrExpression{
+					AndExpression: AndExpression{
+						NotExpression: NotExpression{
+							RelationalExpression: RelationalExpression{
+								AdditionExpression: AdditionExpression{
+									MultiplicationExpression: MultiplicationExpression{
+										PipeOrSpecialExpression: PipeOrSpecialExpression{
+											SequenceExpression: SequenceExpression{
+												UnaryExpression: UnaryExpression{
+													ExponentiationExpression: ExponentiationExpression{
+														SubsetExpression: SubsetExpression{
+															ScopeExpression: ScopeExpression{
+																IndexOrCallExpression: IndexOrCallExpression{
+																	SimpleExpression: &SimpleExpression{
+																		Identifier: identA,
+																		Tokens:     tks[:1],
+																	},
+																	Tokens: tks[:1],
+																},
+																Tokens: tks[:1],
+															},
+															Tokens: tks[:1],
+														},
+														Tokens: tks[:1],
+													},
+													Tokens: tks[:1],
+												},
+												Tokens: tks[:1],
+											},
+											Tokens: tks[:1],
+										},
+										Tokens: tks[:1],
+									},
+									Tokens: tks[:1],
+								},
+								Tokens: tks[:1],
+							},
+							Tokens: tks[:1],
+						},
+						Tokens: tks[:1],
+					},
+					Tokens: tks[:1],
+				},
+				Tokens: tks[:1],
+			},
+			Tokens: tks[:1],
+		},
+		&AssignmentExpression{ // 18
+			FormulaeExpression: FormulaeExpression{
+				OrExpression: &OrExpression{
+					AndExpression: AndExpression{
+						NotExpression: NotExpression{
+							RelationalExpression: RelationalExpression{
+								AdditionExpression: AdditionExpression{
+									MultiplicationExpression: MultiplicationExpression{
+										PipeOrSpecialExpression: PipeOrSpecialExpression{
+											SequenceExpression: SequenceExpression{
+												UnaryExpression: UnaryExpression{
+													ExponentiationExpression: ExponentiationExpression{
+														SubsetExpression: SubsetExpression{
+															ScopeExpression: ScopeExpression{
+																IndexOrCallExpression: IndexOrCallExpression{
+																	SimpleExpression: &SimpleExpression{
+																		Identifier: identA,
+																		Tokens:     tks[:1],
+																	},
+																	Tokens: tks[:1],
+																},
+																Tokens: tks[:1],
+															},
+															Tokens: tks[:1],
+														},
+														Tokens: tks[:1],
+													},
+													Tokens: tks[:1],
+												},
+												Tokens: tks[:1],
+											},
+											Tokens: tks[:1],
+										},
+										Tokens: tks[:1],
+									},
+									Tokens: tks[:1],
+								},
+								Tokens: tks[:1],
+							},
+							Tokens: tks[:1],
+						},
+						Tokens: tks[:1],
+					},
+					Tokens: tks[:1],
+				},
+				Tokens: tks[:1],
+			},
+			AssignmentExpression: &AssignmentExpression{
+				FormulaeExpression: FormulaeExpression{
+					OrExpression: &OrExpression{
+						AndExpression: AndExpression{
+							NotExpression: NotExpression{
+								RelationalExpression: RelationalExpression{
+									AdditionExpression: AdditionExpression{
+										MultiplicationExpression: MultiplicationExpression{
+											PipeOrSpecialExpression: PipeOrSpecialExpression{
+												SequenceExpression: SequenceExpression{
+													UnaryExpression: UnaryExpression{
+														ExponentiationExpression: ExponentiationExpression{
+															SubsetExpression: SubsetExpression{
+																ScopeExpression: ScopeExpression{
+																	IndexOrCallExpression: IndexOrCallExpression{
+																		SimpleExpression: &SimpleExpression{
+																			Identifier: identB,
+																			Tokens:     tks[1:2],
+																		},
+																		Tokens: tks[1:2],
+																	},
+																	Tokens: tks[1:2],
+																},
+																Tokens: tks[1:2],
+															},
+															Tokens: tks[1:2],
+														},
+														Tokens: tks[1:2],
+													},
+													Tokens: tks[1:2],
+												},
+												Tokens: tks[1:2],
+											},
+											Tokens: tks[1:2],
+										},
+										Tokens: tks[1:2],
+									},
+									Tokens: tks[1:2],
+								},
+								Tokens: tks[1:2],
+							},
+							Tokens: tks[1:2],
+						},
+						Tokens: tks[1:2],
+					},
+					Tokens: tks[1:2],
+				},
+			},
+			Tokens: tks[:2],
+		},
+		&QueryExpression{ // 19
+			QueryExpression: &QueryExpression{
+				AssignmentExpression: &AssignmentExpression{
+					FormulaeExpression: FormulaeExpression{
+						OrExpression: &OrExpression{
+							AndExpression: AndExpression{
+								NotExpression: NotExpression{
+									RelationalExpression: RelationalExpression{
+										AdditionExpression: AdditionExpression{
+											MultiplicationExpression: MultiplicationExpression{
+												PipeOrSpecialExpression: PipeOrSpecialExpression{
+													SequenceExpression: SequenceExpression{
+														UnaryExpression: UnaryExpression{
+															ExponentiationExpression: ExponentiationExpression{
+																SubsetExpression: SubsetExpression{
+																	ScopeExpression: ScopeExpression{
+																		IndexOrCallExpression: IndexOrCallExpression{
+																			SimpleExpression: &SimpleExpression{
+																				Identifier: identA,
+																				Tokens:     tks[:1],
+																			},
+																			Tokens: tks[:1],
+																		},
+																		Tokens: tks[:1],
+																	},
+																	Tokens: tks[:1],
+																},
+																Tokens: tks[:1],
+															},
+															Tokens: tks[:1],
+														},
+														Tokens: tks[:1],
+													},
+													Tokens: tks[:1],
+												},
+												Tokens: tks[:1],
+											},
+											Tokens: tks[:1],
+										},
+										Tokens: tks[:1],
+									},
+									Tokens: tks[:1],
+								},
+								Tokens: tks[:1],
+							},
+							Tokens: tks[:1],
+						},
+						Tokens: tks[:1],
+					},
+					Tokens: tks[:1],
+				},
+				Tokens: tks[:1],
+			},
+			Tokens: tks[:1],
+		},
+	} {
+		if output := UnwrapQuery(WrapQuery(test)); !reflect.DeepEqual(output, test) {
+			t.Errorf("test %d: expecting\n%v\n...got...\n%v", n+1, test, output)
+		}
+	}
+}
