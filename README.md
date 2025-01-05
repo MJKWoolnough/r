@@ -654,6 +654,46 @@ QueryExpression represents a help command.
 ```go
 func WrapQuery(p QueryWrappable) *QueryExpression
 ```
+WrapQuery takes one of many types and wraps it in a *QueryExpression
+
+The accepted types/pointers are as follows:
+
+    QueryExpression
+    *QueryExpression
+    AssignmentExpression
+    *AssignmentExpression
+    FormulaeExpression
+    *FormulaeExpression
+    OrExpression
+    *OrExpression
+    AndExpression
+    *AndExpression
+    NotExpression
+    *NotExpression
+    RelationalExpression
+    *RelationalExpression
+    AdditionExpression
+    *AdditionExpression
+    MultiplicationExpression
+    *MultiplicationExpression
+    PipeOrSpecialExpression
+    *PipeOrSpecialExpression
+    SequenceExpression
+    *SequenceExpression
+    UnaryExpression
+    *UnaryExpression
+    ExponentiationExpression
+    *ExponentiationExpression
+    SubsetExpression
+    *SubsetExpression
+    ScopeExpression
+    *ScopeExpression
+    IndexOrCallExpression
+    *IndexOrCallExpression
+    SimpleExpression
+    *SimpleExpression
+    CompoundExpression
+    *CompoundExpression
 
 #### func (QueryExpression) Format
 
@@ -679,6 +719,29 @@ unwrapped with UnwrapQuery.
 ```go
 func UnwrapQuery(q *QueryExpression) QueryWrappable
 ```
+UnwrapQuery returns the first value up the QueryExpression chain that contains
+all of the information required to rebuild the lower chain.
+
+Possible returns types are as follows:
+
+    *QueryExpression
+    *AssignmentExpression
+    *FormulaeExpression
+    *OrExpression
+    *AndExpression
+    *NotExpression
+    *RelationalExpression
+    *AdditionExpression
+    *MultiplicationExpression
+    *PipeOrSpecialExpression
+    *SequenceExpression
+    *UnaryExpression
+    *ExponentiationExpression
+    *SubsetExpression
+    *ScopeExpression
+    *IndexOrCallExpression
+    *SimpleExpression
+    *CompoundExpression
 
 #### type RelationalExpression
 
