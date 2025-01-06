@@ -3,6 +3,7 @@ package r
 import (
 	"fmt"
 	"io"
+	"strings"
 
 	"vimagination.zapto.org/parser"
 )
@@ -141,6 +142,20 @@ func (t Tokens) printType(w io.Writer, v bool) {
 
 func (c Comments) printType(w io.Writer, v bool) {
 	Tokens(c).printType(w, v)
+}
+
+func (c Comments) printSource(w io.Writer, v bool) {
+	for _, c := range c {
+		if !strings.HasPrefix(c.Data, "#") {
+			io.WriteString(w, "#")
+		}
+
+		io.WriteString(w, c.Data)
+
+		if !strings.HasSuffix(c.Data, "\n") {
+			io.WriteString(w, "\n")
+		}
+	}
 }
 
 type formatter interface {
