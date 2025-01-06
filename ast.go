@@ -27,7 +27,7 @@ func Parse(t Tokeniser) (*File, error) {
 }
 
 func (f *File) parse(r *rParser) error {
-	for r.AcceptRunWhitespace() != parser.TokenDone {
+	for r.AcceptRunWhitespaceNoComment() != parser.TokenDone {
 		var e Expression
 
 		s := r.NewGoal()
