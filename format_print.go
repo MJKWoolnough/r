@@ -143,6 +143,10 @@ func (e ExponentiationExpression) printSource(w io.Writer, v bool) {
 }
 
 func (e Expression) printSource(w io.Writer, v bool) {
+	if v {
+		e.Comments.printSource(w, v)
+	}
+
 	if e.FlowControl != nil {
 		e.FlowControl.printSource(w, v)
 	} else if e.FunctionDefinition != nil {
