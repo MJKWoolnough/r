@@ -90,6 +90,26 @@ func TestExpression(t *testing.T) {
 				Token:   tk[0],
 			}
 		}},
+		{"#a comment\na", func(t *test, tk Tokens) { // 7
+			t.Output = Expression{
+				QueryExpression: WrapQuery(&SimpleExpression{
+					Identifier: &tk[2],
+					Tokens:     tk[2:3],
+				}),
+				Comments: Comments{tk[0]},
+				Tokens:   tk[:3],
+			}
+		}},
+		{"#a comment\n# Another Comment\na", func(t *test, tk Tokens) { // 8
+			t.Output = Expression{
+				QueryExpression: WrapQuery(&SimpleExpression{
+					Identifier: &tk[4],
+					Tokens:     tk[4:5],
+				}),
+				Comments: Comments{tk[0], tk[2]},
+				Tokens:   tk[:5],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var e Expression
 
