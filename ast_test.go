@@ -287,6 +287,21 @@ func TestFile(t *testing.T) {
 				Token:   tk[2],
 			}
 		}},
+		{"#a comment\na", func(t *test, tk Tokens) { // 5
+			t.Output = File{
+				Statements: []Expression{
+					{
+						QueryExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[2],
+							Tokens:     tk[2:3],
+						}),
+						Comments: Comments{tk[0]},
+						Tokens:   tk[:3],
+					},
+				},
+				Tokens: tk[:3],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var f File
 
