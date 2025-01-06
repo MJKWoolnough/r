@@ -257,6 +257,9 @@ func (f *Expression) printType(w io.Writer, v bool) {
 		pp.Print("\nQueryExpression: nil")
 	}
 
+	pp.Print("\nComments: ")
+	f.Comments.printType(&pp, v)
+
 	pp.Print("\nTokens: ")
 	f.Tokens.printType(&pp, v)
 
