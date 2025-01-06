@@ -17,6 +17,8 @@ type Tokens []Token
 
 type rParser Tokens
 
+type Comments []Token
+
 // Tokeniser is an interface representing a tokeniser.
 type Tokeniser interface {
 	TokeniserState(parser.TokenFunc)
@@ -145,6 +147,16 @@ func (r *rParser) ToTokens() Tokens {
 
 func (r *rParser) AcceptRunWhitespace() parser.TokenType {
 	return r.AcceptRun(TokenWhitespace, TokenLineTerminator, TokenComment)
+}
+
+func (r *rParser) AcceptRunWhitespaceComments() Comments {
+	var c Comments
+
+	for r.AcceptRun(TokenWhitespace, TokenLineTerminator) == TokenComment {
+		c = append(c, r.next())
+	}
+
+	return c
 }
 
 func (r *rParser) AcceptRunWhitespaceNoNewLine() parser.TokenType {
