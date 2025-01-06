@@ -10,11 +10,14 @@ type Expression struct {
 	FlowControl        *FlowControl
 	FunctionDefinition *FunctionDefinition
 	QueryExpression    *QueryExpression
+	Comments           Comments
 	Tokens             Tokens
 }
 
 func (e *Expression) parse(r *rParser) error {
 	var err error
+
+	e.Comments = r.AcceptRunWhitespaceComments()
 
 	s := r.NewGoal()
 
