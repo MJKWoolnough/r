@@ -149,6 +149,10 @@ func (r *rParser) AcceptRunWhitespace() parser.TokenType {
 	return r.AcceptRun(TokenWhitespace, TokenLineTerminator, TokenComment)
 }
 
+func (r *rParser) AcceptRunWhitespaceNoComment() parser.TokenType {
+	return r.AcceptRun(TokenWhitespace, TokenLineTerminator)
+}
+
 func (r *rParser) AcceptRunWhitespaceComments() Comments {
 	var c Comments
 
