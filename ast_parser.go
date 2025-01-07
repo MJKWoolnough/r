@@ -166,10 +166,16 @@ func (r *rParser) AcceptRunWhitespaceComments() Comments {
 func (r *rParser) AcceptRunWhitespaceCommentsNoNewline() Comments {
 	var c Comments
 
-	for r.AcceptRun(TokenWhitespace) == TokenComment {
+	s := r.NewGoal()
+
+	for s.AcceptRun(TokenWhitespace) == TokenComment {
+		r.Score(s)
+
 		c = append(c, r.next())
 
-		r.Accept(TokenLineTerminator)
+		s = r.NewGoal()
+
+		s.Accept(TokenLineTerminator)
 	}
 
 	return c
