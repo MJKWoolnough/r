@@ -51,6 +51,11 @@ HEREDOC
 				echo "	} else if v {";
 				echo "		pp.Print(\"\\n$fieldName: []\")";
 				echo "	}";
+			elif [ "${fieldType:0:1}" = "[" ]; then
+				echo "	for n, e := range f.$fieldName {";
+				echo "		pp.Printf(\"\n\t%d: \", n)";
+				echo "		e.printType(&pp, v)";
+				echo "	}";
 			elif [ "${fieldType:0:1}" = "*" ]; then
 				echo;
 				echo "	if f.$fieldName != nil {";
