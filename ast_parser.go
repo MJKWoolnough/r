@@ -163,6 +163,18 @@ func (r *rParser) AcceptRunWhitespaceComments() Comments {
 	return c
 }
 
+func (r *rParser) AcceptRunWhitespaceCommentsNoNewline() Comments {
+	var c Comments
+
+	for r.AcceptRun(TokenWhitespace) == TokenComment {
+		c = append(c, r.next())
+
+		r.Accept(TokenLineTerminator)
+	}
+
+	return c
+}
+
 func (r *rParser) AcceptRunWhitespaceNoNewLine() parser.TokenType {
 	return r.AcceptRun(TokenWhitespace)
 }
