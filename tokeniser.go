@@ -79,8 +79,6 @@ func (r *rTokeniser) expression(t *parser.Tokeniser) (parser.Token, parser.Token
 	}
 
 	if t.Accept(lineTerminators) {
-		t.AcceptRun(lineTerminators)
-
 		return t.Return(TokenLineTerminator, r.expression)
 	}
 

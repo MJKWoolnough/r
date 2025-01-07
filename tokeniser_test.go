@@ -23,9 +23,11 @@ func TestTokeniser(t *testing.T) {
 		{ // 2
 			"\n\r \u2028\u2029",
 			[]parser.Token{
-				{Type: TokenLineTerminator, Data: "\n\r"},
+				{Type: TokenLineTerminator, Data: "\n"},
+				{Type: TokenLineTerminator, Data: "\r"},
 				{Type: TokenWhitespace, Data: " "},
-				{Type: TokenLineTerminator, Data: "\u2028\u2029"},
+				{Type: TokenLineTerminator, Data: "\u2028"},
+				{Type: TokenLineTerminator, Data: "\u2029"},
 				{Type: parser.TokenDone, Data: ""},
 			},
 		},
