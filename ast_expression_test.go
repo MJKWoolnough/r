@@ -110,6 +110,16 @@ func TestExpression(t *testing.T) {
 				Tokens:   tk[:5],
 			}
 		}},
+		{"#a comment\na # attached comment\n#another attached", func(t *test, tk Tokens) { // 9
+			t.Output = Expression{
+				QueryExpression: WrapQuery(&SimpleExpression{
+					Identifier: &tk[2],
+					Tokens:     tk[2:3],
+				}),
+				Comments: [2]Comments{{tk[0]}, {tk[4], tk[6]}},
+				Tokens:   tk[:7],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var e Expression
 
