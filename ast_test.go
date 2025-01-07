@@ -295,7 +295,7 @@ func TestFile(t *testing.T) {
 							Identifier: &tk[2],
 							Tokens:     tk[2:3],
 						}),
-						Comments: Comments{tk[0]},
+						Comments: [2]Comments{{tk[0]}, nil},
 						Tokens:   tk[:3],
 					},
 				},

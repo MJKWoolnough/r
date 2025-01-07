@@ -96,7 +96,7 @@ func TestExpression(t *testing.T) {
 					Identifier: &tk[2],
 					Tokens:     tk[2:3],
 				}),
-				Comments: Comments{tk[0]},
+				Comments: [2]Comments{{tk[0]}, nil},
 				Tokens:   tk[:3],
 			}
 		}},
@@ -106,7 +106,7 @@ func TestExpression(t *testing.T) {
 					Identifier: &tk[4],
 					Tokens:     tk[4:5],
 				}),
-				Comments: Comments{tk[0], tk[2]},
+				Comments: [2]Comments{{tk[0], tk[2]}, nil},
 				Tokens:   tk[:5],
 			}
 		}},

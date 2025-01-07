@@ -256,9 +256,10 @@ func (f *Expression) printType(w io.Writer, v bool) {
 	} else if v {
 		pp.Print("\nQueryExpression: nil")
 	}
-
-	pp.Print("\nComments: ")
-	f.Comments.printType(&pp, v)
+	for n, e := range f.Comments {
+		pp.Printf("\n\t%d: ", n)
+		e.printType(&pp, v)
+	}
 
 	pp.Print("\nTokens: ")
 	f.Tokens.printType(&pp, v)
