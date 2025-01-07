@@ -40,6 +40,12 @@ func (e *Expression) parse(r *rParser) error {
 
 	r.Score(s)
 
+	s = r.NewGoal()
+
+	if e.Comments[1] = s.AcceptRunWhitespaceCommentsNoNewline(); e.Comments[1] != nil {
+		r.Score(s)
+	}
+
 	e.Tokens = r.ToTokens()
 
 	return nil
