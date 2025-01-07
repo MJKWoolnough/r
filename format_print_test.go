@@ -2,6 +2,7 @@ package r
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 
 	"vimagination.zapto.org/parser"
@@ -349,6 +350,21 @@ func TestPrintSource(t *testing.T) {
 			"while(a)b\n",
 			"while (a) b\n",
 		},
+		{ // 69
+			"# abc\na",
+			"a\n",
+			"# abc\na\n",
+		},
+		{ // 70
+			"# abc\n# def\na",
+			"a\n",
+			"# abc\n# def\na\n",
+		},
+		{ // 71
+			"# abc\n# def\na\n#ghi\nb",
+			"a\nb\n",
+			"# abc\n# def\na\n#ghi\nb\n",
+		},
 	} {
 		for m, input := range test {
 			tk := parser.NewStringTokeniser(input)
@@ -357,7 +373,7 @@ func TestPrintSource(t *testing.T) {
 				t.Errorf("test %d.%d: unexpected error: %s", n+1, m+1, err)
 			} else if simple := fmt.Sprintf("%s", f); simple != test[1] {
 				t.Errorf("test %d.%d.1: expecting output %q, got %q", n+1, m+1, test[1], simple)
-			} else if verbose := fmt.Sprintf("%+s", f); verbose != test[2] {
+			} else if verbose := fmt.Sprintf("%+s", f); verbose != test[2] && (m != 1 || !strings.HasPrefix(test[0], "#")) {
 				t.Errorf("test %d.%d.2: expecting output %q, got %q", n+1, m+1, test[2], verbose)
 			}
 		}
