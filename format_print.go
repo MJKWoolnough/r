@@ -166,6 +166,10 @@ func (f File) printSource(w io.Writer, v bool) {
 		e.printSource(w, v)
 		io.WriteString(w, "\n")
 	}
+
+	if v {
+		f.Comments.printSource(w, v)
+	}
 }
 
 func (f FlowControl) printSource(w io.Writer, v bool) {
