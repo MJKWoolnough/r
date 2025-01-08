@@ -302,6 +302,29 @@ func TestFile(t *testing.T) {
 				Tokens: tk[:3],
 			}
 		}},
+		{"#abc\na # def\n\n#ghi\nb #jkl", func(t *test, tk Tokens) { // 6
+			t.Output = File{
+				Statements: []Expression{
+					{
+						QueryExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[2],
+							Tokens:     tk[2:3],
+						}),
+						Comments: [2]Comments{{tk[0]}, {tk[4]}},
+						Tokens:   tk[:5],
+					},
+					{
+						QueryExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[9],
+							Tokens:     tk[9:10],
+						}),
+						Comments: [2]Comments{{tk[7]}, {tk[11]}},
+						Tokens:   tk[7:12],
+					},
+				},
+				Tokens: tk[:12],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var f File
 
