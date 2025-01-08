@@ -325,6 +325,68 @@ func TestFile(t *testing.T) {
 				Tokens: tk[:12],
 			}
 		}},
+		{"a\n#A comment", func(t *test, tk Tokens) { // 7
+			t.Output = File{
+				Statements: []Expression{
+					{
+						QueryExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[0],
+							Tokens:     tk[:1],
+						}),
+						Tokens: tk[:1],
+					},
+				},
+				Comments: Comments{tk[2]},
+				Tokens:   tk[:3],
+			}
+		}},
+		{"#abc\na # def\n\n#ghi\nb #jkl\n# last", func(t *test, tk Tokens) { // 8
+			t.Output = File{
+				Statements: []Expression{
+					{
+						QueryExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[2],
+							Tokens:     tk[2:3],
+						}),
+						Comments: [2]Comments{{tk[0]}, {tk[4]}},
+						Tokens:   tk[:5],
+					},
+					{
+						QueryExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[9],
+							Tokens:     tk[9:10],
+						}),
+						Comments: [2]Comments{{tk[7]}, {tk[11], tk[13]}},
+						Tokens:   tk[7:14],
+					},
+				},
+				Tokens: tk[:14],
+			}
+		}},
+		{"#abc\na # def\n\n#ghi\nb #jkl\n\n# last", func(t *test, tk Tokens) { // 8
+			t.Output = File{
+				Statements: []Expression{
+					{
+						QueryExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[2],
+							Tokens:     tk[2:3],
+						}),
+						Comments: [2]Comments{{tk[0]}, {tk[4]}},
+						Tokens:   tk[:5],
+					},
+					{
+						QueryExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[9],
+							Tokens:     tk[9:10],
+						}),
+						Comments: [2]Comments{{tk[7]}, {tk[11]}},
+						Tokens:   tk[7:12],
+					},
+				},
+				Comments: Comments{tk[14]},
+				Tokens:   tk[:15],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var f File
 
