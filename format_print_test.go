@@ -370,6 +370,11 @@ func TestPrintSource(t *testing.T) {
 			"a\n",
 			"# abc\na #ghi\n\n",
 		},
+		{ // 72
+			"# abc\n\n\n# def\na #ghi",
+			"a\n",
+			"# abc\n\n# def\na #ghi\n\n",
+		},
 	} {
 		for m, input := range test {
 			tk := parser.NewStringTokeniser(input)
