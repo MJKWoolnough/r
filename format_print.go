@@ -154,6 +154,11 @@ func (e Expression) printSource(w io.Writer, v bool) {
 	} else if e.QueryExpression != nil {
 		e.QueryExpression.printSource(w, v)
 	}
+
+	if v && e.Comments[1] != nil {
+		io.WriteString(w, " ")
+		e.Comments[1].printSource(w, v)
+	}
 }
 
 func (f File) printSource(w io.Writer, v bool) {
