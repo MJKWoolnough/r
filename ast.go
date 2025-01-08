@@ -8,6 +8,7 @@ import (
 // File represents a parsed R file.
 type File struct {
 	Statements []Expression
+	Comments   Comments
 	Tokens     Tokens
 }
 
@@ -27,10 +28,14 @@ func Parse(t Tokeniser) (*File, error) {
 }
 
 func (f *File) parse(r *rParser) error {
-	for r.AcceptRunWhitespaceNoComment() != parser.TokenDone {
+	s := r.NewGoal()
+
+	for s.AcceptRunWhitespace() != parser.TokenDone {
+		r.AcceptRunWhitespaceNoComment()
+
 		var e Expression
 
-		s := r.NewGoal()
+		s = r.NewGoal()
 
 		if err := e.parse(&s); err != nil {
 			return r.Error("File", err)
@@ -44,8 +49,11 @@ func (f *File) parse(r *rParser) error {
 		if !r.AcceptToken(parser.Token{Type: TokenExpressionTerminator, Data: ";"}) && !r.Accept(TokenLineTerminator) && r.Peek().Type != parser.TokenDone {
 			return r.Error("File", ErrMissingStatementTerminator)
 		}
+
+		s = r.NewGoal()
 	}
 
+	f.Comments = r.AcceptRunWhitespaceComments()
 	f.Tokens = r.ToTokens()
 
 	return nil
