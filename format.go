@@ -145,17 +145,33 @@ func (c Comments) printType(w io.Writer, v bool) {
 }
 
 func (c Comments) printSource(w io.Writer, v bool) {
-	for _, c := range c {
-		if !strings.HasPrefix(c.Data, "#") {
-			io.WriteString(w, "#")
-		}
+	if len(c) > 0 {
+		printComment(w, c[0].Data)
+		io.WriteString(w, "\n")
 
-		io.WriteString(w, c.Data)
+		line := c[0].Line
 
-		if !strings.HasSuffix(c.Data, "\n") {
+		for _, c := range c[1:] {
+			line++
+
+			if line < c.Line {
+				io.WriteString(w, "\n")
+
+				line++
+			}
+
+			printComment(w, c.Data)
 			io.WriteString(w, "\n")
 		}
 	}
+}
+
+func printComment(w io.Writer, c string) {
+	if !strings.HasPrefix(c, "#") {
+		io.WriteString(w, "#")
+	}
+
+	io.WriteString(w, c)
 }
 
 type formatter interface {
