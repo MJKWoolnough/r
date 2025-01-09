@@ -257,6 +257,22 @@ func TestCompoundExpression(t *testing.T) {
 				Token:   tk[2],
 			}
 		}},
+		{"{# abc\na #def\n\n#ghi\n}", func(t *test, tk Tokens) { // 9
+			t.Output = CompoundExpression{
+				Expressions: []Expression{
+					{
+						QueryExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[3],
+							Tokens:     tk[3:4],
+						}),
+						Comments: [2]Comments{{tk[1]}, {tk[5]}},
+						Tokens:   tk[1:6],
+					},
+				},
+				Comments: Comments{tk[8]},
+				Tokens:   tk[:11],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var ce CompoundExpression
 
