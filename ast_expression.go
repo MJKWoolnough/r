@@ -55,15 +55,20 @@ func (e *Expression) parse(r *rParser) error {
 // and seperated by semi-colons, commas, and newlines.
 type CompoundExpression struct {
 	Expressions []Expression
+	Comments    Comments
 	Tokens      Tokens
 }
 
 func (c *CompoundExpression) parse(r *rParser) error {
 	r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "{"})
-	r.AcceptRunWhitespace()
 
-	for !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "}"}) {
-		s := r.NewGoal()
+	s := r.NewGoal()
+	s.AcceptRunWhitespace()
+
+	for !s.AcceptToken(parser.Token{Type: TokenGrouping, Data: "}"}) {
+		r.AcceptRunWhitespaceNoComment()
+
+		s = r.NewGoal()
 
 		var e Expression
 
@@ -74,16 +79,27 @@ func (c *CompoundExpression) parse(r *rParser) error {
 		c.Expressions = append(c.Expressions, e)
 
 		r.Score(s)
-		r.AcceptRunWhitespaceNoNewLine()
 
-		if r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "}"}) {
+		s = r.NewGoal()
+
+		s.AcceptRun(TokenWhitespace)
+
+		if s.AcceptToken(parser.Token{Type: TokenGrouping, Data: "}"}) {
 			break
-		} else if !r.Accept(TokenLineTerminator, TokenExpressionTerminator) {
-			return s.Error("CompoundExpression", ErrMissingTerminator)
+		} else if !s.Accept(TokenLineTerminator, TokenExpressionTerminator) {
+			return r.Error("CompoundExpression", ErrMissingTerminator)
+		} else {
+			r.Score(s)
 		}
 
-		r.AcceptRunWhitespace()
+		s = r.NewGoal()
+
+		s.AcceptRunWhitespace()
 	}
+
+	c.Comments = r.AcceptRunWhitespaceComments()
+
+	r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "}"})
 
 	c.Tokens = r.ToTokens()
 
