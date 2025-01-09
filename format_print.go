@@ -130,6 +130,10 @@ func (c CompoundExpression) printSource(w io.Writer, v bool) {
 		io.WriteString(w, "\n")
 	}
 
+	if v {
+		c.Comments.printSource(w, v)
+	}
+
 	io.WriteString(w, "}")
 }
 
