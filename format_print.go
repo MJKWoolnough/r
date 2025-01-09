@@ -351,6 +351,9 @@ func (o OrExpression) printSource(w io.Writer, v bool) {
 }
 
 func (p ParenthesizedExpression) printSource(w io.Writer, v bool) {
+	io.WriteString(w, "(")
+	p.Expression.printSource(w, v)
+	io.WriteString(w, ")")
 }
 
 func (p PipeOrSpecialExpression) printSource(w io.Writer, v bool) {
