@@ -7232,6 +7232,41 @@ func TestSimpleExpression(t *testing.T) {
 	})
 }
 
+func TestParenthesizedExpression(t *testing.T) {
+	doTests(t, []sourceFn{
+		{"(a)", func(t *test, tk Tokens) { // 1
+			t.Output = ParenthesizedExpression{
+				Expression: Expression{
+					QueryExpression: WrapQuery(&SimpleExpression{
+						Identifier: &tk[1],
+						Tokens:     tk[1:2],
+					}),
+					Tokens: tk[1:2],
+				},
+				Tokens: tk[:3],
+			}
+		}},
+		{"(\na\n)", func(t *test, tk Tokens) { // 2
+			t.Output = ParenthesizedExpression{
+				Expression: Expression{
+					QueryExpression: WrapQuery(&SimpleExpression{
+						Identifier: &tk[2],
+						Tokens:     tk[2:3],
+					}),
+					Tokens: tk[2:3],
+				},
+				Tokens: tk[:5],
+			}
+		}},
+	}, func(t *test) (Type, error) {
+		var pe ParenthesizedExpression
+
+		err := pe.parse(&t.Tokens)
+
+		return pe, err
+	})
+}
+
 func TestIndex(t *testing.T) {
 	doTests(t, []sourceFn{
 		{"[]", func(t *test, tk Tokens) { // 1
