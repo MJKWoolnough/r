@@ -88,9 +88,9 @@ func (c *CompoundExpression) parse(r *rParser) error {
 			break
 		} else if !s.AcceptToken(parser.Token{Type: TokenExpressionTerminator, Data: ";"}) && !s.Accept(TokenLineTerminator) {
 			return r.Error("CompoundExpression", ErrMissingTerminator)
-		} else {
-			r.Score(s)
 		}
+
+		r.Score(s)
 
 		s = r.NewGoal()
 
