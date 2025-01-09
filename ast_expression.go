@@ -1276,7 +1276,7 @@ type SimpleExpression struct {
 	Identifier              *Token
 	Constant                *Token
 	Ellipsis                *Token
-	ParenthesizedExpression *Expression
+	ParenthesizedExpression *ParenthesizedExpression
 	CompoundExpression      *CompoundExpression
 	Tokens                  Tokens
 }
@@ -1288,23 +1288,16 @@ func (a *SimpleExpression) parse(r *rParser) error {
 		a.Constant = r.GetLastToken()
 	} else if r.Accept(TokenEllipsis) {
 		a.Ellipsis = r.GetLastToken()
-	} else if r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "("}) {
-		r.AcceptRunWhitespace()
-
+	} else if tk := r.Peek(); tk == (parser.Token{Type: TokenGrouping, Data: "("}) {
 		s := r.NewGoal()
-		a.ParenthesizedExpression = new(Expression)
+		a.ParenthesizedExpression = new(ParenthesizedExpression)
 
 		if err := a.ParenthesizedExpression.parse(&s); err != nil {
 			return r.Error("SimpleExpression", err)
 		}
 
 		r.Score(s)
-		r.AcceptRunWhitespace()
-
-		if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
-			return r.Error("SimpleExpression", ErrMissingClosingParen)
-		}
-	} else if tk := r.Peek(); tk == (parser.Token{Type: TokenGrouping, Data: "{"}) {
+	} else if tk == (parser.Token{Type: TokenGrouping, Data: "{"}) {
 		s := r.NewGoal()
 		a.CompoundExpression = new(CompoundExpression)
 
@@ -1318,6 +1311,33 @@ func (a *SimpleExpression) parse(r *rParser) error {
 	}
 
 	a.Tokens = r.ToTokens()
+
+	return nil
+}
+
+type ParenthesizedExpression struct {
+	Expression Expression
+	Tokens     Tokens
+}
+
+func (p *ParenthesizedExpression) parse(r *rParser) error {
+	r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "("})
+	r.AcceptRunWhitespace()
+
+	s := r.NewGoal()
+
+	if err := p.Expression.parse(&s); err != nil {
+		return r.Error("ParenthesizedExpression", err)
+	}
+
+	r.Score(s)
+	r.AcceptRunWhitespace()
+
+	if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
+		return r.Error("ParenthesizedExpression", ErrMissingClosingParen)
+	}
+
+	p.Tokens = r.ToTokens()
 
 	return nil
 }

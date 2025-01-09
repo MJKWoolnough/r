@@ -257,6 +257,18 @@ func (f OrExpression) Format(s fmt.State, v rune) {
 }
 
 // Format implements the fmt.Formatter interface
+func (f ParenthesizedExpression) Format(s fmt.State, v rune) {
+	if v == 'v' && s.Flag('#') {
+		type X = ParenthesizedExpression
+		type ParenthesizedExpression X
+
+		fmt.Fprintf(s, "%#v", ParenthesizedExpression(f))
+	} else {
+		format(&f, s, v)
+	}
+}
+
+// Format implements the fmt.Formatter interface
 func (f PipeOrSpecialExpression) Format(s fmt.State, v rune) {
 	if v == 'v' && s.Flag('#') {
 		type X = PipeOrSpecialExpression

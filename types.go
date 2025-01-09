@@ -54,6 +54,8 @@ func (NotExpression) rType() {}
 
 func (OrExpression) rType() {}
 
+func (ParenthesizedExpression) rType() {}
+
 func (PipeOrSpecialExpression) rType() {}
 
 func (QueryExpression) rType() {}

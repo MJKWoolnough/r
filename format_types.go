@@ -573,6 +573,20 @@ func (f *OrExpression) printType(w io.Writer, v bool) {
 	io.WriteString(w, "\n}")
 }
 
+func (f *ParenthesizedExpression) printType(w io.Writer, v bool) {
+	pp := indentPrinter{w}
+
+	pp.Print("ParenthesizedExpression {")
+
+	pp.Print("\nExpression: ")
+	f.Expression.printType(&pp, v)
+
+	pp.Print("\nTokens: ")
+	f.Tokens.printType(&pp, v)
+
+	io.WriteString(w, "\n}")
+}
+
 func (f *PipeOrSpecialExpression) printType(w io.Writer, v bool) {
 	pp := indentPrinter{w}
 

@@ -350,6 +350,9 @@ func (o OrExpression) printSource(w io.Writer, v bool) {
 	}
 }
 
+func (p ParenthesizedExpression) printSource(w io.Writer, v bool) {
+}
+
 func (p PipeOrSpecialExpression) printSource(w io.Writer, v bool) {
 	p.SequenceExpression.printSource(w, v)
 
@@ -437,9 +440,7 @@ func (s SimpleExpression) printSource(w io.Writer, v bool) {
 	} else if s.Ellipsis != nil {
 		io.WriteString(w, s.Ellipsis.Data)
 	} else if s.ParenthesizedExpression != nil {
-		io.WriteString(w, "(")
 		s.ParenthesizedExpression.printSource(w, v)
-		io.WriteString(w, ")")
 	} else if s.CompoundExpression != nil {
 		s.CompoundExpression.printSource(w, v)
 	}

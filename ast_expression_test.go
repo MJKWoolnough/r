@@ -7137,12 +7137,15 @@ func TestSimpleExpression(t *testing.T) {
 		}},
 		{"(a)", func(t *test, tk Tokens) { // 12
 			t.Output = SimpleExpression{
-				ParenthesizedExpression: &Expression{
-					QueryExpression: WrapQuery(&SimpleExpression{
-						Identifier: &tk[1],
-						Tokens:     tk[1:2],
-					}),
-					Tokens: tk[1:2],
+				ParenthesizedExpression: &ParenthesizedExpression{
+					Expression: Expression{
+						QueryExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[1],
+							Tokens:     tk[1:2],
+						}),
+						Tokens: tk[1:2],
+					},
+					Tokens: tk[:3],
 				},
 				Tokens: tk[:3],
 			}
@@ -7173,24 +7176,32 @@ func TestSimpleExpression(t *testing.T) {
 		}},
 		{"(a b)", func(t *test, tk Tokens) { // 15
 			t.Err = Error{
-				Err:     ErrMissingClosingParen,
+				Err: Error{
+					Err:     ErrMissingClosingParen,
+					Parsing: "ParenthesizedExpression",
+					Token:   tk[3],
+				},
 				Parsing: "SimpleExpression",
-				Token:   tk[3],
+				Token:   tk[0],
 			}
 		}},
 		{"(in)", func(t *test, tk Tokens) { // 16
 			t.Err = Error{
 				Err: Error{
-					Err: wrapQueryExpressionError(Error{
-						Err:     ErrInvalidSimpleExpression,
-						Parsing: "SimpleExpression",
+					Err: Error{
+						Err: wrapQueryExpressionError(Error{
+							Err:     ErrInvalidSimpleExpression,
+							Parsing: "SimpleExpression",
+							Token:   tk[1],
+						}),
+						Parsing: "Expression",
 						Token:   tk[1],
-					}),
-					Parsing: "Expression",
+					},
+					Parsing: "ParenthesizedExpression",
 					Token:   tk[1],
 				},
 				Parsing: "SimpleExpression",
-				Token:   tk[1],
+				Token:   tk[0],
 			}
 		}},
 		{"{in}", func(t *test, tk Tokens) { // 17
