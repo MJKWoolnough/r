@@ -44,6 +44,11 @@ func (a Arg) printSource(w io.Writer, v bool) {
 	} else if a.QueryExpression != nil {
 		a.QueryExpression.printSource(w, v)
 	}
+
+	if v && len(a.Comments) > 0 {
+		io.WriteString(w, " ")
+		a.Comments.printSource(w, v)
+	}
 }
 
 func (a ArgList) printSource(w io.Writer, v bool) {
