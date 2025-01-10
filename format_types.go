@@ -71,6 +71,9 @@ func (f *Arg) printType(w io.Writer, v bool) {
 		pp.Print("\nEllipsis: nil")
 	}
 
+	pp.Print("\nComments: ")
+	f.Comments.printType(&pp, v)
+
 	pp.Print("\nTokens: ")
 	f.Tokens.printType(&pp, v)
 
