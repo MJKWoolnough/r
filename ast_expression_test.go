@@ -254,7 +254,7 @@ func TestCompoundExpression(t *testing.T) {
 			t.Err = Error{
 				Err:     ErrMissingTerminator,
 				Parsing: "CompoundExpression",
-				Token:   tk[2],
+				Token:   tk[3],
 			}
 		}},
 		{"{# abc\na #def\n\n#ghi\n}", func(t *test, tk Tokens) { // 9

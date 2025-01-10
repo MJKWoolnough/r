@@ -19,6 +19,8 @@ func (e *Expression) parse(r *rParser) error {
 
 	e.Comments[0] = r.AcceptRunWhitespaceComments()
 
+	r.AcceptRunWhitespace()
+
 	s := r.NewGoal()
 
 	switch tk := r.Peek(); tk {
@@ -40,12 +42,7 @@ func (e *Expression) parse(r *rParser) error {
 
 	r.Score(s)
 
-	s = r.NewGoal()
-
-	if e.Comments[1] = s.AcceptRunWhitespaceCommentsNoNewline(); e.Comments[1] != nil {
-		r.Score(s)
-	}
-
+	e.Comments[1] = r.AcceptRunWhitespaceCommentsNoNewline()
 	e.Tokens = r.ToTokens()
 
 	return nil
@@ -82,22 +79,28 @@ func (c *CompoundExpression) parse(r *rParser) error {
 
 		s = r.NewGoal()
 
-		s.AcceptRun(TokenWhitespace)
+		s.AcceptRunWhitespace()
 
 		if s.AcceptToken(parser.Token{Type: TokenGrouping, Data: "}"}) {
 			break
-		} else if !s.AcceptToken(parser.Token{Type: TokenExpressionTerminator, Data: ";"}) && !s.Accept(TokenLineTerminator) {
-			return r.Error("CompoundExpression", ErrMissingTerminator)
 		}
 
-		r.Score(s)
+		r.AcceptRunWhitespaceNoNewLine()
+
+		if !r.AcceptToken(parser.Token{Type: TokenExpressionTerminator, Data: ";"}) && !r.Accept(TokenLineTerminator) {
+			return r.Error("CompoundExpression", ErrMissingTerminator)
+		}
 
 		s = r.NewGoal()
 
 		s.AcceptRunWhitespace()
 	}
 
+	r.AcceptRunWhitespaceNoComment()
+
 	c.Comments = r.AcceptRunWhitespaceComments()
+
+	r.AcceptRunWhitespace()
 
 	r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "}"})
 
@@ -1335,6 +1338,8 @@ func (p *ParenthesizedExpression) parse(r *rParser) error {
 
 	p.Comments = r.AcceptRunWhitespaceComments()
 
+	r.AcceptRunWhitespace()
+
 	if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
 		return r.Error("ParenthesizedExpression", ErrMissingClosingParen)
 	}
@@ -1443,6 +1448,7 @@ func (c *Call) parse(r *rParser) error {
 type Arg struct {
 	QueryExpression *QueryExpression
 	Ellipsis        *Token
+	Comments        Comments
 	Tokens          Tokens
 }
 
@@ -1460,6 +1466,7 @@ func (a *Arg) parse(r *rParser) error {
 		r.Score(s)
 	}
 
+	a.Comments = r.AcceptRunWhitespaceComments()
 	a.Tokens = r.ToTokens()
 
 	return nil
