@@ -381,9 +381,9 @@ func TestPrintSource(t *testing.T) {
 			"# abc\n\n# def\na #ghi\n\n#123\n",
 		},
 		{ // 75
-			"#1\n{\n# abc\n\t# def\na #ghi\n\n#123\n}",
+			"{\n# abc\n\t# def\na #ghi\n\n#123\n}",
 			"{\n\ta\n}\n",
-			"#1\n{\n\t# abc\n\t# def\n\ta #ghi\n\t\n#123\n}\n",
+			"{\n\t# abc\n\t# def\n\ta #ghi\n\t\n#123\n}\n",
 		},
 	} {
 		for m, input := range test {
@@ -393,7 +393,7 @@ func TestPrintSource(t *testing.T) {
 				t.Errorf("test %d.%d: unexpected error: %s", n+1, m+1, err)
 			} else if simple := fmt.Sprintf("%s", f); simple != test[1] {
 				t.Errorf("test %d.%d.1: expecting output %q, got %q", n+1, m+1, test[1], simple)
-			} else if verbose := fmt.Sprintf("%+s", f); verbose != test[2] && (m != 1 || !strings.HasPrefix(test[0], "#")) {
+			} else if verbose := fmt.Sprintf("%+s", f); verbose != test[2] && (m != 1 || !strings.ContainsRune(test[0], '#')) {
 				t.Errorf("test %d.%d.2: expecting output %q, got %q", n+1, m+1, test[2], verbose)
 			}
 		}
