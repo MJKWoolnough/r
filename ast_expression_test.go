@@ -7258,6 +7258,21 @@ func TestParenthesizedExpression(t *testing.T) {
 				Tokens: tk[:5],
 			}
 		}},
+		{"(in)", func(t *test, tk Tokens) { // 3
+			t.Err = Error{
+				Err: Error{
+					Err: wrapQueryExpressionError(Error{
+						Err:     ErrInvalidSimpleExpression,
+						Parsing: "SimpleExpression",
+						Token:   tk[1],
+					}),
+					Parsing: "Expression",
+					Token:   tk[1],
+				},
+				Parsing: "ParenthesizedExpression",
+				Token:   tk[1],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var pe ParenthesizedExpression
 
