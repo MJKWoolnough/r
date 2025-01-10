@@ -1317,6 +1317,7 @@ func (a *SimpleExpression) parse(r *rParser) error {
 
 type ParenthesizedExpression struct {
 	Expression Expression
+	Comments   Comments
 	Tokens     Tokens
 }
 
@@ -1331,7 +1332,8 @@ func (p *ParenthesizedExpression) parse(r *rParser) error {
 	}
 
 	r.Score(s)
-	r.AcceptRunWhitespace()
+
+	p.Comments = r.AcceptRunWhitespaceComments()
 
 	if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
 		return r.Error("ParenthesizedExpression", ErrMissingClosingParen)
