@@ -7627,6 +7627,12 @@ func TestCall(t *testing.T) {
 				Token:   tk[3],
 			}
 		}},
+		{"(#abc\n)", func(t *test, tk Tokens) { // 16
+			t.Output = Call{
+				Comments: Comments{tk[1]},
+				Tokens:   tk[:4],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var c Call
 
