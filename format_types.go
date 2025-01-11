@@ -70,9 +70,16 @@ func (f *Arg) printType(w io.Writer, v bool) {
 	} else if v {
 		pp.Print("\nEllipsis: nil")
 	}
+	pp.Print("\nComments: [")
 
-	pp.Print("\nComments: ")
-	f.Comments.printType(&pp, v)
+	ipp := indentPrinter{&pp}
+
+	for n, e := range f.Comments {
+		ipp.Printf("\n%d: ", n)
+		e.printType(&ipp, v)
+	}
+
+	pp.Print("\n]")
 
 	pp.Print("\nTokens: ")
 	f.Tokens.printType(&pp, v)

@@ -39,15 +39,19 @@ func (a AndExpression) printSource(w io.Writer, v bool) {
 }
 
 func (a Arg) printSource(w io.Writer, v bool) {
+	if v {
+		a.Comments[0].printSource(w, v)
+	}
+
 	if a.Ellipsis != nil {
 		io.WriteString(w, a.Ellipsis.Data)
 	} else if a.QueryExpression != nil {
 		a.QueryExpression.printSource(w, v)
 	}
 
-	if v && len(a.Comments) > 0 {
+	if v && len(a.Comments[1]) > 0 {
 		io.WriteString(w, " ")
-		a.Comments.printSource(w, v)
+		a.Comments[1].printSource(w, v)
 	}
 }
 

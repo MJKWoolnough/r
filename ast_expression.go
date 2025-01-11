@@ -1403,36 +1403,49 @@ func (i *Index) parse(r *rParser) error {
 
 // Call represents the arguments passed to a function.
 type Call struct {
-	Args   []Arg
-	Tokens Tokens
+	Args     []Arg
+	Comments Comments
+	Tokens   Tokens
 }
 
 func (c *Call) parse(r *rParser) error {
 	r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "("})
-	r.AcceptRunWhitespace()
 
-	for !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
-		s := r.NewGoal()
+	s := r.NewGoal()
+	s.AcceptRunWhitespace()
 
-		var a Arg
+	if s.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
+		c.Comments = r.AcceptRunWhitespaceComments()
 
-		if err := a.parse(&s); err != nil {
-			return r.Error("Call", err)
+		r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"})
+	} else {
+		for !s.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
+			r.AcceptRunWhitespaceNoComment()
+
+			s := r.NewGoal()
+
+			var a Arg
+
+			if err := a.parse(&s); err != nil {
+				return r.Error("Call", err)
+			}
+
+			r.Score(s)
+
+			c.Args = append(c.Args, a)
+
+			r.AcceptRunWhitespace()
+
+			if r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
+				break
+			} else if !r.AcceptToken(parser.Token{Type: TokenExpressionTerminator, Data: ","}) {
+				return r.Error("Call", ErrMissingComma)
+			}
+
+			s = r.NewGoal()
+
+			s.AcceptRunWhitespace()
 		}
-
-		r.Score(s)
-
-		c.Args = append(c.Args, a)
-
-		r.AcceptRunWhitespace()
-
-		if r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
-			break
-		} else if !r.AcceptToken(parser.Token{Type: TokenExpressionTerminator, Data: ","}) {
-			return r.Error("Call", ErrMissingComma)
-		}
-
-		r.AcceptRunWhitespace()
 	}
 
 	for len(c.Args) > 0 && len(c.Args[len(c.Args)-1].Tokens) == 0 {
@@ -1448,11 +1461,15 @@ func (c *Call) parse(r *rParser) error {
 type Arg struct {
 	QueryExpression *QueryExpression
 	Ellipsis        *Token
-	Comments        Comments
+	Comments        [2]Comments
 	Tokens          Tokens
 }
 
 func (a *Arg) parse(r *rParser) error {
+	a.Comments[0] = r.AcceptRunWhitespaceComments()
+
+	r.AcceptRunWhitespace()
+
 	if r.Accept(TokenEllipsis) {
 		a.Ellipsis = r.GetLastToken()
 	} else if tk := r.Peek(); tk != (parser.Token{Type: TokenGrouping, Data: ")"}) && tk != (parser.Token{Type: TokenExpressionTerminator, Data: ","}) && tk.Type != parser.TokenDone {
@@ -1466,7 +1483,7 @@ func (a *Arg) parse(r *rParser) error {
 		r.Score(s)
 	}
 
-	a.Comments = r.AcceptRunWhitespaceComments()
+	a.Comments[1] = r.AcceptRunWhitespaceComments()
 	a.Tokens = r.ToTokens()
 
 	return nil
