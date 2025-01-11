@@ -147,11 +147,12 @@ func (c Comments) printType(w io.Writer, v bool) {
 func (c Comments) printSource(w io.Writer, v bool) {
 	if len(c) > 0 {
 		printComment(w, c[0].Data)
-		io.WriteString(w, "\n")
 
 		line := c[0].Line
 
 		for _, c := range c[1:] {
+			io.WriteString(w, "\n")
+
 			line++
 
 			if line < c.Line {
@@ -161,6 +162,9 @@ func (c Comments) printSource(w io.Writer, v bool) {
 			}
 
 			printComment(w, c.Data)
+		}
+
+		if v {
 			io.WriteString(w, "\n")
 		}
 	}
