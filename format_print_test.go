@@ -400,10 +400,15 @@ func TestPrintSource(t *testing.T) {
 			"a(b)\n",
 			"a(#abc\nb #def\n#ghi\n\n#jkl\n)\n",
 		},
-		{ // 78
+		{ // 79
 			"a(#abc\nb#def\n,#ghi\nc\n#jkl\n)",
 			"a(b,c)\n",
 			"a(#abc\nb #def\n, #ghi\nc #jkl\n)\n",
+		},
+		{ // 80
+			"a(#abc\n)",
+			"a()\n",
+			"a(\n\t#abc\n)\n",
 		},
 	} {
 		for m, input := range test {
