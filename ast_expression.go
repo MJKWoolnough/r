@@ -1417,6 +1417,7 @@ func (c *Call) parse(r *rParser) error {
 	if s.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
 		c.Comments = r.AcceptRunWhitespaceComments()
 
+		r.AcceptRunWhitespace()
 		r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"})
 	} else {
 		for !s.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
