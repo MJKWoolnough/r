@@ -368,12 +368,12 @@ func TestPrintSource(t *testing.T) {
 		{ // 72
 			"# abc\na #ghi",
 			"a\n",
-			"# abc\na #ghi\n\n",
+			"# abc\na #ghi\n",
 		},
 		{ // 73
 			"# abc\n\n\n# def\na #ghi",
 			"a\n",
-			"# abc\n\n# def\na #ghi\n\n",
+			"# abc\n\n# def\na #ghi\n",
 		},
 		{ // 74
 			"# abc\n\n\n# def\na #ghi\n\n#123",
@@ -383,7 +383,7 @@ func TestPrintSource(t *testing.T) {
 		{ // 75
 			"{\n# abc\n\t# def\na #ghi\n\n#123\n}",
 			"{\n\ta\n}\n",
-			"{\n\t# abc\n\t# def\n\ta #ghi\n\t\n#123\n}\n",
+			"{\n\t# abc\n\t# def\n\ta #ghi\n\n\t#123\n}\n",
 		},
 		{ // 76
 			"(a\n#abc\n)",

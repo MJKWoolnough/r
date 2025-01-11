@@ -145,8 +145,12 @@ func (c CompoundExpression) printSource(w io.Writer, v bool) {
 		io.WriteString(w, "\n")
 	}
 
-	if v {
-		c.Comments.printSource(w, v)
+	if v && len(c.Comments) > 0 {
+		ipp := indentPrinter{w}
+
+		io.WriteString(&ipp, "\n")
+		c.Comments.printSource(&ipp, false)
+		io.WriteString(w, "\n")
 	}
 
 	io.WriteString(w, "}")
@@ -176,7 +180,7 @@ func (e Expression) printSource(w io.Writer, v bool) {
 
 	if v && e.Comments[1] != nil {
 		io.WriteString(w, " ")
-		e.Comments[1].printSource(w, v)
+		e.Comments[1].printSource(w, false)
 	}
 }
 
@@ -186,7 +190,8 @@ func (f File) printSource(w io.Writer, v bool) {
 		io.WriteString(w, "\n")
 	}
 
-	if v {
+	if v && len(f.Comments) > 0 {
+		io.WriteString(w, "\n")
 		f.Comments.printSource(w, v)
 	}
 }
