@@ -120,6 +120,12 @@ func (c Call) printSource(w io.Writer, v bool) {
 
 			a.printSource(w, v)
 		}
+	} else if v && len(c.Comments) > 0 {
+		ipp := indentPrinter{w}
+
+		io.WriteString(&ipp, "\n")
+		c.Comments.printSource(&ipp, false)
+		io.WriteString(w, "\n")
 	}
 
 	io.WriteString(w, ")")
