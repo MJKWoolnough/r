@@ -280,14 +280,14 @@ func TestFile(t *testing.T) {
 				Token:   tk[0],
 			}
 		}},
-		{"a b", func(t *test, tk Tokens) { // 4
+		{"a b", func(t *test, tk Tokens) { // 5
 			t.Err = Error{
 				Err:     ErrMissingStatementTerminator,
 				Parsing: "File",
 				Token:   tk[2],
 			}
 		}},
-		{"#a comment\na", func(t *test, tk Tokens) { // 5
+		{"#a comment\na", func(t *test, tk Tokens) { // 6
 			t.Output = File{
 				Statements: []Expression{
 					{
@@ -302,7 +302,7 @@ func TestFile(t *testing.T) {
 				Tokens: tk[:3],
 			}
 		}},
-		{"#abc\na # def\n\n#ghi\nb #jkl", func(t *test, tk Tokens) { // 6
+		{"#abc\na # def\n\n#ghi\nb #jkl", func(t *test, tk Tokens) { // 7
 			t.Output = File{
 				Statements: []Expression{
 					{
@@ -325,7 +325,7 @@ func TestFile(t *testing.T) {
 				Tokens: tk[:12],
 			}
 		}},
-		{"a\n#A comment", func(t *test, tk Tokens) { // 7
+		{"a\n#A comment", func(t *test, tk Tokens) { // 8
 			t.Output = File{
 				Statements: []Expression{
 					{
@@ -340,7 +340,7 @@ func TestFile(t *testing.T) {
 				Tokens:   tk[:3],
 			}
 		}},
-		{"#abc\na # def\n\n#ghi\nb #jkl\n# last", func(t *test, tk Tokens) { // 8
+		{"#abc\na # def\n\n#ghi\nb #jkl\n# last", func(t *test, tk Tokens) { // 9
 			t.Output = File{
 				Statements: []Expression{
 					{
@@ -363,7 +363,7 @@ func TestFile(t *testing.T) {
 				Tokens: tk[:14],
 			}
 		}},
-		{"#abc\na # def\n\n#ghi\nb #jkl\n\n# last", func(t *test, tk Tokens) { // 8
+		{"#abc\na # def\n\n#ghi\nb #jkl\n\n# last", func(t *test, tk Tokens) { // 10
 			t.Output = File{
 				Statements: []Expression{
 					{
