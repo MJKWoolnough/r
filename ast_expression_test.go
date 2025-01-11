@@ -7669,6 +7669,36 @@ func TestArg(t *testing.T) {
 				Token:   tk[0],
 			}
 		}},
+		{"#abc\na", func(t *test, tk Tokens) { // 5
+			t.Output = Arg{
+				QueryExpression: WrapQuery(&SimpleExpression{
+					Identifier: &tk[2],
+					Tokens:     tk[2:3],
+				}),
+				Comments: [2]Comments{{tk[0]}},
+				Tokens:   tk[:3],
+			}
+		}},
+		{"a #abc", func(t *test, tk Tokens) { // 6
+			t.Output = Arg{
+				QueryExpression: WrapQuery(&SimpleExpression{
+					Identifier: &tk[0],
+					Tokens:     tk[:1],
+				}),
+				Comments: [2]Comments{nil, {tk[2]}},
+				Tokens:   tk[:3],
+			}
+		}},
+		{"#abc\n#def\n\n#ghi\na #jkl\n#mno\n\n#pqr", func(t *test, tk Tokens) { // 7
+			t.Output = Arg{
+				QueryExpression: WrapQuery(&SimpleExpression{
+					Identifier: &tk[7],
+					Tokens:     tk[7:8],
+				}),
+				Comments: [2]Comments{{tk[0], tk[2], tk[5]}, {tk[9], tk[11], tk[14]}},
+				Tokens:   tk[:15],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var a Arg
 
