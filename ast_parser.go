@@ -50,17 +50,8 @@ func newRParser(t Tokeniser) (rParser, error) {
 				Parsing: "Tokens",
 				Token:   tokens[len(tokens)-1],
 			}
-		case TokenLineTerminator:
-			var lastChar rune
-
-			for _, c := range tk.Data {
-				if lastChar != '\r' || c != '\n' {
-					line++
-				}
-
-				lastChar = c
-			}
-
+		case TokenLineTerminator, TokenWhitespaceLineTerminator:
+			line++
 			linePos = 0
 		default:
 			linePos += uint64(len(tk.Data))
