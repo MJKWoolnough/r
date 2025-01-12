@@ -374,9 +374,8 @@ func (p ParenthesizedExpression) printSource(w io.Writer, v bool) {
 	io.WriteString(w, "(")
 	p.Expression.printSource(w, v)
 
-	if v && len(p.Comments) > 0 {
+	if v && len(p.Expression.Comments[1]) > 0 {
 		io.WriteString(w, "\n")
-		p.Comments.printSource(w, v)
 	}
 
 	io.WriteString(w, ")")
