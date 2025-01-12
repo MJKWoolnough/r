@@ -388,24 +388,29 @@ func TestPrintSource(t *testing.T) {
 		{ // 76
 			"(a\n#abc\n)",
 			"(a)\n",
-			"(a\n#abc\n)\n",
+			"(a #abc\n)\n",
 		},
 		{ // 77
+			"(a #abc\n#def\n\n#ghi\n)",
+			"(a)\n",
+			"(a #abc\n#def\n\n#ghi\n)\n",
+		},
+		{ // 78
 			"a(b#a comment\n)",
 			"a(b)\n",
 			"a(b #a comment\n)\n",
 		},
-		{ // 78
+		{ // 79
 			"a(#abc\nb#def\n#ghi\n\n#jkl\n)",
 			"a(b)\n",
 			"a(#abc\nb #def\n#ghi\n\n#jkl\n)\n",
 		},
-		{ // 79
+		{ // 80
 			"a(#abc\nb#def\n,#ghi\nc\n#jkl\n)",
 			"a(b,c)\n",
 			"a(#abc\nb #def\n, #ghi\nc #jkl\n)\n",
 		},
-		{ // 80
+		{ // 81
 			"a(#abc\n)",
 			"a()\n",
 			"a(\n\t#abc\n)\n",
