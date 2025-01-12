@@ -1325,7 +1325,7 @@ type ParenthesizedExpression struct {
 
 func (p *ParenthesizedExpression) parse(r *rParser) error {
 	r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "("})
-	r.AcceptRunWhitespace()
+	r.AcceptRunWhitespaceNoComment()
 
 	s := r.NewGoal()
 
@@ -1334,9 +1334,6 @@ func (p *ParenthesizedExpression) parse(r *rParser) error {
 	}
 
 	r.Score(s)
-
-	p.Expression.Comments[1] = append(p.Expression.Comments[1], r.AcceptRunWhitespaceComments()...)
-
 	r.AcceptRunWhitespace()
 
 	if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
