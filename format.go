@@ -70,6 +70,8 @@ func (t Token) printType(w io.Writer, v bool) {
 		typ = "Whitespace"
 	case TokenLineTerminator:
 		typ = "LineTerminator"
+	case TokenWhitespaceLineTerminator:
+		typ = "WhitespaceLineTerminator"
 	case TokenExpressionTerminator:
 		typ = "ExpressionTerminator"
 	case TokenComment:
