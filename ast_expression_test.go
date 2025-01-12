@@ -120,6 +120,16 @@ func TestExpression(t *testing.T) {
 				Tokens:   tk[:7],
 			}
 		}},
+		{"#a comment\n# Another Comment\na\n\n# not parsed", func(t *test, tk Tokens) { // 9
+			t.Output = Expression{
+				QueryExpression: WrapQuery(&SimpleExpression{
+					Identifier: &tk[4],
+					Tokens:     tk[4:5],
+				}),
+				Comments: [2]Comments{{tk[0], tk[2]}, nil},
+				Tokens:   tk[:5],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var e Expression
 
@@ -7271,6 +7281,19 @@ func TestParenthesizedExpression(t *testing.T) {
 				},
 				Parsing: "ParenthesizedExpression",
 				Token:   tk[1],
+			}
+		}},
+		{"(#a comment\n# Another Comment\na\n\n# parsed\n)", func(t *test, tk Tokens) { // 4
+			t.Output = ParenthesizedExpression{
+				Expression: Expression{
+					QueryExpression: WrapQuery(&SimpleExpression{
+						Identifier: &tk[5],
+						Tokens:     tk[5:6],
+					}),
+					Comments: [2]Comments{{tk[1], tk[3]}, {tk[8]}},
+					Tokens:   tk[1:9],
+				},
+				Tokens: tk[:11],
 			}
 		}},
 	}, func(t *test) (Type, error) {
