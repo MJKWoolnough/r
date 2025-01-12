@@ -21,6 +21,7 @@ const (
 const (
 	TokenWhitespace parser.TokenType = iota
 	TokenLineTerminator
+	TokenWhitespaceLineTerminator
 	TokenExpressionTerminator
 	TokenComment
 	TokenStringLiteral
@@ -79,6 +80,10 @@ func (r *rTokeniser) expression(t *parser.Tokeniser) (parser.Token, parser.Token
 	}
 
 	if t.Accept(lineTerminators) {
+		if len(r.tokenDepth) > 0 && r.tokenDepth[len(r.tokenDepth)-1] == ')' {
+			return t.Return(TokenWhitespaceLineTerminator, r.expression)
+		}
+
 		return t.Return(TokenLineTerminator, r.expression)
 	}
 
