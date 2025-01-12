@@ -146,11 +146,11 @@ func (r *rParser) ToTokens() Tokens {
 }
 
 func (r *rParser) AcceptRunWhitespace() parser.TokenType {
-	return r.AcceptRun(TokenWhitespace, TokenLineTerminator, TokenComment)
+	return r.AcceptRun(TokenWhitespace, TokenLineTerminator, TokenWhitespaceLineTerminator, TokenComment)
 }
 
 func (r *rParser) AcceptRunWhitespaceNoComment() parser.TokenType {
-	return r.AcceptRun(TokenWhitespace, TokenLineTerminator)
+	return r.AcceptRun(TokenWhitespace, TokenWhitespaceLineTerminator, TokenLineTerminator)
 }
 
 func (r *rParser) AcceptRunWhitespaceComments() Comments {
@@ -180,14 +180,14 @@ func (r *rParser) AcceptRunWhitespaceCommentsNoNewline() Comments {
 		c = append(c, r.next())
 		s = r.NewGoal()
 
-		s.Accept(TokenLineTerminator)
+		s.Accept(TokenLineTerminator, TokenWhitespaceLineTerminator)
 	}
 
 	return c
 }
 
 func (r *rParser) AcceptRunWhitespaceNoNewLine() parser.TokenType {
-	return r.AcceptRun(TokenWhitespace)
+	return r.AcceptRun(TokenWhitespace, TokenWhitespaceLineTerminator)
 }
 
 func (r *rParser) GetLastToken() *Token {
