@@ -1,6 +1,8 @@
 package r
 
-import "io"
+import (
+	"io"
+)
 
 func (a AdditionExpression) printSource(w io.Writer, v bool) {
 	a.MultiplicationExpression.printSource(w, v)
@@ -68,6 +70,12 @@ func (a ArgList) printSource(w io.Writer, v bool) {
 
 			arg.printSource(w, v)
 		}
+	} else if v && len(a.Comments) > 0 {
+		ipp := indentPrinter{w}
+
+		io.WriteString(&ipp, "\n")
+		a.Comments.printSource(&ipp, false)
+		io.WriteString(w, "\n")
 	}
 }
 
