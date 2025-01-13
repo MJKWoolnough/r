@@ -109,6 +109,9 @@ func (f *ArgList) printType(w io.Writer, v bool) {
 		pp.Print("\nArgs: []")
 	}
 
+	pp.Print("\nComments: ")
+	f.Comments.printType(&pp, v)
+
 	pp.Print("\nTokens: ")
 	f.Tokens.printType(&pp, v)
 
@@ -474,6 +477,9 @@ func (f *Index) printType(w io.Writer, v bool) {
 	} else if v {
 		pp.Print("\nArgs: []")
 	}
+
+	pp.Print("\nComments: ")
+	f.Comments.printType(&pp, v)
 
 	pp.Print("\nTokens: ")
 	f.Tokens.printType(&pp, v)
