@@ -1076,6 +1076,28 @@ func TestArgument(t *testing.T) {
 				Token:   tk[2],
 			}
 		}},
+		{"#abc\na\n#def", func(t *test, tk Tokens) { // 7
+			t.Output = Argument{
+				Identifier: &tk[2],
+				Comments:   [2]Comments{{tk[0]}, {tk[4]}},
+				Tokens:     tk[:5],
+			}
+		}},
+		{"#abc\na #def\n#ghi\n= #jkl\nb #mno", func(t *test, tk Tokens) { // 8
+			t.Output = Argument{
+				Identifier: &tk[2],
+				Default: &Expression{
+					QueryExpression: WrapQuery(&SimpleExpression{
+						Identifier: &tk[12],
+						Tokens:     tk[12:13],
+					}),
+					Comments: [2]Comments{{tk[10]}, {tk[14]}},
+					Tokens:   tk[10:15],
+				},
+				Comments: [2]Comments{{tk[0]}, {tk[4], tk[6]}},
+				Tokens:   tk[:15],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var a Argument
 
