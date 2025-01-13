@@ -883,6 +883,22 @@ func TestFunctionDefinition(t *testing.T) {
 				Token:   tk[3],
 			}
 		}},
+		{"function(#abc\n)a", func(t *test, tk Tokens) { // 8
+			t.Output = FunctionDefinition{
+				ArgList: ArgList{
+					Comments: Comments{tk[2]},
+					Tokens:   tk[2:3],
+				},
+				Body: Expression{
+					QueryExpression: WrapQuery(&SimpleExpression{
+						Identifier: &tk[5],
+						Tokens:     tk[5:6],
+					}),
+					Tokens: tk[5:6],
+				},
+				Tokens: tk[:6],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var fd FunctionDefinition
 
@@ -975,6 +991,18 @@ func TestArgList(t *testing.T) {
 				Err:     ErrMissingTerminator,
 				Parsing: "ArgList",
 				Token:   tk[2],
+			}
+		}},
+		{"#abc", func(t *test, tk Tokens) { // 8
+			t.Output = ArgList{
+				Comments: Comments{tk[0]},
+				Tokens:   tk[:1],
+			}
+		}},
+		{"#abc\n\n#def", func(t *test, tk Tokens) { // 8
+			t.Output = ArgList{
+				Comments: Comments{tk[0], tk[3]},
+				Tokens:   tk[:4],
 			}
 		}},
 	}, func(t *test) (Type, error) {
