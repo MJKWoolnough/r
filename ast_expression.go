@@ -359,7 +359,7 @@ func (f *FunctionDefinition) parse(r *rParser) error {
 		return r.Error("FunctionDefinition", ErrMissingOpeningParen)
 	}
 
-	r.AcceptRunWhitespace()
+	r.AcceptRunWhitespaceNoComment()
 
 	s := r.NewGoal()
 
@@ -387,15 +387,19 @@ func (f *FunctionDefinition) parse(r *rParser) error {
 
 // ArgList represents a series af arguments accepted by a FunctionDefinition.
 type ArgList struct {
-	Args   []Argument
-	Tokens Tokens
+	Args     []Argument
+	Comments Comments
+	Tokens   Tokens
 }
 
 func (a *ArgList) parse(r *rParser) error {
 	s := r.NewGoal()
+	s.AcceptRunWhitespace()
 
-	if tk := s.Peek(); tk != (parser.Token{Type: TokenGrouping, Data: ")"}) && tk.Type != parser.TokenDone {
-		for {
+	if s.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) || s.Peek().Type == parser.TokenDone {
+		a.Comments = r.AcceptRunWhitespaceComments()
+	} else {
+		for !s.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
 			var arg Argument
 
 			if err := arg.parse(&s); err != nil {
@@ -403,8 +407,8 @@ func (a *ArgList) parse(r *rParser) error {
 			}
 
 			r.Score(s)
-			a.Args = append(a.Args, arg)
 
+			a.Args = append(a.Args, arg)
 			s = r.NewGoal()
 
 			s.AcceptRunWhitespace()
