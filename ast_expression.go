@@ -434,12 +434,17 @@ func (a *ArgList) parse(r *rParser) error {
 type Argument struct {
 	Identifier *Token
 	Default    *Expression
+	Comments   [2]Comments
 	Tokens     Tokens
 }
 
 // Argument represents a single param accepted by a FunctionDefinition and a
 // possible default value.
 func (a *Argument) parse(r *rParser) error {
+	a.Comments[0] = r.AcceptRunWhitespaceComments()
+
+	r.AcceptRunWhitespace()
+
 	if !r.Accept(TokenIdentifier) && !r.AcceptToken(parser.Token{Type: TokenEllipsis, Data: "..."}) {
 		return r.Error("Argument", ErrMissingIdentifier)
 	}
@@ -452,9 +457,11 @@ func (a *Argument) parse(r *rParser) error {
 		s.AcceptRunWhitespace()
 
 		if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "="}) {
-			s.AcceptRunWhitespace()
+			a.Comments[1] = r.AcceptRunWhitespaceComments()
 
-			r.Score(s)
+			r.AcceptRunWhitespace()
+			r.AcceptToken(parser.Token{Type: TokenOperator, Data: "="})
+			r.AcceptRunWhitespaceNoComment()
 
 			s = r.NewGoal()
 			a.Default = new(Expression)
@@ -464,7 +471,11 @@ func (a *Argument) parse(r *rParser) error {
 			}
 
 			r.Score(s)
+		} else {
+			a.Comments[1] = r.AcceptRunWhitespaceComments()
 		}
+	} else {
+		a.Comments[1] = r.AcceptRunWhitespaceComments()
 	}
 
 	a.Tokens = r.ToTokens()
