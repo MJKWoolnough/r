@@ -81,7 +81,15 @@ func (a ArgList) printSource(w io.Writer, v bool) {
 
 func (a Argument) printSource(w io.Writer, v bool) {
 	if a.Identifier != nil {
+		if v {
+			a.Comments[0].printSource(w, v)
+		}
+
 		io.WriteString(w, a.Identifier.Data)
+
+		if v {
+			a.Comments[1].printSource(w, v)
+		}
 
 		if a.Identifier.Type == TokenIdentifier && a.Default != nil {
 			if v {
