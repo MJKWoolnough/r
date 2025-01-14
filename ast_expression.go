@@ -400,6 +400,10 @@ func (a *ArgList) parse(r *rParser) error {
 		a.Comments = r.AcceptRunWhitespaceComments()
 	} else {
 		for !s.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
+			r.AcceptRunWhitespaceNoComment()
+
+			s = r.NewGoal()
+
 			var arg Argument
 
 			if err := arg.parse(&s); err != nil {
@@ -419,10 +423,10 @@ func (a *ArgList) parse(r *rParser) error {
 				return s.Error("ArgList", ErrMissingTerminator)
 			}
 
-			s.AcceptRunWhitespace()
 			r.Score(s)
 
 			s = r.NewGoal()
+			s.AcceptRunWhitespace()
 		}
 	}
 
