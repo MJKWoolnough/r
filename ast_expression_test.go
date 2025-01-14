@@ -899,6 +899,85 @@ func TestFunctionDefinition(t *testing.T) {
 				Tokens: tk[:6],
 			}
 		}},
+		{"function(#abc\na #def\n)b", func(t *test, tk Tokens) { // 9
+			t.Output = FunctionDefinition{
+				ArgList: ArgList{
+					Args: []Argument{
+						{
+							Identifier: &tk[4],
+							Comments:   [2]Comments{{tk[2]}, {tk[6]}},
+							Tokens:     tk[2:7],
+						},
+					},
+					Tokens: tk[2:7],
+				},
+				Body: Expression{
+					QueryExpression: WrapQuery(&SimpleExpression{
+						Identifier: &tk[9],
+						Tokens:     tk[9:10],
+					}),
+					Tokens: tk[9:10],
+				},
+				Tokens: tk[:10],
+			}
+		}},
+		{"function(#abc\na #def\n, #ghi\nb #jkl\n)c", func(t *test, tk Tokens) { // 10
+			t.Output = FunctionDefinition{
+				ArgList: ArgList{
+					Args: []Argument{
+						{
+							Identifier: &tk[4],
+							Comments:   [2]Comments{{tk[2]}, {tk[6]}},
+							Tokens:     tk[2:7],
+						},
+						{
+							Identifier: &tk[12],
+							Comments:   [2]Comments{{tk[10]}, {tk[14]}},
+							Tokens:     tk[10:15],
+						},
+					},
+					Tokens: tk[2:15],
+				},
+				Body: Expression{
+					QueryExpression: WrapQuery(&SimpleExpression{
+						Identifier: &tk[17],
+						Tokens:     tk[17:18],
+					}),
+					Tokens: tk[17:18],
+				},
+				Tokens: tk[:18],
+			}
+		}},
+		{"function(#abc\na #def\n = #ghi\nb#jkl\n)c", func(t *test, tk Tokens) { // 11
+			t.Output = FunctionDefinition{
+				ArgList: ArgList{
+					Args: []Argument{
+						{
+							Identifier: &tk[4],
+							Default: &Expression{
+								QueryExpression: WrapQuery(&SimpleExpression{
+									Identifier: &tk[13],
+									Tokens:     tk[13:14],
+								}),
+								Comments: [2]Comments{{tk[11]}, {tk[14]}},
+								Tokens:   tk[11:15],
+							},
+							Comments: [2]Comments{{tk[2]}, {tk[6]}},
+							Tokens:   tk[2:15],
+						},
+					},
+					Tokens: tk[2:15],
+				},
+				Body: Expression{
+					QueryExpression: WrapQuery(&SimpleExpression{
+						Identifier: &tk[17],
+						Tokens:     tk[17:18],
+					}),
+					Tokens: tk[17:18],
+				},
+				Tokens: tk[:18],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var fd FunctionDefinition
 
