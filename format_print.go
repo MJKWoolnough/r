@@ -59,16 +59,26 @@ func (a Arg) printSource(w io.Writer, v bool) {
 
 func (a ArgList) printSource(w io.Writer, v bool) {
 	if len(a.Args) > 0 {
-		a.Args[0].printSource(w, v)
+		ipp := indentPrinter{w}
 
-		for _, arg := range a.Args[1:] {
-			if v {
-				io.WriteString(w, ", ")
-			} else {
-				io.WriteString(w, ",")
+		for n, arg := range a.Args {
+			if n > 0 {
+				if v {
+					io.WriteString(w, ", ")
+				} else {
+					io.WriteString(w, ",")
+				}
 			}
 
-			arg.printSource(w, v)
+			arg.printSource(&ipp, v)
+
+			if v && (arg.Default == nil && len(arg.Comments[1]) > 0 || arg.Default != nil && len(arg.Default.Comments[1]) > 0) {
+				if n == len(a.Args)-1 {
+					io.WriteString(w, "\n")
+				} else {
+					ipp.WriteString("\n")
+				}
+			}
 		}
 	} else if v && len(a.Comments) > 0 {
 		ipp := indentPrinter{w}
@@ -87,12 +97,17 @@ func (a Argument) printSource(w io.Writer, v bool) {
 
 		io.WriteString(w, a.Identifier.Data)
 
-		if v {
-			a.Comments[1].printSource(w, v)
+		if v && len(a.Comments[1]) > 0 {
+			io.WriteString(w, " ")
+			a.Comments[1].printSource(w, false)
 		}
 
 		if a.Identifier.Type == TokenIdentifier && a.Default != nil {
 			if v {
+				if v && len(a.Comments[1]) > 0 {
+					io.WriteString(w, "\n")
+				}
+
 				io.WriteString(w, " = ")
 			} else {
 				io.WriteString(w, "=")
@@ -268,6 +283,7 @@ func (f FormulaeExpression) printSource(w io.Writer, v bool) {
 
 func (f FunctionDefinition) printSource(w io.Writer, v bool) {
 	io.WriteString(w, "function(")
+
 	f.ArgList.printSource(w, v)
 
 	if v {
