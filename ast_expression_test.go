@@ -978,6 +978,22 @@ func TestFunctionDefinition(t *testing.T) {
 				Tokens: tk[:18],
 			}
 		}},
+		{"function #abc\n()a", func(t *test, tk Tokens) { // 12
+			t.Output = FunctionDefinition{
+				ArgList: ArgList{
+					Tokens: tk[5:5],
+				},
+				Body: Expression{
+					QueryExpression: WrapQuery(&SimpleExpression{
+						Identifier: &tk[6],
+						Tokens:     tk[6:7],
+					}),
+					Tokens: tk[6:7],
+				},
+				Comments: Comments{tk[2]},
+				Tokens:   tk[:7],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var fd FunctionDefinition
 
