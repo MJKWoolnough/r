@@ -425,6 +425,11 @@ func TestPrintSource(t *testing.T) {
 			"function(a,b)c\n",
 			"function(#abc\n\ta #def\n\t, #ghi\n\tb #jkl\n) c\n",
 		},
+		{ // 84
+			"function #abc\n()a",
+			"function()a\n",
+			"function #abc\n() a\n",
+		},
 	} {
 		for m, input := range test {
 			tk := parser.NewStringTokeniser(input)
