@@ -282,7 +282,17 @@ func (f FormulaeExpression) printSource(w io.Writer, v bool) {
 }
 
 func (f FunctionDefinition) printSource(w io.Writer, v bool) {
-	io.WriteString(w, "function(")
+	io.WriteString(w, "function")
+
+	if v && len(f.Comments) > 0 {
+		ipp := indentPrinter{w}
+
+		io.WriteString(w, " ")
+		f.Comments.printSource(&ipp, false)
+		io.WriteString(w, "\n")
+	}
+
+	io.WriteString(w, "(")
 
 	f.ArgList.printSource(w, v)
 
