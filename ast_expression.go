@@ -346,13 +346,17 @@ func (f *ForControl) parse(r *rParser) error {
 
 // FunctionDefinition represents a defined function.
 type FunctionDefinition struct {
-	ArgList ArgList
-	Body    Expression
-	Tokens  Tokens
+	ArgList  ArgList
+	Body     Expression
+	Comments Comments
+	Tokens   Tokens
 }
 
 func (f *FunctionDefinition) parse(r *rParser) error {
 	r.AcceptToken(parser.Token{Type: TokenKeyword, Data: "function"})
+
+	f.Comments = r.AcceptRunWhitespaceComments()
+
 	r.AcceptRunWhitespace()
 
 	if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "("}) {
