@@ -154,19 +154,25 @@ func (f *FlowControl) parse(r *rParser) error {
 
 // IfControl represents a conditional branch and optional else.
 type IfControl struct {
-	Cond   FormulaeExpression
-	Expr   Expression
-	Else   *Expression
-	Tokens Tokens
+	Cond     FormulaeExpression
+	Expr     Expression
+	Else     *Expression
+	Comments [4]Comments
+	Tokens   Tokens
 }
 
 func (i *IfControl) parse(r *rParser) error {
 	r.AcceptToken(parser.Token{Type: TokenKeyword, Data: "if"})
+
+	i.Comments[0] = r.AcceptRunWhitespaceComments()
+
 	r.AcceptRunWhitespace()
 
 	if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "("}) {
 		return r.Error("IfControl", ErrMissingOpeningParen)
 	}
+
+	i.Comments[1] = r.AcceptRunWhitespaceComments()
 
 	r.AcceptRunWhitespace()
 
@@ -177,13 +183,16 @@ func (i *IfControl) parse(r *rParser) error {
 	}
 
 	r.Score(s)
+
+	i.Comments[2] = r.AcceptRunWhitespaceComments()
+
 	r.AcceptRunWhitespace()
 
 	if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
 		return r.Error("IfControl", ErrMissingClosingParen)
 	}
 
-	r.AcceptRunWhitespace()
+	r.AcceptRunWhitespaceNoComment()
 
 	s = r.NewGoal()
 
@@ -198,16 +207,19 @@ func (i *IfControl) parse(r *rParser) error {
 	s.AcceptRunWhitespace()
 
 	if s.AcceptToken(parser.Token{Type: TokenKeyword, Data: "else"}) {
-		s.AcceptRunWhitespace()
+		i.Comments[3] = r.AcceptRunWhitespaceComments()
 
-		t := s.NewGoal()
+		r.AcceptRunWhitespace()
+		r.AcceptToken(parser.Token{Type: TokenKeyword, Data: "else"})
+		r.AcceptRunWhitespaceNoComment()
+
+		s := r.NewGoal()
 		i.Else = new(Expression)
 
-		if err := i.Else.parse(&t); err != nil {
-			return s.Error("IfControl", err)
+		if err := i.Else.parse(&s); err != nil {
+			return r.Error("IfControl", err)
 		}
 
-		s.Score(t)
 		r.Score(s)
 	}
 
