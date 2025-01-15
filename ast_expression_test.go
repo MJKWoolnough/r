@@ -540,6 +540,50 @@ func TestIfControl(t *testing.T) {
 				Token:   tk[8],
 			}
 		}},
+		{"if #abc\n(#def\na #ghi\n)#jkl\nb#mno", func(t *test, tk Tokens) { // 9
+			t.Output = IfControl{
+				Cond: WrapQuery(&SimpleExpression{
+					Identifier: &tk[7],
+					Tokens:     tk[7:8],
+				}).AssignmentExpression.FormulaeExpression,
+				Expr: Expression{
+					QueryExpression: WrapQuery(&SimpleExpression{
+						Identifier: &tk[14],
+						Tokens:     tk[14:15],
+					}),
+					Comments: [2]Comments{{tk[12]}, {tk[15]}},
+					Tokens:   tk[12:16],
+				},
+				Comments: [4]Comments{{tk[2]}, {tk[5]}, {tk[9]}},
+				Tokens:   tk[:16],
+			}
+		}},
+		{"if #abc\n(#def\na #ghi\n)#jkl\nb#mno\n\n#pqr\nelse#stu\nc#vwx", func(t *test, tk Tokens) { // 10
+			t.Output = IfControl{
+				Cond: WrapQuery(&SimpleExpression{
+					Identifier: &tk[7],
+					Tokens:     tk[7:8],
+				}).AssignmentExpression.FormulaeExpression,
+				Expr: Expression{
+					QueryExpression: WrapQuery(&SimpleExpression{
+						Identifier: &tk[14],
+						Tokens:     tk[14:15],
+					}),
+					Comments: [2]Comments{{tk[12]}, {tk[15]}},
+					Tokens:   tk[12:16],
+				},
+				Else: &Expression{
+					QueryExpression: WrapQuery(&SimpleExpression{
+						Identifier: &tk[23],
+						Tokens:     tk[23:24],
+					}),
+					Comments: [2]Comments{{tk[21]}, {tk[24]}},
+					Tokens:   tk[21:25],
+				},
+				Comments: [4]Comments{{tk[2]}, {tk[5]}, {tk[9]}, {tk[18]}},
+				Tokens:   tk[:25],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var ic IfControl
 
