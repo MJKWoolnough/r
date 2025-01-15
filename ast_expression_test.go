@@ -667,6 +667,24 @@ func TestWhileControl(t *testing.T) {
 				Token:   tk[4],
 			}
 		}},
+		{"while#abc\n(#def\na#ghi\n)#jkl\nb#mno", func(t *test, tk Tokens) { // 7
+			t.Output = WhileControl{
+				Cond: WrapQuery(&SimpleExpression{
+					Identifier: &tk[6],
+					Tokens:     tk[6:7],
+				}).AssignmentExpression.FormulaeExpression,
+				Expr: Expression{
+					QueryExpression: WrapQuery(&SimpleExpression{
+						Identifier: &tk[12],
+						Tokens:     tk[12:13],
+					}),
+					Comments: [2]Comments{{tk[10]}, {tk[13]}},
+					Tokens:   tk[10:14],
+				},
+				Comments: [3]Comments{{tk[1]}, {tk[4]}, {tk[7]}},
+				Tokens:   tk[:14],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var wc WhileControl
 
