@@ -571,13 +571,29 @@ func (u UnaryExpression) printSource(w io.Writer, v bool) {
 }
 
 func (wc WhileControl) printSource(w io.Writer, v bool) {
+	ipp := indentPrinter{w}
+
 	if v {
-		io.WriteString(w, "while (")
+		if len(wc.Comments[0]) > 0 {
+			io.WriteString(w, "while ")
+			wc.Comments[0].printSource(w, true)
+			io.WriteString(w, "(")
+		} else {
+			io.WriteString(w, "while (")
+		}
+
+		wc.Comments[1].printSource(&ipp, v)
 	} else {
 		io.WriteString(w, "while(")
 	}
 
 	wc.Cond.printSource(w, v)
+
+	if v && len(wc.Comments[2]) > 0 {
+		io.WriteString(w, " ")
+		wc.Comments[2].printSource(&ipp, false)
+		io.WriteString(w, "\n")
+	}
 
 	if v {
 		io.WriteString(w, ") ")
