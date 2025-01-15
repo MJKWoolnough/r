@@ -306,8 +306,19 @@ func (f FunctionDefinition) printSource(w io.Writer, v bool) {
 }
 
 func (i IfControl) printSource(w io.Writer, v bool) {
+	ipp := indentPrinter{w}
+
 	if v {
-		io.WriteString(w, "if (")
+		io.WriteString(w, "if ")
+
+		if len(i.Comments[0]) > 0 {
+			i.Comments[0].printSource(&ipp, false)
+			io.WriteString(w, "\n(")
+		} else {
+			io.WriteString(w, "(")
+		}
+
+		i.Comments[1].printSource(&ipp, v)
 	} else {
 		io.WriteString(w, "if(")
 	}
@@ -315,6 +326,11 @@ func (i IfControl) printSource(w io.Writer, v bool) {
 	i.Cond.printSource(w, v)
 
 	if v {
+		if len(i.Comments[2]) > 0 {
+			i.Comments[2].printSource(&ipp, false)
+			io.WriteString(w, "\n")
+		}
+
 		io.WriteString(w, ") ")
 	} else {
 		io.WriteString(w, ")")
@@ -323,7 +339,18 @@ func (i IfControl) printSource(w io.Writer, v bool) {
 	i.Expr.printSource(w, v)
 
 	if i.Else != nil {
-		io.WriteString(w, " else ")
+		if v && (len(i.Expr.Comments[1]) > 0 || len(i.Comments[3]) > 0) {
+			io.WriteString(w, "\n")
+		}
+
+		if v && len(i.Comments[3]) > 0 {
+			io.WriteString(w, "\n")
+			i.Comments[3].printSource(w, v)
+			io.WriteString(w, "else ")
+		} else {
+			io.WriteString(w, " else ")
+		}
+
 		i.Else.printSource(w, v)
 	}
 }
