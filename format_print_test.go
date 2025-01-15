@@ -440,6 +440,11 @@ func TestPrintSource(t *testing.T) {
 			"if(a)b else c\n",
 			"if #abc\n(#def\n\ta#ghi\n) #jkl\nb #mno\n\n#pqr\nelse #stu\nc #vwx\n",
 		},
+		{ // 87
+			"while#abc\n(#def\na#ghi\n)#jkl\nb#mno",
+			"while(a)b\n",
+			"while #abc\n(#def\n\ta #ghi\n) #jkl\nb #mno\n",
+		},
 	} {
 		for m, input := range test {
 			tk := parser.NewStringTokeniser(input)
