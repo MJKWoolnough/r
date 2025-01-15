@@ -230,18 +230,24 @@ func (i *IfControl) parse(r *rParser) error {
 
 // WhileControl represents a looping branch with a single condition.
 type WhileControl struct {
-	Cond   FormulaeExpression
-	Expr   Expression
-	Tokens Tokens
+	Cond     FormulaeExpression
+	Expr     Expression
+	Comments [3]Comments
+	Tokens   Tokens
 }
 
 func (w *WhileControl) parse(r *rParser) error {
 	r.AcceptToken(parser.Token{Type: TokenKeyword, Data: "while"})
+
+	w.Comments[0] = r.AcceptRunWhitespaceComments()
+
 	r.AcceptRunWhitespace()
 
 	if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "("}) {
 		return r.Error("WhileControl", ErrMissingOpeningParen)
 	}
+
+	w.Comments[1] = r.AcceptRunWhitespaceComments()
 
 	r.AcceptRunWhitespace()
 
@@ -252,13 +258,16 @@ func (w *WhileControl) parse(r *rParser) error {
 	}
 
 	r.Score(s)
+
+	w.Comments[2] = r.AcceptRunWhitespaceComments()
+
 	r.AcceptRunWhitespace()
 
 	if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
 		return r.Error("WhileControl", ErrMissingClosingParen)
 	}
 
-	r.AcceptRunWhitespace()
+	r.AcceptRunWhitespaceNoComment()
 
 	s = r.NewGoal()
 
