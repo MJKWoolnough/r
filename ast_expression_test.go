@@ -120,7 +120,7 @@ func TestExpression(t *testing.T) {
 				Tokens:   tk[:7],
 			}
 		}},
-		{"#a comment\n# Another Comment\na\n\n# not parsed", func(t *test, tk Tokens) { // 9
+		{"#a comment\n# Another Comment\na\n\n# not parsed", func(t *test, tk Tokens) { // 10
 			t.Output = Expression{
 				QueryExpression: WrapQuery(&SimpleExpression{
 					Identifier: &tk[4],
@@ -1188,7 +1188,7 @@ func TestArgList(t *testing.T) {
 				Tokens:   tk[:1],
 			}
 		}},
-		{"#abc\n\n#def", func(t *test, tk Tokens) { // 8
+		{"#abc\n\n#def", func(t *test, tk Tokens) { // 9
 			t.Output = ArgList{
 				Comments: Comments{tk[0], tk[3]},
 				Tokens:   tk[:4],
