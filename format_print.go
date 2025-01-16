@@ -241,15 +241,42 @@ func (f FlowControl) printSource(w io.Writer, v bool) {
 
 func (f ForControl) printSource(w io.Writer, v bool) {
 	if f.Var != nil && f.Var.Type == TokenIdentifier {
+		ipp := indentPrinter{w}
+
 		if v {
-			io.WriteString(w, "for (")
+			io.WriteString(w, "for ")
+
+			f.Comments[0].printSource(w, v)
+			io.WriteString(w, "(")
 		} else {
 			io.WriteString(w, "for(")
 		}
 
+		if v {
+			f.Comments[1].printSource(&ipp, v)
+		}
+
 		io.WriteString(w, f.Var.Data)
-		io.WriteString(w, " in ")
-		f.List.printSource(w, v)
+		io.WriteString(w, " ")
+
+		if v {
+			f.Comments[2].printSource(&ipp, v)
+		}
+
+		io.WriteString(w, "in")
+		io.WriteString(w, " ")
+
+		if v {
+			f.Comments[3].printSource(&ipp, v)
+		}
+
+		f.List.printSource(&ipp, v)
+
+		if v && len(f.Comments[4]) > 0 {
+			io.WriteString(w, " ")
+			f.Comments[4].printSource(&ipp, false)
+			io.WriteString(w, "\n")
+		}
 
 		if v {
 			io.WriteString(w, ") ")
