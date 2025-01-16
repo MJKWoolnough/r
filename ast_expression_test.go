@@ -723,6 +723,19 @@ func TestRepeatControl(t *testing.T) {
 				Token:   tk[2],
 			}
 		}},
+		{"repeat #abc\na#def", func(t *test, tk Tokens) { // 3
+			t.Output = RepeatControl{
+				Expr: Expression{
+					QueryExpression: WrapQuery(&SimpleExpression{
+						Identifier: &tk[4],
+						Tokens:     tk[4:5],
+					}),
+					Comments: [2]Comments{{tk[2]}, {tk[5]}},
+					Tokens:   tk[2:6],
+				},
+				Tokens: tk[:6],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var rc RepeatControl
 
