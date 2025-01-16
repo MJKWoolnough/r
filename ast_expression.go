@@ -290,7 +290,7 @@ type RepeatControl struct {
 
 func (rc *RepeatControl) parse(r *rParser) error {
 	r.AcceptToken(parser.Token{Type: TokenKeyword, Data: "repeat"})
-	r.AcceptRunWhitespace()
+	r.AcceptRunWhitespaceNoComment()
 
 	s := r.NewGoal()
 
