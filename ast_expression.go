@@ -307,19 +307,25 @@ func (rc *RepeatControl) parse(r *rParser) error {
 
 // ForControl represents a looping branch over an expression.
 type ForControl struct {
-	Var    *Token
-	List   FormulaeExpression
-	Expr   Expression
-	Tokens Tokens
+	Var      *Token
+	List     FormulaeExpression
+	Expr     Expression
+	Comments [5]Comments
+	Tokens   Tokens
 }
 
 func (f *ForControl) parse(r *rParser) error {
 	r.AcceptToken(parser.Token{Type: TokenKeyword, Data: "for"})
+
+	f.Comments[0] = r.AcceptRunWhitespaceComments()
+
 	r.AcceptRunWhitespace()
 
 	if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "("}) {
 		return r.Error("ForControl", ErrMissingOpeningParen)
 	}
+
+	f.Comments[1] = r.AcceptRunWhitespaceComments()
 
 	r.AcceptRunWhitespace()
 
@@ -328,12 +334,15 @@ func (f *ForControl) parse(r *rParser) error {
 	}
 
 	f.Var = r.GetLastToken()
+	f.Comments[2] = r.AcceptRunWhitespaceComments()
 
 	r.AcceptRunWhitespace()
 
 	if !r.AcceptToken(parser.Token{Type: TokenKeyword, Data: "in"}) {
 		return r.Error("ForControl", ErrMissingIn)
 	}
+
+	f.Comments[3] = r.AcceptRunWhitespaceComments()
 
 	r.AcceptRunWhitespace()
 
@@ -344,13 +353,16 @@ func (f *ForControl) parse(r *rParser) error {
 	}
 
 	r.Score(s)
+
+	f.Comments[4] = r.AcceptRunWhitespaceComments()
+
 	r.AcceptRunWhitespace()
 
 	if !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: ")"}) {
 		return r.Error("ForControl", ErrMissingClosingParen)
 	}
 
-	r.AcceptRunWhitespace()
+	r.AcceptRunWhitespaceNoComment()
 
 	s = r.NewGoal()
 
