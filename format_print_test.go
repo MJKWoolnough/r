@@ -445,10 +445,15 @@ func TestPrintSource(t *testing.T) {
 			"while(a)b\n",
 			"while #abc\n(#def\n\ta #ghi\n) #jkl\nb #mno\n",
 		},
-		{ // 87
+		{ // 88
 			"for#abc\n(#def\na#ghi\nin#jkl\nb#mno\n)#pqr\nc#stu",
 			"for(a in b)c\n",
 			"for #abc\n(#def\n\ta #ghi\n\tin #jkl\n\tb #mno\n) #pqr\nc #stu\n",
+		},
+		{ // 89
+			"repeat#abc\na#def",
+			"repeat a\n",
+			"repeat #abc\na #def\n",
 		},
 	} {
 		for m, input := range test {
