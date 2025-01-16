@@ -60,6 +60,7 @@ func (c *CompoundExpression) parse(r *rParser) error {
 	r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "{"})
 
 	s := r.NewGoal()
+
 	s.AcceptRunWhitespace()
 
 	for !s.AcceptToken(parser.Token{Type: TokenGrouping, Data: "}"}) {
