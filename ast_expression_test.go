@@ -822,6 +822,25 @@ func TestForControl(t *testing.T) {
 				Token:   tk[8],
 			}
 		}},
+		{"for#abc\n(#def\na#ghi\nin#jkl\nb#mno\n)#pqr\nc#stu", func(t *test, tk Tokens) { // 9
+			t.Output = ForControl{
+				Var: &tk[6],
+				List: WrapQuery(&SimpleExpression{
+					Identifier: &tk[12],
+					Tokens:     tk[12:13],
+				}).AssignmentExpression.FormulaeExpression,
+				Expr: Expression{
+					QueryExpression: WrapQuery(&SimpleExpression{
+						Identifier: &tk[18],
+						Tokens:     tk[18:19],
+					}),
+					Comments: [2]Comments{{tk[16]}, {tk[19]}},
+					Tokens:   tk[16:20],
+				},
+				Comments: [5]Comments{{tk[1]}, {tk[4]}, {tk[7]}, {tk[10]}, {tk[13]}},
+				Tokens:   tk[:20],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var fc ForControl
 
