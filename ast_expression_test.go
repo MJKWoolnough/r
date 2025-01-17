@@ -7568,6 +7568,26 @@ func TestParenthesizedExpression(t *testing.T) {
 				Tokens: tk[:11],
 			}
 		}},
+		{"(a#abc\n?#def\nb)", func(t *test, tk Tokens) { // 5
+			t.Output = ParenthesizedExpression{
+				Expression: Expression{
+					QueryExpression: &QueryExpression{
+						AssignmentExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[1],
+							Tokens:     tk[1:2],
+						}).AssignmentExpression,
+						QueryExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[7],
+							Tokens:     tk[7:8],
+						}),
+						Comments: [2]Comments{{tk[2]}, {tk[5]}},
+						Tokens:   tk[1:8],
+					},
+					Tokens: tk[1:8],
+				},
+				Tokens: tk[:9],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var pe ParenthesizedExpression
 
