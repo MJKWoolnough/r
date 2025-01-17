@@ -604,6 +604,7 @@ type AssignmentExpression struct {
 	FormulaeExpression   FormulaeExpression
 	AssignmentType       AssignmentType
 	AssignmentExpression *AssignmentExpression
+	Comments             [2]Comments
 	Tokens               Tokens
 }
 
@@ -633,9 +634,14 @@ func (a *AssignmentExpression) parse(r *rParser) error {
 	}
 
 	if a.AssignmentType != AssignmentNone {
-		s.AcceptRunWhitespace()
+		a.Comments[0] = r.AcceptRunWhitespaceComments()
 
-		r.Score(s)
+		r.AcceptRunWhitespaceNoNewLine()
+		r.Next()
+
+		a.Comments[1] = r.AcceptRunWhitespaceComments()
+
+		r.AcceptRunWhitespace()
 
 		s = r.NewGoal()
 		a.AssignmentExpression = new(AssignmentExpression)
