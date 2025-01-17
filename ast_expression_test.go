@@ -1895,6 +1895,39 @@ func TestQueryExpression(t *testing.T) {
 				Token:   tk[2],
 			}
 		}},
+		{"?#abc\na", func(t *test, tk Tokens) { // 9
+			t.Output = QueryExpression{
+				QueryExpression: WrapQuery(&SimpleExpression{
+					Identifier: &tk[3],
+					Tokens:     tk[3:4],
+				}),
+				Comments: [2]Comments{nil, {tk[1]}},
+				Tokens:   tk[:4],
+			}
+		}},
+		{"a?#abc\na", func(t *test, tk Tokens) { // 10
+			t.Output = QueryExpression{
+				AssignmentExpression: WrapQuery(&SimpleExpression{
+					Identifier: &tk[0],
+					Tokens:     tk[:1],
+				}).AssignmentExpression,
+				QueryExpression: WrapQuery(&SimpleExpression{
+					Identifier: &tk[4],
+					Tokens:     tk[4:5],
+				}),
+				Comments: [2]Comments{nil, {tk[2]}},
+				Tokens:   tk[:5],
+			}
+		}},
+		{"a#abc\n?#def\na", func(t *test, tk Tokens) { // 11
+			t.Output = QueryExpression{
+				AssignmentExpression: WrapQuery(&SimpleExpression{
+					Identifier: &tk[0],
+					Tokens:     tk[:1],
+				}).AssignmentExpression,
+				Tokens: tk[:1],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var qe QueryExpression
 
