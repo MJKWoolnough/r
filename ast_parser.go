@@ -71,7 +71,7 @@ func (r *rParser) Score(k rParser) {
 	*r = (*r)[:len(*r)+len(k)]
 }
 
-func (r *rParser) next() Token {
+func (r *rParser) Next() Token {
 	l := len(*r)
 	*r = (*r)[:l+1]
 	tk := (*r)[l]
@@ -84,7 +84,7 @@ func (r *rParser) backup() {
 }
 
 func (r *rParser) Peek() parser.Token {
-	tk := r.next().Token
+	tk := r.Next().Token
 
 	r.backup()
 
@@ -92,7 +92,7 @@ func (r *rParser) Peek() parser.Token {
 }
 
 func (r *rParser) Accept(ts ...parser.TokenType) bool {
-	tt := r.next().Type
+	tt := r.Next().Type
 
 	for _, pt := range ts {
 		if pt == tt {
@@ -108,7 +108,7 @@ func (r *rParser) Accept(ts ...parser.TokenType) bool {
 func (r *rParser) AcceptRun(ts ...parser.TokenType) parser.TokenType {
 Loop:
 	for {
-		tt := r.next().Type
+		tt := r.Next().Type
 
 		for _, pt := range ts {
 			if pt == tt {
@@ -123,7 +123,7 @@ Loop:
 }
 
 func (r *rParser) AcceptToken(tk parser.Token) bool {
-	if r.next().Token == tk {
+	if r.Next().Token == tk {
 		return true
 	}
 
@@ -150,7 +150,7 @@ func (r *rParser) AcceptRunWhitespaceComments() Comments {
 	s := r.NewGoal()
 
 	for s.AcceptRunWhitespaceNoComment() == TokenComment {
-		c = append(c, s.next())
+		c = append(c, s.Next())
 
 		r.Score(s)
 
@@ -168,7 +168,7 @@ func (r *rParser) AcceptRunWhitespaceCommentsNoNewline() Comments {
 	for s.AcceptRun(TokenWhitespace, TokenWhitespaceLineTerminator) == TokenComment {
 		r.Score(s)
 
-		c = append(c, r.next())
+		c = append(c, r.Next())
 		s = r.NewGoal()
 
 		s.Accept(TokenLineTerminator, TokenWhitespaceLineTerminator)
@@ -203,7 +203,7 @@ func (e Error) Unwrap() error {
 }
 
 func (r *rParser) Error(parsingFunc string, err error) error {
-	tk := r.next()
+	tk := r.Next()
 
 	r.backup()
 
