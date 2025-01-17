@@ -503,12 +503,20 @@ func (q QueryExpression) printSource(w io.Writer, v bool) {
 	if q.QueryExpression != nil {
 		if v && q.AssignmentExpression != nil {
 			io.WriteString(w, " ")
+
+			q.Comments[0].printSource(w, v)
 		}
 
 		io.WriteString(w, "?")
 
-		if v && q.QueryExpression.AssignmentExpression != nil {
-			io.WriteString(w, " ")
+		if v {
+			if q.QueryExpression.AssignmentExpression != nil {
+				io.WriteString(w, " ")
+			}
+
+			if len(q.Comments) > 0 {
+				q.Comments[1].printSource(w, v)
+			}
 		}
 
 		q.QueryExpression.printSource(w, v)
