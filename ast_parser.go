@@ -165,7 +165,7 @@ func (r *rParser) AcceptRunWhitespaceCommentsNoNewline() Comments {
 
 	s := r.NewGoal()
 
-	for s.AcceptRunWhitespaceNoNewLine() == TokenComment {
+	for s.AcceptRun(TokenWhitespace, TokenWhitespaceLineTerminator) == TokenComment {
 		r.Score(s)
 
 		c = append(c, r.next())
@@ -178,7 +178,7 @@ func (r *rParser) AcceptRunWhitespaceCommentsNoNewline() Comments {
 }
 
 func (r *rParser) AcceptRunWhitespaceNoNewLine() parser.TokenType {
-	return r.AcceptRun(TokenWhitespace, TokenWhitespaceLineTerminator)
+	return r.AcceptRun(TokenWhitespace, TokenWhitespaceLineTerminator, TokenComment)
 }
 
 func (r *rParser) GetLastToken() *Token {
