@@ -529,11 +529,14 @@ func (a *Argument) parse(r *rParser) error {
 type QueryExpression struct {
 	AssignmentExpression *AssignmentExpression
 	QueryExpression      *QueryExpression
+	Comments             [2]Comments
 	Tokens               Tokens
 }
 
 func (q *QueryExpression) parse(r *rParser) error {
 	if r.AcceptToken(parser.Token{Type: TokenOperator, Data: "?"}) {
+		q.Comments[1] = r.AcceptRunWhitespaceComments()
+
 		r.AcceptRunWhitespace()
 
 		s := r.NewGoal()
@@ -559,8 +562,14 @@ func (q *QueryExpression) parse(r *rParser) error {
 		s.AcceptRunWhitespaceNoNewLine()
 
 		if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "?"}) {
-			s.AcceptRunWhitespace()
-			r.Score(s)
+			q.Comments[0] = r.AcceptRunWhitespaceComments()
+
+			r.AcceptRunWhitespace()
+			r.AcceptToken(parser.Token{Type: TokenOperator, Data: "?"})
+
+			q.Comments[1] = r.AcceptRunWhitespaceComments()
+
+			r.AcceptRunWhitespace()
 
 			s = r.NewGoal()
 			q.QueryExpression = new(QueryExpression)
