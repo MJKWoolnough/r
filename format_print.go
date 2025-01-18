@@ -124,12 +124,14 @@ func (a AssignmentExpression) printSource(w io.Writer, v bool) {
 	if a.AssignmentType != AssignmentNone && a.AssignmentExpression != nil {
 		if v {
 			io.WriteString(w, " ")
+			a.Comments[0].printSource(w, v)
 		}
 
 		a.AssignmentType.printSource(w, v)
 
 		if v {
 			io.WriteString(w, " ")
+			a.Comments[1].printSource(w, v)
 		}
 
 		a.AssignmentExpression.printSource(w, v)
