@@ -10,6 +10,7 @@ Package r implements an R tokeniser and parser.
 const (
 	TokenWhitespace parser.TokenType = iota
 	TokenLineTerminator
+	TokenWhitespaceLineTerminator
 	TokenExpressionTerminator
 	TokenComment
 	TokenStringLiteral
@@ -149,6 +150,7 @@ String implements the fmt.Stringer interface.
 type Arg struct {
 	QueryExpression *QueryExpression
 	Ellipsis        *Token
+	Comments        [2]Comments
 	Tokens          Tokens
 }
 ```
@@ -166,8 +168,9 @@ Format implements the fmt.Formatter interface
 
 ```go
 type ArgList struct {
-	Args   []Argument
-	Tokens Tokens
+	Args     []Argument
+	Comments Comments
+	Tokens   Tokens
 }
 ```
 
@@ -186,6 +189,7 @@ Format implements the fmt.Formatter interface
 type Argument struct {
 	Identifier *Token
 	Default    *Expression
+	Comments   [2]Comments
 	Tokens     Tokens
 }
 ```
@@ -205,6 +209,7 @@ type AssignmentExpression struct {
 	FormulaeExpression   FormulaeExpression
 	AssignmentType       AssignmentType
 	AssignmentExpression *AssignmentExpression
+	Comments             [2]Comments
 	Tokens               Tokens
 }
 ```
@@ -248,8 +253,9 @@ String implements the fmt.Stringer interface.
 
 ```go
 type Call struct {
-	Args   []Arg
-	Tokens Tokens
+	Args     []Arg
+	Comments Comments
+	Tokens   Tokens
 }
 ```
 
@@ -262,11 +268,19 @@ func (f Call) Format(s fmt.State, v rune)
 ```
 Format implements the fmt.Formatter interface
 
+#### type Comments
+
+```go
+type Comments []Token
+```
+
+
 #### type CompoundExpression
 
 ```go
 type CompoundExpression struct {
 	Expressions []Expression
+	Comments    Comments
 	Tokens      Tokens
 }
 ```
@@ -333,6 +347,7 @@ type Expression struct {
 	FlowControl        *FlowControl
 	FunctionDefinition *FunctionDefinition
 	QueryExpression    *QueryExpression
+	Comments           [2]Comments
 	Tokens             Tokens
 }
 ```
@@ -352,6 +367,7 @@ Format implements the fmt.Formatter interface
 ```go
 type File struct {
 	Statements []Expression
+	Comments   Comments
 	Tokens     Tokens
 }
 ```
@@ -397,10 +413,11 @@ Format implements the fmt.Formatter interface
 
 ```go
 type ForControl struct {
-	Var    *Token
-	List   FormulaeExpression
-	Expr   Expression
-	Tokens Tokens
+	Var      *Token
+	List     FormulaeExpression
+	Expr     Expression
+	Comments [5]Comments
+	Tokens   Tokens
 }
 ```
 
@@ -436,9 +453,10 @@ Format implements the fmt.Formatter interface
 
 ```go
 type FunctionDefinition struct {
-	ArgList ArgList
-	Body    Expression
-	Tokens  Tokens
+	ArgList  ArgList
+	Body     Expression
+	Comments Comments
+	Tokens   Tokens
 }
 ```
 
@@ -455,10 +473,11 @@ Format implements the fmt.Formatter interface
 
 ```go
 type IfControl struct {
-	Cond   FormulaeExpression
-	Expr   Expression
-	Else   *Expression
-	Tokens Tokens
+	Cond     FormulaeExpression
+	Expr     Expression
+	Else     *Expression
+	Comments [4]Comments
+	Tokens   Tokens
 }
 ```
 
@@ -616,6 +635,23 @@ func (o OrType) String() string
 ```
 String implements the fmt.Stringer interface.
 
+#### type ParenthesizedExpression
+
+```go
+type ParenthesizedExpression struct {
+	Expression Expression
+	Tokens     Tokens
+}
+```
+
+
+#### func (ParenthesizedExpression) Format
+
+```go
+func (f ParenthesizedExpression) Format(s fmt.State, v rune)
+```
+Format implements the fmt.Formatter interface
+
 #### type PipeOrSpecialExpression
 
 ```go
@@ -643,6 +679,7 @@ Format implements the fmt.Formatter interface
 type QueryExpression struct {
 	AssignmentExpression *AssignmentExpression
 	QueryExpression      *QueryExpression
+	Comments             [2]Comments
 	Tokens               Tokens
 }
 ```
@@ -853,7 +890,7 @@ type SimpleExpression struct {
 	Identifier              *Token
 	Constant                *Token
 	Ellipsis                *Token
-	ParenthesizedExpression *Expression
+	ParenthesizedExpression *ParenthesizedExpression
 	CompoundExpression      *CompoundExpression
 	Tokens                  Tokens
 }
@@ -999,9 +1036,10 @@ String implements the fmt.Stringer interface.
 
 ```go
 type WhileControl struct {
-	Cond   FormulaeExpression
-	Expr   Expression
-	Tokens Tokens
+	Cond     FormulaeExpression
+	Expr     Expression
+	Comments [3]Comments
+	Tokens   Tokens
 }
 ```
 
