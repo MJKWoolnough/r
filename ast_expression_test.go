@@ -3138,6 +3138,30 @@ func TestAssignmentExpression(t *testing.T) {
 				Token:   tk[2],
 			}
 		}},
+		{"a=#abc\nb", func(t *test, tk Tokens) { // 14
+			t.Output = AssignmentExpression{
+				FormulaeExpression: WrapQuery(&SimpleExpression{
+					Identifier: &tk[0],
+					Tokens:     tk[:1],
+				}).AssignmentExpression.FormulaeExpression,
+				AssignmentType: AssignmentEquals,
+				AssignmentExpression: WrapQuery(&SimpleExpression{
+					Identifier: &tk[4],
+					Tokens:     tk[4:5],
+				}).AssignmentExpression,
+				Comments: [2]Comments{nil, {tk[2]}},
+				Tokens:   tk[:5],
+			}
+		}},
+		{"a#abc\n=#def\nb", func(t *test, tk Tokens) { // 15
+			t.Output = AssignmentExpression{
+				FormulaeExpression: WrapQuery(&SimpleExpression{
+					Identifier: &tk[0],
+					Tokens:     tk[:1],
+				}).AssignmentExpression.FormulaeExpression,
+				Tokens: tk[:1],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var ae AssignmentExpression
 
@@ -7582,6 +7606,30 @@ func TestParenthesizedExpression(t *testing.T) {
 						}),
 						Comments: [2]Comments{{tk[2]}, {tk[5]}},
 						Tokens:   tk[1:8],
+					},
+					Tokens: tk[1:8],
+				},
+				Tokens: tk[:9],
+			}
+		}},
+		{"(a#abc\n=#def\nb)", func(t *test, tk Tokens) { // 6
+			t.Output = ParenthesizedExpression{
+				Expression: Expression{
+					QueryExpression: &QueryExpression{
+						AssignmentExpression: &AssignmentExpression{
+							FormulaeExpression: WrapQuery(&SimpleExpression{
+								Identifier: &tk[1],
+								Tokens:     tk[1:2],
+							}).AssignmentExpression.FormulaeExpression,
+							AssignmentType: AssignmentEquals,
+							AssignmentExpression: WrapQuery(&SimpleExpression{
+								Identifier: &tk[7],
+								Tokens:     tk[7:8],
+							}).AssignmentExpression,
+							Comments: [2]Comments{{tk[2]}, {tk[5]}},
+							Tokens:   tk[1:8],
+						},
+						Tokens: tk[1:8],
 					},
 					Tokens: tk[1:8],
 				},
