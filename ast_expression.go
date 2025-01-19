@@ -662,6 +662,7 @@ func (a *AssignmentExpression) parse(r *rParser) error {
 type FormulaeExpression struct {
 	OrExpression       *OrExpression
 	FormulaeExpression *FormulaeExpression
+	Comments           Comments
 	Tokens             Tokens
 }
 
@@ -683,9 +684,11 @@ func (f *FormulaeExpression) parse(r *rParser) error {
 	}
 
 	if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "~"}) {
-		s.AcceptRunWhitespace()
-
 		r.Score(s)
+
+		f.Comments = r.AcceptRunWhitespaceComments()
+
+		r.AcceptRunWhitespace()
 
 		s = r.NewGoal()
 		f.FormulaeExpression = new(FormulaeExpression)
