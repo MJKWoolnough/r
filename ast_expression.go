@@ -719,6 +719,7 @@ type OrExpression struct {
 	AndExpression AndExpression
 	OrType        OrType
 	OrExpression  *OrExpression
+	Comments      [2]Comments
 	Tokens        Tokens
 }
 
@@ -742,8 +743,14 @@ func (o *OrExpression) parse(r *rParser) error {
 	}
 
 	if o.OrType != OrNone {
-		s.AcceptRunWhitespace()
-		r.Score(s)
+		o.Comments[0] = r.AcceptRunWhitespaceCommentsNoNewline()
+
+		r.AcceptRunWhitespaceNoNewLine()
+		r.Next()
+
+		o.Comments[1] = r.AcceptRunWhitespaceComments()
+
+		r.AcceptRunWhitespace()
 
 		s = r.NewGoal()
 		o.OrExpression = new(OrExpression)
