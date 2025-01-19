@@ -4129,6 +4129,96 @@ func TestOrExpression(t *testing.T) {
 				Token:   tk[2],
 			}
 		}},
+		{"a | #abc\n b", func(t *test, tk Tokens) { // 8
+			t.Output = OrExpression{
+				AndExpression: AndExpression{
+					NotExpression: NotExpression{
+						RelationalExpression: RelationalExpression{
+							AdditionExpression: AdditionExpression{
+								MultiplicationExpression: MultiplicationExpression{
+									PipeOrSpecialExpression: PipeOrSpecialExpression{
+										SequenceExpression: SequenceExpression{
+											UnaryExpression: UnaryExpression{
+												ExponentiationExpression: ExponentiationExpression{
+													SubsetExpression: SubsetExpression{
+														ScopeExpression: ScopeExpression{
+															IndexOrCallExpression: IndexOrCallExpression{
+																SimpleExpression: &SimpleExpression{
+																	Identifier: &tk[0],
+																	Tokens:     tk[:1],
+																},
+																Tokens: tk[:1],
+															},
+															Tokens: tk[:1],
+														},
+														Tokens: tk[:1],
+													},
+													Tokens: tk[:1],
+												},
+												Tokens: tk[:1],
+											},
+											Tokens: tk[:1],
+										},
+										Tokens: tk[:1],
+									},
+									Tokens: tk[:1],
+								},
+								Tokens: tk[:1],
+							},
+							Tokens: tk[:1],
+						},
+						Tokens: tk[:1],
+					},
+					Tokens: tk[:1],
+				},
+				OrType: OrVectorized,
+				OrExpression: &OrExpression{
+					AndExpression: AndExpression{
+						NotExpression: NotExpression{
+							RelationalExpression: RelationalExpression{
+								AdditionExpression: AdditionExpression{
+									MultiplicationExpression: MultiplicationExpression{
+										PipeOrSpecialExpression: PipeOrSpecialExpression{
+											SequenceExpression: SequenceExpression{
+												UnaryExpression: UnaryExpression{
+													ExponentiationExpression: ExponentiationExpression{
+														SubsetExpression: SubsetExpression{
+															ScopeExpression: ScopeExpression{
+																IndexOrCallExpression: IndexOrCallExpression{
+																	SimpleExpression: &SimpleExpression{
+																		Identifier: &tk[7],
+																		Tokens:     tk[7:8],
+																	},
+																	Tokens: tk[7:8],
+																},
+																Tokens: tk[7:8],
+															},
+															Tokens: tk[7:8],
+														},
+														Tokens: tk[7:8],
+													},
+													Tokens: tk[7:8],
+												},
+												Tokens: tk[7:8],
+											},
+											Tokens: tk[7:8],
+										},
+										Tokens: tk[7:8],
+									},
+									Tokens: tk[7:8],
+								},
+								Tokens: tk[7:8],
+							},
+							Tokens: tk[7:8],
+						},
+						Tokens: tk[7:8],
+					},
+					Tokens: tk[7:8],
+				},
+				Comments: [2]Comments{nil, {tk[4]}},
+				Tokens:   tk[:8],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var oe OrExpression
 
@@ -7683,6 +7773,27 @@ func TestParenthesizedExpression(t *testing.T) {
 						},
 						Tokens: tk[1:8],
 					},
+					Tokens: tk[1:8],
+				},
+				Tokens: tk[:9],
+			}
+		}},
+		{"(a#abc\n|#def\nb)", func(t *test, tk Tokens) { // 7
+			t.Output = ParenthesizedExpression{
+				Expression: Expression{
+					QueryExpression: WrapQuery(OrExpression{
+						AndExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[1],
+							Tokens:     tk[1:2],
+						}).AssignmentExpression.FormulaeExpression.OrExpression.AndExpression,
+						OrType: OrVectorized,
+						OrExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[7],
+							Tokens:     tk[7:8],
+						}).AssignmentExpression.FormulaeExpression.OrExpression,
+						Comments: [2]Comments{{tk[2]}, {tk[5]}},
+						Tokens:   tk[1:8],
+					}),
 					Tokens: tk[1:8],
 				},
 				Tokens: tk[:9],
