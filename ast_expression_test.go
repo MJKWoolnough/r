@@ -3543,6 +3543,58 @@ func TestFormulaeExpression(t *testing.T) {
 				Token:   tk[1],
 			}
 		}},
+		{"~#abc\na", func(t *test, tk Tokens) { // 7
+			t.Output = FormulaeExpression{
+				FormulaeExpression: &FormulaeExpression{
+					OrExpression: &OrExpression{
+						AndExpression: AndExpression{
+							NotExpression: NotExpression{
+								RelationalExpression: RelationalExpression{
+									AdditionExpression: AdditionExpression{
+										MultiplicationExpression: MultiplicationExpression{
+											PipeOrSpecialExpression: PipeOrSpecialExpression{
+												SequenceExpression: SequenceExpression{
+													UnaryExpression: UnaryExpression{
+														ExponentiationExpression: ExponentiationExpression{
+															SubsetExpression: SubsetExpression{
+																ScopeExpression: ScopeExpression{
+																	IndexOrCallExpression: IndexOrCallExpression{
+																		SimpleExpression: &SimpleExpression{
+																			Identifier: &tk[3],
+																			Tokens:     tk[3:4],
+																		},
+																		Tokens: tk[3:4],
+																	},
+																	Tokens: tk[3:4],
+																},
+																Tokens: tk[3:4],
+															},
+															Tokens: tk[3:4],
+														},
+														Tokens: tk[3:4],
+													},
+													Tokens: tk[3:4],
+												},
+												Tokens: tk[3:4],
+											},
+											Tokens: tk[3:4],
+										},
+										Tokens: tk[3:4],
+									},
+									Tokens: tk[3:4],
+								},
+								Tokens: tk[3:4],
+							},
+							Tokens: tk[3:4],
+						},
+						Tokens: tk[3:4],
+					},
+					Tokens: tk[3:4],
+				},
+				Comments: Comments{tk[1]},
+				Tokens:   tk[:4],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var fe FormulaeExpression
 
