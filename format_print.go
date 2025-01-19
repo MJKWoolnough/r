@@ -457,12 +457,14 @@ func (o OrExpression) printSource(w io.Writer, v bool) {
 	if o.OrType != OrNone && o.OrExpression != nil {
 		if v {
 			io.WriteString(w, " ")
+			o.Comments[0].printSource(w, v)
 		}
 
 		o.OrType.printSource(w, v)
 
 		if v {
 			io.WriteString(w, " ")
+			o.Comments[1].printSource(w, v)
 		}
 
 		o.OrExpression.printSource(w, v)
