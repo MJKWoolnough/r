@@ -304,6 +304,7 @@ func (f FormulaeExpression) printSource(w io.Writer, v bool) {
 
 		if v {
 			io.WriteString(w, " ")
+			f.Comments.printSource(w, v)
 		}
 
 		f.FormulaeExpression.printSource(w, v)
