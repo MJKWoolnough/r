@@ -28,12 +28,14 @@ func (a AndExpression) printSource(w io.Writer, v bool) {
 	if a.AndType != AndNone && a.AndExpression != nil {
 		if v {
 			io.WriteString(w, " ")
+			a.Comments[0].printSource(w, v)
 		}
 
 		a.AndType.printSource(w, v)
 
 		if v {
 			io.WriteString(w, " ")
+			a.Comments[1].printSource(w, v)
 		}
 
 		a.AndExpression.printSource(w, v)
