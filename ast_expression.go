@@ -833,12 +833,15 @@ func (a *AndExpression) parse(r *rParser) error {
 type NotExpression struct {
 	Nots                 uint
 	RelationalExpression RelationalExpression
+	Comments             []Comments
 	Tokens               Tokens
 }
 
 func (n *NotExpression) parse(r *rParser) error {
 	for r.AcceptToken(parser.Token{Type: TokenOperator, Data: "!"}) {
 		n.Nots++
+
+		n.Comments = append(n.Comments, r.AcceptRunWhitespaceComments())
 
 		r.AcceptRunWhitespace()
 	}
