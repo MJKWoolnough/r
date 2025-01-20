@@ -446,8 +446,13 @@ func (m MultiplicationExpression) printSource(w io.Writer, v bool) {
 }
 
 func (n NotExpression) printSource(w io.Writer, v bool) {
-	for range n.Nots {
+	for m := range n.Nots {
 		io.WriteString(w, "!")
+
+		if v && uint(len(n.Comments)) > m && len(n.Comments[m]) > 0 {
+			io.WriteString(w, " ")
+			n.Comments[m].printSource(w, v)
+		}
 	}
 
 	n.RelationalExpression.printSource(w, v)
