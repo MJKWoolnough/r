@@ -505,6 +505,26 @@ func TestPrintSource(t *testing.T) {
 			"(a&b)\n",
 			"(a #abc\n& #def\nb)\n",
 		},
+		{ // 100
+			"!#abc\na",
+			"!a\n",
+			"! #abc\na\n",
+		},
+		{ // 101
+			"!!#abc\na",
+			"!!a\n",
+			"!! #abc\na\n",
+		},
+		{ // 102
+			"!#abc\n!a",
+			"!!a\n",
+			"! #abc\n!a\n",
+		},
+		{ // 103
+			"!#abc\n!#def\na",
+			"!!a\n",
+			"! #abc\n! #def\na\n",
+		},
 	} {
 		for m, input := range test {
 			tk := parser.NewStringTokeniser(input)
