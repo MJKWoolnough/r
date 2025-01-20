@@ -781,6 +781,7 @@ type AndExpression struct {
 	NotExpression NotExpression
 	AndType       AndType
 	AndExpression *AndExpression
+	Comments      [2]Comments
 	Tokens        Tokens
 }
 
@@ -804,8 +805,14 @@ func (a *AndExpression) parse(r *rParser) error {
 	}
 
 	if a.AndType != AndNone {
-		s.AcceptRunWhitespace()
-		r.Score(s)
+		a.Comments[0] = r.AcceptRunWhitespaceCommentsNoNewline()
+
+		r.AcceptRunWhitespaceNoNewLine()
+		r.Next()
+
+		a.Comments[1] = r.AcceptRunWhitespaceComments()
+
+		r.AcceptRunWhitespace()
 
 		s = r.NewGoal()
 		a.AndExpression = new(AndExpression)
