@@ -879,6 +879,7 @@ type RelationalExpression struct {
 	AdditionExpression   AdditionExpression
 	RelationalOperator   RelationalOperator
 	RelationalExpression *RelationalExpression
+	Comments             [2]Comments
 	Tokens               Tokens
 }
 
@@ -910,8 +911,14 @@ func (re *RelationalExpression) parse(r *rParser) error {
 	}
 
 	if re.RelationalOperator != RelationalNone {
-		s.AcceptRunWhitespace()
-		r.Score(s)
+		re.Comments[0] = r.AcceptRunWhitespaceCommentsNoNewline()
+
+		r.AcceptRunWhitespaceNoNewLine()
+		r.Next()
+
+		re.Comments[1] = r.AcceptRunWhitespaceComments()
+
+		r.AcceptRunWhitespace()
 
 		s = r.NewGoal()
 		re.RelationalExpression = new(RelationalExpression)
