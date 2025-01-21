@@ -950,6 +950,7 @@ type AdditionExpression struct {
 	MultiplicationExpression MultiplicationExpression
 	AdditionType             AdditionType
 	AdditionExpression       *AdditionExpression
+	Comments                 [2]Comments
 	Tokens                   Tokens
 }
 
@@ -973,8 +974,14 @@ func (a *AdditionExpression) parse(r *rParser) error {
 	}
 
 	if a.AdditionType != AdditionNone {
-		s.AcceptRunWhitespace()
-		r.Score(s)
+		a.Comments[0] = r.AcceptRunWhitespaceCommentsNoNewline()
+
+		r.AcceptRunWhitespaceNoNewLine()
+		r.Next()
+
+		a.Comments[1] = r.AcceptRunWhitespaceComments()
+
+		r.AcceptRunWhitespace()
 
 		s = r.NewGoal()
 		a.AdditionExpression = new(AdditionExpression)
