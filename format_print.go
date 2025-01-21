@@ -10,12 +10,14 @@ func (a AdditionExpression) printSource(w io.Writer, v bool) {
 	if a.AdditionType != AdditionNone && a.AdditionExpression != nil {
 		if v {
 			io.WriteString(w, " ")
+			a.Comments[0].printSource(w, v)
 		}
 
 		a.AdditionType.printSource(w, v)
 
 		if v {
 			io.WriteString(w, " ")
+			a.Comments[1].printSource(w, v)
 		}
 
 		a.AdditionExpression.printSource(w, v)
