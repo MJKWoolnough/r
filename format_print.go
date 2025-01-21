@@ -541,12 +541,14 @@ func (r RelationalExpression) printSource(w io.Writer, v bool) {
 	if r.RelationalOperator != RelationalNone && r.RelationalExpression != nil {
 		if v {
 			io.WriteString(w, " ")
+			r.Comments[0].printSource(w, v)
 		}
 
 		r.RelationalOperator.printSource(w, v)
 
 		if v {
 			io.WriteString(w, " ")
+			r.Comments[1].printSource(w, v)
 		}
 
 		r.RelationalExpression.printSource(w, v)
