@@ -1067,6 +1067,7 @@ type PipeOrSpecialExpression struct {
 	SequenceExpression      SequenceExpression
 	Operator                *Token
 	PipeOrSpecialExpression *PipeOrSpecialExpression
+	Comments                [2]Comments
 	Tokens                  Tokens
 }
 
@@ -1086,8 +1087,14 @@ func (p *PipeOrSpecialExpression) parse(r *rParser) error {
 	if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "|>"}) || s.Accept(TokenSpecialOperator) {
 		p.Operator = s.GetLastToken()
 
-		s.AcceptRunWhitespace()
-		r.Score(s)
+		p.Comments[0] = r.AcceptRunWhitespaceCommentsNoNewline()
+
+		r.AcceptRunWhitespaceNoNewLine()
+		r.Next()
+
+		p.Comments[1] = r.AcceptRunWhitespaceComments()
+
+		r.AcceptRunWhitespace()
 
 		s = r.NewGoal()
 		p.PipeOrSpecialExpression = new(PipeOrSpecialExpression)
