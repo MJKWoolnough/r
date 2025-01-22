@@ -6887,6 +6887,60 @@ func TestPipeOrSpecialExpression(t *testing.T) {
 				Token:   tk[2],
 			}
 		}},
+		{"a|>#abc\nb", func(t *test, tk Tokens) { // 8
+			t.Output = PipeOrSpecialExpression{
+				SequenceExpression: SequenceExpression{
+					UnaryExpression: UnaryExpression{
+						ExponentiationExpression: ExponentiationExpression{
+							SubsetExpression: SubsetExpression{
+								ScopeExpression: ScopeExpression{
+									IndexOrCallExpression: IndexOrCallExpression{
+										SimpleExpression: &SimpleExpression{
+											Identifier: &tk[0],
+											Tokens:     tk[:1],
+										},
+										Tokens: tk[:1],
+									},
+									Tokens: tk[:1],
+								},
+								Tokens: tk[:1],
+							},
+							Tokens: tk[:1],
+						},
+						Tokens: tk[:1],
+					},
+					Tokens: tk[:1],
+				},
+				Operator: &tk[1],
+				PipeOrSpecialExpression: &PipeOrSpecialExpression{
+					SequenceExpression: SequenceExpression{
+						UnaryExpression: UnaryExpression{
+							ExponentiationExpression: ExponentiationExpression{
+								SubsetExpression: SubsetExpression{
+									ScopeExpression: ScopeExpression{
+										IndexOrCallExpression: IndexOrCallExpression{
+											SimpleExpression: &SimpleExpression{
+												Identifier: &tk[4],
+												Tokens:     tk[4:5],
+											},
+											Tokens: tk[4:5],
+										},
+										Tokens: tk[4:5],
+									},
+									Tokens: tk[4:5],
+								},
+								Tokens: tk[4:5],
+							},
+							Tokens: tk[4:5],
+						},
+						Tokens: tk[4:5],
+					},
+					Tokens: tk[4:5],
+				},
+				Comments: [2]Comments{nil, {tk[2]}},
+				Tokens:   tk[:5],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var pe PipeOrSpecialExpression
 
@@ -8283,6 +8337,27 @@ func TestParenthesizedExpression(t *testing.T) {
 							Identifier: &tk[7],
 							Tokens:     tk[7:8],
 						}).AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression,
+						Comments: [2]Comments{{tk[2]}, {tk[5]}},
+						Tokens:   tk[1:8],
+					}),
+					Tokens: tk[1:8],
+				},
+				Tokens: tk[:9],
+			}
+		}},
+		{"(a#abc\n|>#def\nb)", func(t *test, tk Tokens) { // 12
+			t.Output = ParenthesizedExpression{
+				Expression: Expression{
+					QueryExpression: WrapQuery(PipeOrSpecialExpression{
+						SequenceExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[1],
+							Tokens:     tk[1:2],
+						}).AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression,
+						Operator: &tk[4],
+						PipeOrSpecialExpression: &WrapQuery(&SimpleExpression{
+							Identifier: &tk[7],
+							Tokens:     tk[7:8],
+						}).AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression,
 						Comments: [2]Comments{{tk[2]}, {tk[5]}},
 						Tokens:   tk[1:8],
 					}),
