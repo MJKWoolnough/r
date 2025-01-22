@@ -6503,6 +6503,66 @@ func TestMultiplicationExpression(t *testing.T) {
 				Token:   tk[2],
 			}
 		}},
+		{"a*#abc\nb", func(t *test, tk Tokens) { // 8
+			t.Output = MultiplicationExpression{
+				PipeOrSpecialExpression: PipeOrSpecialExpression{
+					SequenceExpression: SequenceExpression{
+						UnaryExpression: UnaryExpression{
+							ExponentiationExpression: ExponentiationExpression{
+								SubsetExpression: SubsetExpression{
+									ScopeExpression: ScopeExpression{
+										IndexOrCallExpression: IndexOrCallExpression{
+											SimpleExpression: &SimpleExpression{
+												Identifier: &tk[0],
+												Tokens:     tk[:1],
+											},
+											Tokens: tk[:1],
+										},
+										Tokens: tk[:1],
+									},
+									Tokens: tk[:1],
+								},
+								Tokens: tk[:1],
+							},
+							Tokens: tk[:1],
+						},
+						Tokens: tk[:1],
+					},
+					Tokens: tk[:1],
+				},
+				MultiplicationType: MultiplicationMultiply,
+				MultiplicationExpression: &MultiplicationExpression{
+					PipeOrSpecialExpression: PipeOrSpecialExpression{
+						SequenceExpression: SequenceExpression{
+							UnaryExpression: UnaryExpression{
+								ExponentiationExpression: ExponentiationExpression{
+									SubsetExpression: SubsetExpression{
+										ScopeExpression: ScopeExpression{
+											IndexOrCallExpression: IndexOrCallExpression{
+												SimpleExpression: &SimpleExpression{
+													Identifier: &tk[4],
+													Tokens:     tk[4:5],
+												},
+												Tokens: tk[4:5],
+											},
+											Tokens: tk[4:5],
+										},
+										Tokens: tk[4:5],
+									},
+									Tokens: tk[4:5],
+								},
+								Tokens: tk[4:5],
+							},
+							Tokens: tk[4:5],
+						},
+						Tokens: tk[4:5],
+					},
+					Tokens: tk[4:5],
+				},
+				Comments: [2]Comments{nil, {tk[2]}},
+				Tokens:   tk[:5],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var me MultiplicationExpression
 
@@ -8202,6 +8262,27 @@ func TestParenthesizedExpression(t *testing.T) {
 							Identifier: &tk[7],
 							Tokens:     tk[7:8],
 						}).AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression,
+						Comments: [2]Comments{{tk[2]}, {tk[5]}},
+						Tokens:   tk[1:8],
+					}),
+					Tokens: tk[1:8],
+				},
+				Tokens: tk[:9],
+			}
+		}},
+		{"(a#abc\n*#def\nb)", func(t *test, tk Tokens) { // 11
+			t.Output = ParenthesizedExpression{
+				Expression: Expression{
+					QueryExpression: WrapQuery(MultiplicationExpression{
+						PipeOrSpecialExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[1],
+							Tokens:     tk[1:2],
+						}).AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression,
+						MultiplicationType: MultiplicationMultiply,
+						MultiplicationExpression: &WrapQuery(&SimpleExpression{
+							Identifier: &tk[7],
+							Tokens:     tk[7:8],
+						}).AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression,
 						Comments: [2]Comments{{tk[2]}, {tk[5]}},
 						Tokens:   tk[1:8],
 					}),
