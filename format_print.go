@@ -435,12 +435,14 @@ func (m MultiplicationExpression) printSource(w io.Writer, v bool) {
 	if m.MultiplicationType != MultiplicationNone && m.MultiplicationExpression != nil {
 		if v {
 			io.WriteString(w, " ")
+			m.Comments[0].printSource(w, v)
 		}
 
 		m.MultiplicationType.printSource(w, v)
 
 		if v {
 			io.WriteString(w, " ")
+			m.Comments[1].printSource(w, v)
 		}
 
 		m.MultiplicationExpression.printSource(w, v)
