@@ -499,12 +499,14 @@ func (p PipeOrSpecialExpression) printSource(w io.Writer, v bool) {
 	if p.Operator != nil && p.PipeOrSpecialExpression != nil {
 		if v {
 			io.WriteString(w, " ")
+			p.Comments[0].printSource(w, v)
 		}
 
 		io.WriteString(w, p.Operator.Data)
 
 		if v {
 			io.WriteString(w, " ")
+			p.Comments[1].printSource(w, v)
 		}
 
 		p.PipeOrSpecialExpression.printSource(w, v)
