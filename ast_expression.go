@@ -1011,6 +1011,7 @@ type MultiplicationExpression struct {
 	PipeOrSpecialExpression  PipeOrSpecialExpression
 	MultiplicationType       MultiplicationType
 	MultiplicationExpression *MultiplicationExpression
+	Comments                 [2]Comments
 	Tokens                   Tokens
 }
 
@@ -1036,8 +1037,14 @@ func (m *MultiplicationExpression) parse(r *rParser) error {
 	}
 
 	if m.MultiplicationType != MultiplicationNone {
-		s.AcceptRunWhitespace()
-		r.Score(s)
+		m.Comments[0] = r.AcceptRunWhitespaceCommentsNoNewline()
+
+		r.AcceptRunWhitespaceNoNewLine()
+		r.Next()
+
+		m.Comments[1] = r.AcceptRunWhitespaceComments()
+
+		r.AcceptRunWhitespace()
 
 		s = r.NewGoal()
 		m.MultiplicationExpression = new(MultiplicationExpression)
