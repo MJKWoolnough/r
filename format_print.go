@@ -624,12 +624,17 @@ func (s SubsetExpression) printSource(w io.Writer, v bool) {
 }
 
 func (u UnaryExpression) printSource(w io.Writer, v bool) {
-	for _, t := range u.UnaryType {
+	for n, t := range u.UnaryType {
 		switch t {
 		case UnaryAdd:
 			io.WriteString(w, "+")
 		case UnaryMinus:
 			io.WriteString(w, "-")
+		}
+
+		if v && len(u.Comments) > n && len(u.Comments[n]) > 0 {
+			io.WriteString(w, " ")
+			u.Comments[n].printSource(w, v)
 		}
 	}
 
