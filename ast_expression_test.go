@@ -7134,6 +7134,53 @@ func TestSequenceExpression(t *testing.T) {
 				Token:   tk[2],
 			}
 		}},
+		{"a:#abc\nb", func(t *test, tk Tokens) { // 6
+			t.Output = SequenceExpression{
+				UnaryExpression: UnaryExpression{
+					ExponentiationExpression: ExponentiationExpression{
+						SubsetExpression: SubsetExpression{
+							ScopeExpression: ScopeExpression{
+								IndexOrCallExpression: IndexOrCallExpression{
+									SimpleExpression: &SimpleExpression{
+										Identifier: &tk[0],
+										Tokens:     tk[:1],
+									},
+									Tokens: tk[:1],
+								},
+								Tokens: tk[:1],
+							},
+							Tokens: tk[:1],
+						},
+						Tokens: tk[:1],
+					},
+					Tokens: tk[:1],
+				},
+				SequenceExpression: &SequenceExpression{
+					UnaryExpression: UnaryExpression{
+						ExponentiationExpression: ExponentiationExpression{
+							SubsetExpression: SubsetExpression{
+								ScopeExpression: ScopeExpression{
+									IndexOrCallExpression: IndexOrCallExpression{
+										SimpleExpression: &SimpleExpression{
+											Identifier: &tk[4],
+											Tokens:     tk[4:5],
+										},
+										Tokens: tk[4:5],
+									},
+									Tokens: tk[4:5],
+								},
+								Tokens: tk[4:5],
+							},
+							Tokens: tk[4:5],
+						},
+						Tokens: tk[4:5],
+					},
+					Tokens: tk[4:5],
+				},
+				Comments: [2]Comments{nil, {tk[2]}},
+				Tokens:   tk[:5],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var se SequenceExpression
 
@@ -8358,6 +8405,26 @@ func TestParenthesizedExpression(t *testing.T) {
 							Identifier: &tk[7],
 							Tokens:     tk[7:8],
 						}).AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression,
+						Comments: [2]Comments{{tk[2]}, {tk[5]}},
+						Tokens:   tk[1:8],
+					}),
+					Tokens: tk[1:8],
+				},
+				Tokens: tk[:9],
+			}
+		}},
+		{"(a#abc\n:#def\nb)", func(t *test, tk Tokens) { // 13
+			t.Output = ParenthesizedExpression{
+				Expression: Expression{
+					QueryExpression: WrapQuery(SequenceExpression{
+						UnaryExpression: WrapQuery(&SimpleExpression{
+							Identifier: &tk[1],
+							Tokens:     tk[1:2],
+						}).AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression,
+						SequenceExpression: &WrapQuery(&SimpleExpression{
+							Identifier: &tk[7],
+							Tokens:     tk[7:8],
+						}).AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression,
 						Comments: [2]Comments{{tk[2]}, {tk[5]}},
 						Tokens:   tk[1:8],
 					}),
