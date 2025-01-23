@@ -1115,6 +1115,7 @@ func (p *PipeOrSpecialExpression) parse(r *rParser) error {
 type SequenceExpression struct {
 	UnaryExpression    UnaryExpression
 	SequenceExpression *SequenceExpression
+	Comments           [2]Comments
 	Tokens             Tokens
 }
 
@@ -1132,8 +1133,14 @@ func (se *SequenceExpression) parse(r *rParser) error {
 	s.AcceptRunWhitespaceNoNewLine()
 
 	if s.AcceptToken(parser.Token{Type: TokenOperator, Data: ":"}) {
-		s.AcceptRunWhitespace()
-		r.Score(s)
+		se.Comments[0] = r.AcceptRunWhitespaceComments()
+
+		r.AcceptRunWhitespace()
+		r.Next()
+
+		se.Comments[1] = r.AcceptRunWhitespaceComments()
+
+		r.AcceptRunWhitespace()
 
 		s = r.NewGoal()
 		se.SequenceExpression = new(SequenceExpression)
