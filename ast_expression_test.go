@@ -7234,7 +7234,8 @@ func TestUnaryExpression(t *testing.T) {
 					},
 					Tokens: tk[1:2],
 				},
-				Tokens: tk[:2],
+				Comments: []Comments{nil},
+				Tokens:   tk[:2],
 			}
 		}},
 		{"-a", func(t *test, tk Tokens) { // 3
@@ -7258,7 +7259,8 @@ func TestUnaryExpression(t *testing.T) {
 					},
 					Tokens: tk[1:2],
 				},
-				Tokens: tk[:2],
+				Comments: []Comments{nil},
+				Tokens:   tk[:2],
 			}
 		}},
 		{"+ a", func(t *test, tk Tokens) { // 4
@@ -7282,7 +7284,8 @@ func TestUnaryExpression(t *testing.T) {
 					},
 					Tokens: tk[2:3],
 				},
-				Tokens: tk[:3],
+				Comments: []Comments{nil},
+				Tokens:   tk[:3],
 			}
 		}},
 		{"+- + a", func(t *test, tk Tokens) { // 5
@@ -7308,7 +7311,8 @@ func TestUnaryExpression(t *testing.T) {
 					},
 					Tokens: tk[5:6],
 				},
-				Tokens: tk[:6],
+				Comments: []Comments{nil, nil, nil},
+				Tokens:   tk[:6],
 			}
 		}},
 		{"in", func(t *test, tk Tokens) { // 6
@@ -7336,6 +7340,57 @@ func TestUnaryExpression(t *testing.T) {
 				},
 				Parsing: "UnaryExpression",
 				Token:   tk[0],
+			}
+		}},
+		{"+#abc\na", func(t *test, tk Tokens) { // 7
+			t.Output = UnaryExpression{
+				UnaryType: []UnaryType{
+					UnaryAdd,
+				},
+				ExponentiationExpression: ExponentiationExpression{
+					SubsetExpression: SubsetExpression{
+						ScopeExpression: ScopeExpression{
+							IndexOrCallExpression: IndexOrCallExpression{
+								SimpleExpression: &SimpleExpression{
+									Identifier: &tk[3],
+									Tokens:     tk[3:4],
+								},
+								Tokens: tk[3:4],
+							},
+							Tokens: tk[3:4],
+						},
+						Tokens: tk[3:4],
+					},
+					Tokens: tk[3:4],
+				},
+				Comments: []Comments{{tk[1]}},
+				Tokens:   tk[:4],
+			}
+		}},
+		{"+#abc\n-#def\na", func(t *test, tk Tokens) { // 8
+			t.Output = UnaryExpression{
+				UnaryType: []UnaryType{
+					UnaryAdd,
+					UnaryMinus,
+				},
+				ExponentiationExpression: ExponentiationExpression{
+					SubsetExpression: SubsetExpression{
+						ScopeExpression: ScopeExpression{
+							IndexOrCallExpression: IndexOrCallExpression{
+								SimpleExpression: &SimpleExpression{
+									Identifier: &tk[6],
+									Tokens:     tk[6:7],
+								},
+								Tokens: tk[6:7],
+							},
+							Tokens: tk[6:7],
+						},
+						Tokens: tk[6:7],
+					},
+					Tokens: tk[6:7],
+				},
+				Comments: []Comments{{tk[1]}, {tk[4]}},
+				Tokens:   tk[:7],
 			}
 		}},
 	}, func(t *test) (Type, error) {
