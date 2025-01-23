@@ -1169,6 +1169,7 @@ const (
 type UnaryExpression struct {
 	UnaryType                []UnaryType
 	ExponentiationExpression ExponentiationExpression
+	Comments                 []Comments
 	Tokens                   Tokens
 }
 
@@ -1176,9 +1177,13 @@ func (u *UnaryExpression) parse(r *rParser) error {
 	for {
 		if r.AcceptToken(parser.Token{Type: TokenOperator, Data: "+"}) {
 			u.UnaryType = append(u.UnaryType, UnaryAdd)
+			u.Comments = append(u.Comments, r.AcceptRunWhitespaceComments())
+
 			r.AcceptRunWhitespace()
 		} else if r.AcceptToken(parser.Token{Type: TokenOperator, Data: "-"}) {
 			u.UnaryType = append(u.UnaryType, UnaryMinus)
+			u.Comments = append(u.Comments, r.AcceptRunWhitespaceComments())
+
 			r.AcceptRunWhitespace()
 		} else {
 			break
