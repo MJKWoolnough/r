@@ -974,6 +974,23 @@ func (f *UnaryExpression) printType(w io.Writer, v bool) {
 	pp.Print("\nExponentiationExpression: ")
 	f.ExponentiationExpression.printType(&pp, v)
 
+	if f.Comments == nil {
+		pp.Print("\nComments: nil")
+	} else if len(f.Comments) > 0 {
+		pp.Print("\nComments: [")
+
+		ipp := indentPrinter{&pp}
+
+		for n, e := range f.Comments {
+			ipp.Printf("\n%d: ", n)
+			e.printType(&ipp, v)
+		}
+
+		pp.Print("\n]")
+	} else if v {
+		pp.Print("\nComments: []")
+	}
+
 	pp.Print("\nTokens: ")
 	f.Tokens.printType(&pp, v)
 
