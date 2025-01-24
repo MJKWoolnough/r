@@ -624,10 +624,20 @@ func (s SubsetExpression) printSource(w io.Writer, v bool) {
 	s.ScopeExpression.printSource(w, v)
 
 	if s.SubsetExpression != nil && s.SubsetType != SubsetNone {
+		if v && len(s.Comments[0]) > 0 {
+			io.WriteString(w, " ")
+			s.Comments[0].printSource(w, v)
+		}
+
 		if s.SubsetType == SubsetList {
 			io.WriteString(w, "$")
 		} else {
 			io.WriteString(w, "@")
+		}
+
+		if v && len(s.Comments[1]) > 0 {
+			io.WriteString(w, " ")
+			s.Comments[1].printSource(w, v)
 		}
 
 		s.SubsetExpression.printSource(w, v)
