@@ -1207,6 +1207,7 @@ func (u *UnaryExpression) parse(r *rParser) error {
 type ExponentiationExpression struct {
 	SubsetExpression         SubsetExpression
 	ExponentiationExpression *ExponentiationExpression
+	Comments                 [2]Comments
 	Tokens                   Tokens
 }
 
@@ -1224,8 +1225,14 @@ func (e *ExponentiationExpression) parse(r *rParser) error {
 	s.AcceptRunWhitespaceNoNewLine()
 
 	if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "^"}) {
-		s.AcceptRunWhitespace()
-		r.Score(s)
+		e.Comments[0] = r.AcceptRunWhitespaceComments()
+
+		r.AcceptRunWhitespace()
+		r.Next()
+
+		e.Comments[1] = r.AcceptRunWhitespaceComments()
+
+		r.AcceptRunWhitespace()
 
 		s = r.NewGoal()
 		e.ExponentiationExpression = new(ExponentiationExpression)
