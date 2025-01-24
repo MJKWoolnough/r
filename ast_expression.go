@@ -1263,6 +1263,7 @@ type SubsetExpression struct {
 	ScopeExpression  ScopeExpression
 	SubsetType       SubsetType
 	SubsetExpression *SubsetExpression
+	Comments         [2]Comments
 	Tokens           Tokens
 }
 
@@ -1286,8 +1287,14 @@ func (se *SubsetExpression) parse(r *rParser) error {
 	}
 
 	if se.SubsetType != SubsetNone {
-		s.AcceptRunWhitespace()
-		r.Score(s)
+		se.Comments[0] = r.AcceptRunWhitespaceComments()
+
+		r.AcceptRunWhitespace()
+		r.Next()
+
+		se.Comments[1] = r.AcceptRunWhitespaceComments()
+
+		r.AcceptRunWhitespace()
 
 		s = r.NewGoal()
 		se.SubsetExpression = new(SubsetExpression)
