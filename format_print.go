@@ -197,7 +197,18 @@ func (e ExponentiationExpression) printSource(w io.Writer, v bool) {
 	e.SubsetExpression.printSource(w, v)
 
 	if e.ExponentiationExpression != nil {
+		if v && len(e.Comments[0]) > 0 {
+			io.WriteString(w, " ")
+			e.Comments[0].printSource(w, v)
+		}
+
 		io.WriteString(w, "^")
+
+		if v && len(e.Comments[1]) > 0 {
+			io.WriteString(w, " ")
+			e.Comments[1].printSource(w, v)
+		}
+
 		e.ExponentiationExpression.printSource(w, v)
 	}
 }
