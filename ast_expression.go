@@ -1364,6 +1364,7 @@ type IndexOrCallExpression struct {
 	IndexOrCallExpression *IndexOrCallExpression
 	Index                 *Index
 	Call                  *Call
+	Comments              Comments
 	Tokens                Tokens
 }
 
@@ -1382,13 +1383,16 @@ Loop:
 		i.Tokens = r.ToTokens()
 		s = r.NewGoal()
 
-		s.AcceptRunWhitespaceNoNewLine()
-
 		var (
-			index *Index
-			call  *Call
-			err   error
+			index    *Index
+			comments Comments
+			call     *Call
+			err      error
 		)
+
+		comments = s.AcceptRunWhitespaceCommentsNoNewline()
+
+		s.AcceptRunWhitespaceNoNewLine()
 
 		switch s.Peek() {
 		case parser.Token{Type: TokenGrouping, Data: "["}, parser.Token{Type: TokenGrouping, Data: "[["}:
@@ -1420,6 +1424,7 @@ Loop:
 			IndexOrCallExpression: j,
 			Index:                 index,
 			Call:                  call,
+			Comments:              comments,
 		}
 	}
 
