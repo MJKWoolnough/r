@@ -581,7 +581,18 @@ func (s ScopeExpression) printSource(w io.Writer, v bool) {
 	s.IndexOrCallExpression.printSource(w, v)
 
 	if s.ScopeExpression != nil {
+		if v && len(s.Comments[0]) > 0 {
+			io.WriteString(w, " ")
+			s.Comments[0].printSource(w, v)
+		}
+
 		io.WriteString(w, "::")
+
+		if v && len(s.Comments[1]) > 0 {
+			io.WriteString(w, " ")
+			s.Comments[1].printSource(w, v)
+		}
+
 		s.ScopeExpression.printSource(w, v)
 	}
 }
