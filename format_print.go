@@ -432,6 +432,11 @@ func (i IndexOrCallExpression) printSource(w io.Writer, v bool) {
 	} else if i.IndexOrCallExpression != nil {
 		i.IndexOrCallExpression.printSource(w, v)
 
+		if v && len(i.Comments) > 0 {
+			io.WriteString(w, " ")
+			i.Comments.printSource(w, v)
+		}
+
 		if i.Index != nil {
 			i.Index.printSource(w, v)
 		} else if i.Call != nil {
