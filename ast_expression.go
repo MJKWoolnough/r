@@ -1315,6 +1315,7 @@ func (se *SubsetExpression) parse(r *rParser) error {
 type ScopeExpression struct {
 	IndexOrCallExpression IndexOrCallExpression
 	ScopeExpression       *ScopeExpression
+	Comments              [2]Comments
 	Tokens                Tokens
 }
 
@@ -1332,8 +1333,14 @@ func (se *ScopeExpression) parse(r *rParser) error {
 	s.AcceptRunWhitespaceNoNewLine()
 
 	if s.AcceptToken(parser.Token{Type: TokenOperator, Data: "::"}) {
-		s.AcceptRunWhitespace()
-		r.Score(s)
+		se.Comments[0] = r.AcceptRunWhitespaceComments()
+
+		r.AcceptRunWhitespace()
+		r.Next()
+
+		se.Comments[1] = r.AcceptRunWhitespaceComments()
+
+		r.AcceptRunWhitespace()
 
 		s = r.NewGoal()
 		se.ScopeExpression = new(ScopeExpression)
