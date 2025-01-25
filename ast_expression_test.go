@@ -8158,6 +8158,15 @@ func TestIndexOrCallExpression(t *testing.T) {
 				Token:   tk[1],
 			}
 		}},
+		{"a#abv\n[b]", func(t *test, tk Tokens) { // 10
+			t.Output = IndexOrCallExpression{
+				SimpleExpression: &SimpleExpression{
+					Identifier: &tk[0],
+					Tokens:     tk[:1],
+				},
+				Tokens: tk[:1],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var ice IndexOrCallExpression
 
@@ -8635,6 +8644,34 @@ func TestParenthesizedExpression(t *testing.T) {
 					Tokens: tk[1:8],
 				},
 				Tokens: tk[:9],
+			}
+		}},
+		{"(a#abc\n[b])", func(t *test, tk Tokens) { // 17
+			t.Output = ParenthesizedExpression{
+				Expression: Expression{
+					QueryExpression: WrapQuery(&IndexOrCallExpression{
+						IndexOrCallExpression: &IndexOrCallExpression{
+							SimpleExpression: &SimpleExpression{
+								Identifier: &tk[1],
+								Tokens:     tk[1:2],
+							},
+							Tokens: tk[1:2],
+						},
+						Index: &Index{
+							Args: []QueryExpression{
+								*WrapQuery(&SimpleExpression{
+									Identifier: &tk[5],
+									Tokens:     tk[5:6],
+								}),
+							},
+							Tokens: tk[4:7],
+						},
+						Comments: Comments{tk[2]},
+						Tokens:   tk[1:7],
+					}),
+					Tokens: tk[1:7],
+				},
+				Tokens: tk[:8],
 			}
 		}},
 	}, func(t *test) (Type, error) {
