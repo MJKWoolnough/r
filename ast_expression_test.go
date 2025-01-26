@@ -8873,6 +8873,17 @@ func TestIndexExpression(t *testing.T) {
 				Tokens: tk[:1],
 			}
 		}},
+		{"in", func(t *test, tk Tokens) { // 2
+			t.Err = Error{
+				Err: wrapQueryExpressionError(Error{
+					Err:     ErrInvalidSimpleExpression,
+					Parsing: "SimpleExpression",
+					Token:   tk[0],
+				}),
+				Parsing: "IndexExpression",
+				Token:   tk[0],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var i IndexExpression
 
