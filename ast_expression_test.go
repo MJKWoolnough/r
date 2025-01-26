@@ -8862,6 +8862,26 @@ func TestIndex(t *testing.T) {
 	})
 }
 
+func TestIndexExpression(t *testing.T) {
+	doTests(t, []sourceFn{
+		{"a", func(t *test, tk Tokens) { // 1
+			t.Output = IndexExpression{
+				QueryExpression: *WrapQuery(&SimpleExpression{
+					Identifier: &tk[0],
+					Tokens:     tk[:1],
+				}),
+				Tokens: tk[:1],
+			}
+		}},
+	}, func(t *test) (Type, error) {
+		var i IndexExpression
+
+		err := i.parse(&t.Tokens)
+
+		return i, err
+	})
+}
+
 func TestCall(t *testing.T) {
 	doTests(t, []sourceFn{
 		{"()", func(t *test, tk Tokens) { // 1
