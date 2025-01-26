@@ -427,7 +427,16 @@ func (i Index) printSource(w io.Writer, v bool) {
 }
 
 func (i IndexExpression) printSource(w io.Writer, v bool) {
+	if v {
+		i.Comments[0].printSource(w, v)
+	}
+
 	i.QueryExpression.printSource(w, v)
+
+	if v && len(i.Comments[1]) > 0 {
+		io.WriteString(w, " ")
+		i.Comments[1].printSource(w, v)
+	}
 }
 
 func (i IndexOrCallExpression) printSource(w io.Writer, v bool) {
