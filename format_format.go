@@ -209,6 +209,18 @@ func (f Index) Format(s fmt.State, v rune) {
 }
 
 // Format implements the fmt.Formatter interface
+func (f IndexExpression) Format(s fmt.State, v rune) {
+	if v == 'v' && s.Flag('#') {
+		type X = IndexExpression
+		type IndexExpression X
+
+		fmt.Fprintf(s, "%#v", IndexExpression(f))
+	} else {
+		format(&f, s, v)
+	}
+}
+
+// Format implements the fmt.Formatter interface
 func (f IndexOrCallExpression) Format(s fmt.State, v rune) {
 	if v == 'v' && s.Flag('#') {
 		type X = IndexOrCallExpression

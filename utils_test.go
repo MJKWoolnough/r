@@ -1167,11 +1167,14 @@ func TestUnwrapQuery(t *testing.T) {
 				},
 			},
 			Index: &Index{
-				Args: []QueryExpression{
-					*WrapQuery(&SimpleExpression{
-						Identifier: identB,
-						Tokens:     tks[1:2],
-					}),
+				Args: []IndexExpression{
+					{
+						QueryExpression: *WrapQuery(&SimpleExpression{
+							Identifier: identB,
+							Tokens:     tks[1:2],
+						}),
+						Tokens: tks[1:2],
+					},
 				},
 				Tokens: tks[1:2],
 			},

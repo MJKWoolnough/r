@@ -46,6 +46,8 @@ func (IfControl) rType() {}
 
 func (Index) rType() {}
 
+func (IndexExpression) rType() {}
+
 func (IndexOrCallExpression) rType() {}
 
 func (MultiplicationExpression) rType() {}

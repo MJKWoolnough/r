@@ -560,6 +560,20 @@ func (f *Index) printType(w io.Writer, v bool) {
 	io.WriteString(w, "\n}")
 }
 
+func (f *IndexExpression) printType(w io.Writer, v bool) {
+	pp := indentPrinter{w}
+
+	pp.Print("IndexExpression {")
+
+	pp.Print("\nQueryExpression: ")
+	f.QueryExpression.printType(&pp, v)
+
+	pp.Print("\nTokens: ")
+	f.Tokens.printType(&pp, v)
+
+	io.WriteString(w, "\n}")
+}
+
 func (f *IndexOrCallExpression) printType(w io.Writer, v bool) {
 	pp := indentPrinter{w}
 

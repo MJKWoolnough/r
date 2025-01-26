@@ -1506,7 +1506,7 @@ func (p *ParenthesizedExpression) parse(r *rParser) error {
 // Index represents either a single or double bracketed indexing operation.
 type Index struct {
 	Double bool
-	Args   []QueryExpression
+	Args   []IndexExpression
 	Tokens Tokens
 }
 
@@ -1523,7 +1523,7 @@ func (i *Index) parse(r *rParser) error {
 		for {
 			s := r.NewGoal()
 
-			var h QueryExpression
+			var h IndexExpression
 
 			if err := h.parse(&s); err != nil {
 				return r.Error("Index", err)
@@ -1549,6 +1549,25 @@ func (i *Index) parse(r *rParser) error {
 			r.AcceptRunWhitespace()
 		}
 	}
+
+	i.Tokens = r.ToTokens()
+
+	return nil
+}
+
+type IndexExpression struct {
+	QueryExpression QueryExpression
+	Tokens
+}
+
+func (i *IndexExpression) parse(r *rParser) error {
+	s := r.NewGoal()
+
+	if err := i.QueryExpression.parse(&s); err != nil {
+		return r.Error("IndexExpression", err)
+	}
+
+	r.Score(s)
 
 	i.Tokens = r.ToTokens()
 

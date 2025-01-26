@@ -426,6 +426,10 @@ func (i Index) printSource(w io.Writer, v bool) {
 	}
 }
 
+func (i IndexExpression) printSource(w io.Writer, v bool) {
+	i.QueryExpression.printSource(w, v)
+}
+
 func (i IndexOrCallExpression) printSource(w io.Writer, v bool) {
 	if i.SimpleExpression != nil {
 		i.SimpleExpression.printSource(w, v)
