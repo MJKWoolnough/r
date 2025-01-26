@@ -620,6 +620,11 @@ func TestPrintSource(t *testing.T) {
 			"(a[b])\n",
 			"(a #abc\n[b])\n",
 		},
+		{ // 123
+			"a[ #abc\n#def\nb #ghi\n\n#jkl\n, c #mno\n]",
+			"a[b,c]\n",
+			"a[#abc\n#def\nb #ghi\n\n#jkl\n, c #mno\n]\n",
+		},
 	} {
 		for m, input := range test {
 			tk := parser.NewStringTokeniser(input)
