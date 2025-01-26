@@ -8853,6 +8853,44 @@ func TestIndex(t *testing.T) {
 				Token:   tk[3],
 			}
 		}},
+		{"[#abc\na#def\n]", func(t *test, tk Tokens) { // 12
+			t.Output = Index{
+				Args: []IndexExpression{
+					{
+						QueryExpression: *WrapQuery(&SimpleExpression{
+							Identifier: &tk[3],
+							Tokens:     tk[3:4],
+						}),
+						Comments: [2]Comments{{tk[1]}, {tk[4]}},
+						Tokens:   tk[1:5],
+					},
+				},
+				Tokens: tk[:7],
+			}
+		}},
+		{"[ #abc\na #def\n , #ghi\n\n#jkl\nb\n#mno\n]", func(t *test, tk Tokens) { // 13
+			t.Output = Index{
+				Args: []IndexExpression{
+					{
+						QueryExpression: *WrapQuery(&SimpleExpression{
+							Identifier: &tk[4],
+							Tokens:     tk[4:5],
+						}),
+						Comments: [2]Comments{{tk[2]}, {tk[6]}},
+						Tokens:   tk[2:7],
+					},
+					{
+						QueryExpression: *WrapQuery(&SimpleExpression{
+							Identifier: &tk[16],
+							Tokens:     tk[16:17],
+						}),
+						Comments: [2]Comments{{tk[11], tk[14]}, {tk[18]}},
+						Tokens:   tk[11:19],
+					},
+				},
+				Tokens: tk[:21],
+			}
+		}},
 	}, func(t *test) (Type, error) {
 		var i Index
 
@@ -8882,6 +8920,16 @@ func TestIndexExpression(t *testing.T) {
 				}),
 				Parsing: "IndexExpression",
 				Token:   tk[0],
+			}
+		}},
+		{"#abc\na#def", func(t *test, tk Tokens) { // 3
+			t.Output = IndexExpression{
+				QueryExpression: *WrapQuery(&SimpleExpression{
+					Identifier: &tk[2],
+					Tokens:     tk[2:3],
+				}),
+				Comments: [2]Comments{{tk[0]}, {tk[3]}},
+				Tokens:   tk[:4],
 			}
 		}},
 	}, func(t *test) (Type, error) {
