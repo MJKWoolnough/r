@@ -1517,11 +1517,16 @@ func (i *Index) parse(r *rParser) error {
 		r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "["})
 	}
 
-	r.AcceptRunWhitespace()
+	s := r.NewGoal()
+	s.AcceptRunWhitespace()
 
-	if i.Double || !r.AcceptToken(parser.Token{Type: TokenGrouping, Data: "]"}) {
+	if !i.Double && s.AcceptToken(parser.Token{Type: TokenGrouping, Data: "]"}) {
+		r.Score(s)
+	} else {
 		for {
-			s := r.NewGoal()
+			r.AcceptRunWhitespaceNoComment()
+
+			s = r.NewGoal()
 
 			var h IndexExpression
 
@@ -1532,6 +1537,7 @@ func (i *Index) parse(r *rParser) error {
 			i.Args = append(i.Args, h)
 
 			r.Score(s)
+
 			r.AcceptRunWhitespace()
 
 			if i.Double {
@@ -1545,8 +1551,6 @@ func (i *Index) parse(r *rParser) error {
 			} else if !r.AcceptToken(parser.Token{Type: TokenExpressionTerminator, Data: ","}) {
 				return r.Error("Index", ErrMissingComma)
 			}
-
-			r.AcceptRunWhitespace()
 		}
 	}
 
@@ -1557,10 +1561,15 @@ func (i *Index) parse(r *rParser) error {
 
 type IndexExpression struct {
 	QueryExpression QueryExpression
+	Comments        [2]Comments
 	Tokens
 }
 
 func (i *IndexExpression) parse(r *rParser) error {
+	i.Comments[0] = r.AcceptRunWhitespaceComments()
+
+	r.AcceptRunWhitespace()
+
 	s := r.NewGoal()
 
 	if err := i.QueryExpression.parse(&s); err != nil {
@@ -1569,6 +1578,7 @@ func (i *IndexExpression) parse(r *rParser) error {
 
 	r.Score(s)
 
+	i.Comments[1] = r.AcceptRunWhitespaceComments()
 	i.Tokens = r.ToTokens()
 
 	return nil
