@@ -1559,6 +1559,7 @@ func (i *Index) parse(r *rParser) error {
 	return nil
 }
 
+// IndexExpression represents a single expression within an Index.
 type IndexExpression struct {
 	QueryExpression QueryExpression
 	Comments        [2]Comments
