@@ -65,6 +65,7 @@ type AdditionExpression struct {
 	MultiplicationExpression MultiplicationExpression
 	AdditionType             AdditionType
 	AdditionExpression       *AdditionExpression
+	Comments                 [2]Comments
 	Tokens                   Tokens
 }
 ```
@@ -108,6 +109,7 @@ type AndExpression struct {
 	NotExpression NotExpression
 	AndType       AndType
 	AndExpression *AndExpression
+	Comments      [2]Comments
 	Tokens        Tokens
 }
 ```
@@ -327,6 +329,7 @@ Unwrap returns the wrapped error.
 type ExponentiationExpression struct {
 	SubsetExpression         SubsetExpression
 	ExponentiationExpression *ExponentiationExpression
+	Comments                 [2]Comments
 	Tokens                   Tokens
 }
 ```
@@ -436,6 +439,7 @@ Format implements the fmt.Formatter interface
 type FormulaeExpression struct {
 	OrExpression       *OrExpression
 	FormulaeExpression *FormulaeExpression
+	Comments           Comments
 	Tokens             Tokens
 }
 ```
@@ -495,7 +499,7 @@ Format implements the fmt.Formatter interface
 ```go
 type Index struct {
 	Double bool
-	Args   []QueryExpression
+	Args   []IndexExpression
 	Tokens Tokens
 }
 ```
@@ -509,6 +513,25 @@ func (f Index) Format(s fmt.State, v rune)
 ```
 Format implements the fmt.Formatter interface
 
+#### type IndexExpression
+
+```go
+type IndexExpression struct {
+	QueryExpression QueryExpression
+	Comments        [2]Comments
+	Tokens
+}
+```
+
+IndexExpression represents a single expression within an Index.
+
+#### func (IndexExpression) Format
+
+```go
+func (f IndexExpression) Format(s fmt.State, v rune)
+```
+Format implements the fmt.Formatter interface
+
 #### type IndexOrCallExpression
 
 ```go
@@ -517,6 +540,7 @@ type IndexOrCallExpression struct {
 	IndexOrCallExpression *IndexOrCallExpression
 	Index                 *Index
 	Call                  *Call
+	Comments              Comments
 	Tokens                Tokens
 }
 ```
@@ -538,6 +562,7 @@ type MultiplicationExpression struct {
 	PipeOrSpecialExpression  PipeOrSpecialExpression
 	MultiplicationType       MultiplicationType
 	MultiplicationExpression *MultiplicationExpression
+	Comments                 [2]Comments
 	Tokens                   Tokens
 }
 ```
@@ -579,6 +604,7 @@ String implements the fmt.Stringer interface.
 type NotExpression struct {
 	Nots                 uint
 	RelationalExpression RelationalExpression
+	Comments             []Comments
 	Tokens               Tokens
 }
 ```
@@ -599,6 +625,7 @@ type OrExpression struct {
 	AndExpression AndExpression
 	OrType        OrType
 	OrExpression  *OrExpression
+	Comments      [2]Comments
 	Tokens        Tokens
 }
 ```
@@ -659,6 +686,7 @@ type PipeOrSpecialExpression struct {
 	SequenceExpression      SequenceExpression
 	Operator                *Token
 	PipeOrSpecialExpression *PipeOrSpecialExpression
+	Comments                [2]Comments
 	Tokens                  Tokens
 }
 ```
@@ -787,6 +815,7 @@ type RelationalExpression struct {
 	AdditionExpression   AdditionExpression
 	RelationalOperator   RelationalOperator
 	RelationalExpression *RelationalExpression
+	Comments             [2]Comments
 	Tokens               Tokens
 }
 ```
@@ -851,6 +880,7 @@ Format implements the fmt.Formatter interface
 type ScopeExpression struct {
 	IndexOrCallExpression IndexOrCallExpression
 	ScopeExpression       *ScopeExpression
+	Comments              [2]Comments
 	Tokens                Tokens
 }
 ```
@@ -870,6 +900,7 @@ Format implements the fmt.Formatter interface
 type SequenceExpression struct {
 	UnaryExpression    UnaryExpression
 	SequenceExpression *SequenceExpression
+	Comments           [2]Comments
 	Tokens             Tokens
 }
 ```
@@ -913,6 +944,7 @@ type SubsetExpression struct {
 	ScopeExpression  ScopeExpression
 	SubsetType       SubsetType
 	SubsetExpression *SubsetExpression
+	Comments         [2]Comments
 	Tokens           Tokens
 }
 ```
@@ -997,6 +1029,7 @@ Type is an interface satisfied by all R structural types.
 type UnaryExpression struct {
 	UnaryType                []UnaryType
 	ExponentiationExpression ExponentiationExpression
+	Comments                 []Comments
 	Tokens                   Tokens
 }
 ```
