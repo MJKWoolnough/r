@@ -35,7 +35,9 @@ func Walk(t r.Type, fn Handler) error {
 	case *r.ArgList:
 		return walkArgList(t, fn)
 	case r.Argument:
+		return walkArgument(&t, fn)
 	case *r.Argument:
+		return walkArgument(t, fn)
 	case r.AssignmentExpression:
 	case *r.AssignmentExpression:
 	case r.Call:
@@ -123,7 +125,13 @@ func walkArgList(t *r.ArgList, fn Handler) error {
 	return nil
 }
 
-func walkArgument(t *r.Argument, fn Handler) error { return nil }
+func walkArgument(t *r.Argument, fn Handler) error {
+	if t.Default != nil {
+		return fn.Handle(t.Default)
+	}
+
+	return nil
+}
 
 func walkAssignmentExpression(t *r.AssignmentExpression, fn Handler) error { return nil }
 
