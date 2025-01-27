@@ -19,7 +19,9 @@ func (h HandlerFunc) Handle(t r.Type) error {
 func Walk(t r.Type, fn Handler) error {
 	switch t := t.(type) {
 	case r.AdditionExpression:
+		return walkAdditionExpression(&t, fn)
 	case *r.AdditionExpression:
+		return walkAdditionExpression(t, fn)
 	case r.AndExpression:
 	case *r.AndExpression:
 	case r.Arg:
@@ -73,7 +75,17 @@ func Walk(t r.Type, fn Handler) error {
 	return nil
 }
 
-func walkAdditionExpression(t *r.AdditionExpression, fn Handler) error { return nil }
+func walkAdditionExpression(t *r.AdditionExpression, fn Handler) error {
+	if err := fn.Handle(t.MultiplicationExpression); err != nil {
+		return err
+	}
+
+	if t.AdditionExpression != nil {
+		return fn.Handle(t.AdditionExpression)
+	}
+
+	return nil
+}
 
 func walkAndExpression(t *r.AndExpression, fn Handler) error { return nil }
 
