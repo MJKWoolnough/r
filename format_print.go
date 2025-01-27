@@ -108,11 +108,11 @@ func (a Argument) printSource(w io.Writer, v bool) {
 
 		if a.Identifier.Type == TokenIdentifier && a.Default != nil {
 			if v {
-				if v && len(a.Comments[1]) > 0 {
-					io.WriteString(w, "\n")
+				if len(a.Comments[1]) > 0 {
+					io.WriteString(w, "\n= ")
+				} else {
+					io.WriteString(w, " = ")
 				}
-
-				io.WriteString(w, " = ")
 			} else {
 				io.WriteString(w, "=")
 			}
