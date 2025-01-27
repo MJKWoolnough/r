@@ -27,7 +27,9 @@ func Walk(t r.Type, fn Handler) error {
 	case *r.AndExpression:
 		return walkAndExpression(t, fn)
 	case r.Arg:
+		return walkArg(&t, fn)
 	case *r.Arg:
+		return walkArg(t, fn)
 	case r.ArgList:
 	case *r.ArgList:
 	case r.Argument:
@@ -101,7 +103,13 @@ func walkAndExpression(t *r.AndExpression, fn Handler) error {
 	return nil
 }
 
-func walkArg(t *r.Arg, fn Handler) error { return nil }
+func walkArg(t *r.Arg, fn Handler) error {
+	if t.QueryExpression != nil {
+		return fn.Handle(t.QueryExpression)
+	}
+
+	return nil
+}
 
 func walkArgList(t *r.ArgList, fn Handler) error { return nil }
 
