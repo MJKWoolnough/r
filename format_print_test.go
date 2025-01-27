@@ -426,201 +426,206 @@ func TestPrintSource(t *testing.T) {
 			"function(#abc\n\ta #def\n\t, #ghi\n\tb #jkl\n) c\n",
 		},
 		{ // 84
+			"function (#abc\na#def\n=b)c",
+			"function(a=b)c\n",
+			"function(#abc\n\ta #def\n\t= b) c\n",
+		},
+		{ // 85
 			"function #abc\n()a",
 			"function()a\n",
 			"function #abc\n() a\n",
 		},
-		{ // 85
+		{ // 86
 			"if#abc\n(#def\na#ghi\n)#jkl\nb",
 			"if(a)b\n",
 			"if #abc\n(#def\n\ta#ghi\n) #jkl\nb\n",
 		},
-		{ // 86
+		{ // 87
 			"if#abc\n(#def\na#ghi\n)#jkl\nb#mno\n\n#pqr\nelse#stu\nc#vwx",
 			"if(a)b else c\n",
 			"if #abc\n(#def\n\ta#ghi\n) #jkl\nb #mno\n\n#pqr\nelse #stu\nc #vwx\n",
 		},
-		{ // 87
+		{ // 88
 			"while#abc\n(#def\na#ghi\n)#jkl\nb#mno",
 			"while(a)b\n",
 			"while #abc\n(#def\n\ta #ghi\n) #jkl\nb #mno\n",
 		},
-		{ // 88
+		{ // 89
 			"for#abc\n(#def\na#ghi\nin#jkl\nb#mno\n)#pqr\nc#stu",
 			"for(a in b)c\n",
 			"for #abc\n(#def\n\ta #ghi\n\tin #jkl\n\tb #mno\n) #pqr\nc #stu\n",
 		},
-		{ // 89
+		{ // 90
 			"repeat#abc\na#def",
 			"repeat a\n",
 			"repeat #abc\na #def\n",
 		},
-		{ // 90
+		{ // 91
 			"?#abc\na",
 			"?a\n",
 			"? #abc\na\n",
 		},
-		{ // 91
+		{ // 92
 			"a?#abc\nb",
 			"a?b\n",
 			"a ? #abc\nb\n",
 		},
-		{ // 92
+		{ // 93
 			"(a#abc\n?#def\nb)",
 			"(a?b)\n",
 			"(a #abc\n? #def\nb)\n",
 		},
-		{ // 93
+		{ // 94
 			"a=#abc\nb",
 			"a=b\n",
 			"a = #abc\nb\n",
 		},
-		{ // 94
+		{ // 95
 			"(a#abc\n=#def\nb)",
 			"(a=b)\n",
 			"(a #abc\n= #def\nb)\n",
 		},
-		{ // 95
+		{ // 96
 			"~#abc\na",
 			"~a\n",
 			"~ #abc\na\n",
 		},
-		{ // 96
+		{ // 97
 			"a|#abc\nb",
 			"a|b\n",
 			"a | #abc\nb\n",
 		},
-		{ // 97
+		{ // 98
 			"(a#abc\n|#def\nb)",
 			"(a|b)\n",
 			"(a #abc\n| #def\nb)\n",
 		},
-		{ // 98
+		{ // 99
 			"a&#abc\nb",
 			"a&b\n",
 			"a & #abc\nb\n",
 		},
-		{ // 99
+		{ // 100
 			"(a#abc\n&#def\nb)",
 			"(a&b)\n",
 			"(a #abc\n& #def\nb)\n",
 		},
-		{ // 100
+		{ // 101
 			"!#abc\na",
 			"!a\n",
 			"! #abc\na\n",
 		},
-		{ // 101
+		{ // 102
 			"!!#abc\na",
 			"!!a\n",
 			"!! #abc\na\n",
 		},
-		{ // 102
+		{ // 103
 			"!#abc\n!a",
 			"!!a\n",
 			"! #abc\n!a\n",
 		},
-		{ // 103
+		{ // 104
 			"!#abc\n!#def\na",
 			"!!a\n",
 			"! #abc\n! #def\na\n",
 		},
-		{ // 104
+		{ // 105
 			"a>#abc\nb",
 			"a>b\n",
 			"a > #abc\nb\n",
 		},
-		{ // 105
+		{ // 106
 			"(a#abc\n>#def\nb)",
 			"(a>b)\n",
 			"(a #abc\n> #def\nb)\n",
 		},
-		{ // 106
+		{ // 107
 			"a+#abc\nb",
 			"a+b\n",
 			"a + #abc\nb\n",
 		},
-		{ // 107
+		{ // 108
 			"(a#abc\n+#def\nb)",
 			"(a+b)\n",
 			"(a #abc\n+ #def\nb)\n",
 		},
-		{ // 108
+		{ // 109
 			"a*#abc\nb",
 			"a*b\n",
 			"a * #abc\nb\n",
 		},
-		{ // 109
+		{ // 110
 			"(a#abc\n*#def\nb)",
 			"(a*b)\n",
 			"(a #abc\n* #def\nb)\n",
 		},
-		{ // 110
+		{ // 111
 			"a|>#abc\nb",
 			"a|>b\n",
 			"a |> #abc\nb\n",
 		},
-		{ // 111
+		{ // 112
 			"(a#abc\n|>#def\nb)",
 			"(a|>b)\n",
 			"(a #abc\n|> #def\nb)\n",
 		},
-		{ // 112
+		{ // 113
 			"a:#abc\nb",
 			"a:b\n",
 			"a: #abc\nb\n",
 		},
-		{ // 113
+		{ // 114
 			"(a#abc\n:#def\nb)",
 			"(a:b)\n",
 			"(a #abc\n: #def\nb)\n",
 		},
-		{ // 114
+		{ // 115
 			"+#abc\na",
 			"+a\n",
 			"+ #abc\na\n",
 		},
-		{ // 115
+		{ // 116
 			"+#abc\n-#def\na",
 			"+-a\n",
 			"+ #abc\n- #def\na\n",
 		},
-		{ // 116
+		{ // 117
 			"a^#abc\nb",
 			"a^b\n",
 			"a^ #abc\nb\n",
 		},
-		{ // 117
+		{ // 118
 			"(a#abc\n^#def\nb)",
 			"(a^b)\n",
 			"(a #abc\n^ #def\nb)\n",
 		},
-		{ // 118
+		{ // 119
 			"a$#abc\nb",
 			"a$b\n",
 			"a$ #abc\nb\n",
 		},
-		{ // 119
+		{ // 120
 			"(a#abc\n$#def\nb)",
 			"(a$b)\n",
 			"(a #abc\n$ #def\nb)\n",
 		},
-		{ // 120
+		{ // 121
 			"a::#abc\nb",
 			"a::b\n",
 			"a:: #abc\nb\n",
 		},
-		{ // 121
+		{ // 122
 			"(a#abc\n::#def\nb)",
 			"(a::b)\n",
 			"(a #abc\n:: #def\nb)\n",
 		},
-		{ // 122
+		{ // 123
 			"(a#abc\n[b])",
 			"(a[b])\n",
 			"(a #abc\n[b])\n",
 		},
-		{ // 123
+		{ // 124
 			"a[ #abc\n#def\nb #ghi\n\n#jkl\n, c #mno\n]",
 			"a[b,c]\n",
 			"a[#abc\n#def\nb #ghi\n\n#jkl\n, c #mno\n]\n",
