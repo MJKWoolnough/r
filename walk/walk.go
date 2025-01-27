@@ -23,7 +23,9 @@ func Walk(t r.Type, fn Handler) error {
 	case *r.AdditionExpression:
 		return walkAdditionExpression(t, fn)
 	case r.AndExpression:
+		return walkAndExpression(&t, fn)
 	case *r.AndExpression:
+		return walkAndExpression(t, fn)
 	case r.Arg:
 	case *r.Arg:
 	case r.ArgList:
@@ -76,7 +78,7 @@ func Walk(t r.Type, fn Handler) error {
 }
 
 func walkAdditionExpression(t *r.AdditionExpression, fn Handler) error {
-	if err := fn.Handle(t.MultiplicationExpression); err != nil {
+	if err := fn.Handle(&t.MultiplicationExpression); err != nil {
 		return err
 	}
 
@@ -87,7 +89,17 @@ func walkAdditionExpression(t *r.AdditionExpression, fn Handler) error {
 	return nil
 }
 
-func walkAndExpression(t *r.AndExpression, fn Handler) error { return nil }
+func walkAndExpression(t *r.AndExpression, fn Handler) error {
+	if err := fn.Handle(&t.NotExpression); err != nil {
+		return err
+	}
+
+	if t.AndExpression != nil {
+		return fn.Handle(t.AndExpression)
+	}
+
+	return nil
+}
 
 func walkArg(t *r.Arg, fn Handler) error { return nil }
 
