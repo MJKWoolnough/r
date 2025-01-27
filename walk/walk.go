@@ -39,7 +39,9 @@ func Walk(t r.Type, fn Handler) error {
 	case *r.Argument:
 		return walkArgument(t, fn)
 	case r.AssignmentExpression:
+		return walkAssignmentExpression(&t, fn)
 	case *r.AssignmentExpression:
+		return walkAssignmentExpression(t, fn)
 	case r.Call:
 	case *r.Call:
 	case r.CompoundExpression:
@@ -133,7 +135,17 @@ func walkArgument(t *r.Argument, fn Handler) error {
 	return nil
 }
 
-func walkAssignmentExpression(t *r.AssignmentExpression, fn Handler) error { return nil }
+func walkAssignmentExpression(t *r.AssignmentExpression, fn Handler) error {
+	if err := fn.Handle(&t.FormulaeExpression); err != nil {
+		return err
+	}
+
+	if t.AssignmentExpression != nil {
+		return fn.Handle(t.AssignmentExpression)
+	}
+
+	return nil
+}
 
 func walkCall(t *r.Call, fn Handler) error { return nil }
 
