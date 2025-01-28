@@ -59,7 +59,9 @@ func Walk(t r.Type, fn Handler) error {
 	case *r.Expression:
 		return walkExpression(t, fn)
 	case r.File:
+		return walkFile(&t, fn)
 	case *r.File:
+		return walkFile(t, fn)
 	case r.FlowControl:
 	case *r.FlowControl:
 	case r.ForControl:
@@ -199,7 +201,15 @@ func walkExpression(t *r.Expression, fn Handler) error {
 	return nil
 }
 
-func walkFile(t *r.File, fn Handler) error { return nil }
+func walkFile(t *r.File, fn Handler) error {
+	for n := range t.Statements {
+		if err := fn.Handle(&t.Statements[n]); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
 
 func walkFlowControl(t *r.FlowControl, fn Handler) error { return nil }
 
