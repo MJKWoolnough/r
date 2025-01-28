@@ -79,7 +79,9 @@ func Walk(t r.Type, fn Handler) error {
 	case *r.FunctionDefinition:
 		return walkFunctionDefinition(t, fn)
 	case r.IfControl:
+		return walkIfControl(&t, fn)
 	case *r.IfControl:
+		return walkIfControl(t, fn)
 	case r.Index:
 	case *r.Index:
 	case r.IndexExpression:
@@ -267,7 +269,21 @@ func walkFunctionDefinition(t *r.FunctionDefinition, fn Handler) error {
 	return fn.Handle(&t.Body)
 }
 
-func walkIfControl(t *r.IfControl, fn Handler) error { return nil }
+func walkIfControl(t *r.IfControl, fn Handler) error {
+	if err := fn.Handle(&t.Cond); err != nil {
+		return err
+	}
+
+	if err := fn.Handle(&t.Expr); err != nil {
+		return err
+	}
+
+	if t.Else != nil {
+		return fn.Handle(t.Else)
+	}
+
+	return nil
+}
 
 func walkIndex(t *r.Index, fn Handler) error { return nil }
 
