@@ -67,7 +67,9 @@ func Walk(t r.Type, fn Handler) error {
 	case *r.FlowControl:
 		return walkFlowControl(t, fn)
 	case r.ForControl:
+		return walkForControl(&t, fn)
 	case *r.ForControl:
+		return walkForControl(t, fn)
 	case r.FormulaeExpression:
 	case *r.FormulaeExpression:
 	case r.FunctionDefinition:
@@ -227,7 +229,17 @@ func walkFlowControl(t *r.FlowControl, fn Handler) error {
 	return nil
 }
 
-func walkForControl(t *r.ForControl, fn Handler) error { return nil }
+func walkForControl(t *r.ForControl, fn Handler) error {
+	if err := fn.Handle(&t.List); err != nil {
+		return err
+	}
+
+	if err := fn.Handle(&t.Expr); err != nil {
+		return err
+	}
+
+	return nil
+}
 
 func walkFormulaeExpression(t *r.FormulaeExpression, fn Handler) error { return nil }
 
