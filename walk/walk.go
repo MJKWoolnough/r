@@ -55,7 +55,9 @@ func Walk(t r.Type, fn Handler) error {
 	case *r.ExponentiationExpression:
 		return walkExponentiationExpression(t, fn)
 	case r.Expression:
+		return walkExpression(&t, fn)
 	case *r.Expression:
+		return walkExpression(t, fn)
 	case r.File:
 	case *r.File:
 	case r.FlowControl:
@@ -185,7 +187,17 @@ func walkExponentiationExpression(t *r.ExponentiationExpression, fn Handler) err
 	return nil
 }
 
-func walkExpression(t *r.Expression, fn Handler) error { return nil }
+func walkExpression(t *r.Expression, fn Handler) error {
+	if t.FlowControl != nil {
+		return fn.Handle(t.FlowControl)
+	} else if t.FunctionDefinition != nil {
+		return fn.Handle(t.FunctionDefinition)
+	} else if t.QueryExpression != nil {
+		return fn.Handle(t.QueryExpression)
+	}
+
+	return nil
+}
 
 func walkFile(t *r.File, fn Handler) error { return nil }
 
