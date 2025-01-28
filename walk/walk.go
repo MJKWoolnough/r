@@ -63,7 +63,9 @@ func Walk(t r.Type, fn Handler) error {
 	case *r.File:
 		return walkFile(t, fn)
 	case r.FlowControl:
+		return walkFlowControl(&t, fn)
 	case *r.FlowControl:
+		return walkFlowControl(t, fn)
 	case r.ForControl:
 	case *r.ForControl:
 	case r.FormulaeExpression:
@@ -211,7 +213,19 @@ func walkFile(t *r.File, fn Handler) error {
 	return nil
 }
 
-func walkFlowControl(t *r.FlowControl, fn Handler) error { return nil }
+func walkFlowControl(t *r.FlowControl, fn Handler) error {
+	if t.IfControl != nil {
+		return fn.Handle(t.IfControl)
+	} else if t.WhileControl != nil {
+		return fn.Handle(t.WhileControl)
+	} else if t.RepeatControl != nil {
+		return fn.Handle(t.RepeatControl)
+	} else if t.ForControl != nil {
+		return fn.Handle(t.ForControl)
+	}
+
+	return nil
+}
 
 func walkForControl(t *r.ForControl, fn Handler) error { return nil }
 
