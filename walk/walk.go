@@ -51,7 +51,9 @@ func Walk(t r.Type, fn Handler) error {
 	case *r.CompoundExpression:
 		return walkCompoundExpression(t, fn)
 	case r.ExponentiationExpression:
+		return walkExponentiationExpression(&t, fn)
 	case *r.ExponentiationExpression:
+		return walkExponentiationExpression(t, fn)
 	case r.Expression:
 	case *r.Expression:
 	case r.File:
@@ -171,7 +173,17 @@ func walkCompoundExpression(t *r.CompoundExpression, fn Handler) error {
 	return nil
 }
 
-func walkExponentiationExpression(t *r.ExponentiationExpression, fn Handler) error { return nil }
+func walkExponentiationExpression(t *r.ExponentiationExpression, fn Handler) error {
+	if err := fn.Handle(&t.SubsetExpression); err != nil {
+		return err
+	}
+
+	if t.ExponentiationExpression != nil {
+		return fn.Handle(t.ExponentiationExpression)
+	}
+
+	return nil
+}
 
 func walkExpression(t *r.Expression, fn Handler) error { return nil }
 
