@@ -92,7 +92,9 @@ func Walk(t r.Type, fn Handler) error {
 	case *r.IndexExpression:
 		return walkIndexExpression(t, fn)
 	case r.IndexOrCallExpression:
+		return walkIndexOrCallExpression(&t, fn)
 	case *r.IndexOrCallExpression:
+		return walkIndexOrCallExpression(t, fn)
 	case r.MultiplicationExpression:
 	case *r.MultiplicationExpression:
 	case r.NotExpression:
@@ -304,7 +306,22 @@ func walkIndexExpression(t *r.IndexExpression, fn Handler) error {
 	return fn.Handle(&t.QueryExpression)
 }
 
-func walkIndexOrCallExpression(t *r.IndexOrCallExpression, fn Handler) error { return nil }
+func walkIndexOrCallExpression(t *r.IndexOrCallExpression, fn Handler) error {
+	if t.SimpleExpression != nil {
+		return fn.Handle(t.SimpleExpression)
+	} else if t.IndexOrCallExpression != nil {
+		if err := fn.Handle(t.IndexOrCallExpression); err != nil {
+			return err
+		}
+
+		if t.Index != nil {
+			return fn.Handle(t.Index)
+		} else if t.Call != nil {
+			return fn.Handle(t.Call)
+		}
+	}
+	return nil
+}
 
 func walkMultiplicationExpression(t *r.MultiplicationExpression, fn Handler) error { return nil }
 
