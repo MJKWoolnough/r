@@ -1,3 +1,4 @@
+// Package walk provides a R type walker.
 package walk
 
 import "vimagination.zapto.org/r"
