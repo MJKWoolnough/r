@@ -116,7 +116,9 @@ func Walk(t r.Type, fn Handler) error {
 	case *r.PipeOrSpecialExpression:
 		return walkPipeOrSpecialExpression(t, fn)
 	case r.QueryExpression:
+		return walkQueryExpression(&t, fn)
 	case *r.QueryExpression:
+		return walkQueryExpression(t, fn)
 	}
 
 	return nil
@@ -377,4 +379,16 @@ func walkPipeOrSpecialExpression(t *r.PipeOrSpecialExpression, fn Handler) error
 	return nil
 }
 
-func walkQueryExpression(t *r.QueryExpression, fn Handler) error { return nil }
+func walkQueryExpression(t *r.QueryExpression, fn Handler) error {
+	if t.AssignmentExpression != nil {
+		if err := fn.Handle(t.AssignmentExpression); err != nil {
+			return err
+		}
+	}
+
+	if t.QueryExpression != nil {
+		return fn.Handle(t.QueryExpression)
+	}
+
+	return nil
+}
