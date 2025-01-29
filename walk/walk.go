@@ -100,7 +100,9 @@ func Walk(t r.Type, fn Handler) error {
 	case *r.MultiplicationExpression:
 		return walkMultiplicationExpression(t, fn)
 	case r.NotExpression:
+		return walkNotExpression(&t, fn)
 	case *r.NotExpression:
+		return walkNotExpression(t, fn)
 	case r.OrExpression:
 	case *r.OrExpression:
 	case r.ParenthesizedExpression:
@@ -337,7 +339,9 @@ func walkMultiplicationExpression(t *r.MultiplicationExpression, fn Handler) err
 	return nil
 }
 
-func walkNotExpression(t *r.NotExpression, fn Handler) error { return nil }
+func walkNotExpression(t *r.NotExpression, fn Handler) error {
+	return fn.Handle(&t.RelationalExpression)
+}
 
 func walkOrExpression(t *r.OrExpression, fn Handler) error { return nil }
 
