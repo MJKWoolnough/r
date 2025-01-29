@@ -104,7 +104,9 @@ func Walk(t r.Type, fn Handler) error {
 	case *r.NotExpression:
 		return walkNotExpression(t, fn)
 	case r.OrExpression:
+		return walkOrExpression(&t, fn)
 	case *r.OrExpression:
+		return walkOrExpression(t, fn)
 	case r.ParenthesizedExpression:
 	case *r.ParenthesizedExpression:
 	case r.PipeOrSpecialExpression:
@@ -343,7 +345,17 @@ func walkNotExpression(t *r.NotExpression, fn Handler) error {
 	return fn.Handle(&t.RelationalExpression)
 }
 
-func walkOrExpression(t *r.OrExpression, fn Handler) error { return nil }
+func walkOrExpression(t *r.OrExpression, fn Handler) error {
+	if err := fn.Handle(&t.AndExpression); err != nil {
+		return err
+	}
+
+	if t.OrExpression != nil {
+		return fn.Handle(t.OrExpression)
+	}
+
+	return nil
+}
 
 func walkParenthesizedExpression(t *r.ParenthesizedExpression, fn Handler) error { return nil }
 
