@@ -112,7 +112,9 @@ func Walk(t r.Type, fn Handler) error {
 	case *r.ParenthesizedExpression:
 		return walkParenthesizedExpression(t, fn)
 	case r.PipeOrSpecialExpression:
+		return walkPipeOrSpecialExpression(&t, fn)
 	case *r.PipeOrSpecialExpression:
+		return walkPipeOrSpecialExpression(t, fn)
 	case r.QueryExpression:
 	case *r.QueryExpression:
 	}
@@ -363,6 +365,16 @@ func walkParenthesizedExpression(t *r.ParenthesizedExpression, fn Handler) error
 	return fn.Handle(&t.Expression)
 }
 
-func walkPipeOrSpecialExpression(t *r.PipeOrSpecialExpression, fn Handler) error { return nil }
+func walkPipeOrSpecialExpression(t *r.PipeOrSpecialExpression, fn Handler) error {
+	if err := fn.Handle(&t.SequenceExpression); err != nil {
+		return err
+	}
+
+	if t.PipeOrSpecialExpression != nil {
+		return fn.Handle(t.PipeOrSpecialExpression)
+	}
+
+	return nil
+}
 
 func walkQueryExpression(t *r.QueryExpression, fn Handler) error { return nil }
