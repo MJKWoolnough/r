@@ -276,6 +276,7 @@ Format implements the fmt.Formatter interface
 type Comments []Token
 ```
 
+Comments is a collection of Comment Tokens.
 
 #### type CompoundExpression
 
