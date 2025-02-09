@@ -17,6 +17,7 @@ type Tokens []Token
 
 type rParser Tokens
 
+// Comments is a collection of Comment Tokens.
 type Comments []Token
 
 // Tokeniser is an interface representing a tokeniser.
