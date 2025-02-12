@@ -1,5 +1,5 @@
 // Package r implements an R tokeniser and parser.
-package r
+package r // import "vimagination.zapto.org/r"
 
 import (
 	"vimagination.zapto.org/parser"
