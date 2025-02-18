@@ -145,7 +145,6 @@ func (r *rTokeniser) string(t *parser.Tokeniser) (parser.Token, parser.TokenFunc
 				}
 
 				if brace {
-
 					t.Accept(hexDigit)
 					t.Accept(hexDigit)
 					t.Accept(hexDigit)
