@@ -49,24 +49,24 @@ func SetTokeniser(t *parser.Tokeniser) *parser.Tokeniser {
 }
 
 type rTokeniser struct {
-	tokenDepth []byte
+	state []byte
 }
 
-func (r *rTokeniser) lastDepth() byte {
-	if len(r.tokenDepth) == 0 {
+func (r *rTokeniser) lastState() byte {
+	if len(r.state) == 0 {
 		return 0
 	}
 
-	d := r.tokenDepth[len(r.tokenDepth)-1]
+	d := r.state[len(r.state)-1]
 
-	r.tokenDepth = r.tokenDepth[:len(r.tokenDepth)-1]
+	r.state = r.state[:len(r.state)-1]
 
 	return d
 }
 
 func (r *rTokeniser) expression(t *parser.Tokeniser) (parser.Token, parser.TokenFunc) {
 	if t.Peek() == -1 {
-		if len(r.tokenDepth) != 0 {
+		if len(r.state) != 0 {
 			return t.ReturnError(io.ErrUnexpectedEOF)
 		}
 
@@ -80,7 +80,7 @@ func (r *rTokeniser) expression(t *parser.Tokeniser) (parser.Token, parser.Token
 	}
 
 	if t.Accept(lineTerminators) {
-		if len(r.tokenDepth) > 0 && r.tokenDepth[len(r.tokenDepth)-1] != '}' {
+		if len(r.state) > 0 && r.state[len(r.state)-1] != '}' {
 			return t.Return(TokenWhitespaceLineTerminator, r.expression)
 		}
 
@@ -335,22 +335,22 @@ func (r *rTokeniser) operator(t *parser.Tokeniser) (parser.Token, parser.TokenFu
 		t.Accept("|>")
 	} else if t.Accept("[") {
 		if t.Accept("[") {
-			r.tokenDepth = append(r.tokenDepth, '#')
+			r.state = append(r.state, '#')
 		} else {
-			r.tokenDepth = append(r.tokenDepth, ']')
+			r.state = append(r.state, ']')
 		}
 
 		return t.Return(TokenGrouping, r.expression)
 	} else if t.Accept("(") {
-		r.tokenDepth = append(r.tokenDepth, ')')
+		r.state = append(r.state, ')')
 
 		return t.Return(TokenGrouping, r.expression)
 	} else if t.Accept("{") {
-		r.tokenDepth = append(r.tokenDepth, '}')
+		r.state = append(r.state, '}')
 
 		return t.Return(TokenGrouping, r.expression)
 	} else if t.Accept("]") {
-		if g := r.lastDepth(); g == '#' {
+		if g := r.lastState(); g == '#' {
 			if !t.Accept("]") {
 				return t.ReturnError(ErrInvalidCharacter)
 			}
@@ -360,13 +360,13 @@ func (r *rTokeniser) operator(t *parser.Tokeniser) (parser.Token, parser.TokenFu
 
 		return t.Return(TokenGrouping, r.expression)
 	} else if t.Accept(")") {
-		if r.lastDepth() != ')' {
+		if r.lastState() != ')' {
 			return t.ReturnError(ErrInvalidCharacter)
 		}
 
 		return t.Return(TokenGrouping, r.expression)
 	} else if t.Accept("}") {
-		if r.lastDepth() != '}' {
+		if r.lastState() != '}' {
 			return t.ReturnError(ErrInvalidCharacter)
 		}
 
