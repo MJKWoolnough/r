@@ -49,7 +49,7 @@ func (e *Expression) parse(r *rParser) error {
 }
 
 // CompoundExpression represents a series of expressions, wrapped in braces,
-// and seperated by semi-colons, commas, and newlines.
+// and separated by semi-colons, commas, and newlines.
 type CompoundExpression struct {
 	Expressions []Expression
 	Comments    Comments
