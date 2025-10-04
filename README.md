@@ -289,7 +289,7 @@ type CompoundExpression struct {
 ```
 
 CompoundExpression represents a series of expressions, wrapped in braces, and
-seperated by semi-colons, commas, and newlines.
+separated by semi-colons, commas, and newlines.
 
 #### func (CompoundExpression) Format
 
