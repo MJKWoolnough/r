@@ -184,11 +184,11 @@ func (f *AssignmentExpression) printType(w io.Writer, v bool) {
 	pp.Print("\nAssignmentType: ")
 	f.AssignmentType.printType(&pp, v)
 
-	if f.AssignmentExpression != nil {
-		pp.Print("\nAssignmentExpression: ")
-		f.AssignmentExpression.printType(&pp, v)
+	if f.Expression != nil {
+		pp.Print("\nExpression: ")
+		f.Expression.printType(&pp, v)
 	} else if v {
-		pp.Print("\nAssignmentExpression: nil")
+		pp.Print("\nExpression: nil")
 	}
 	pp.Print("\nComments: [")
 
