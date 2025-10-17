@@ -125,7 +125,7 @@ func (a Argument) printSource(w io.Writer, v bool) {
 func (a AssignmentExpression) printSource(w io.Writer, v bool) {
 	a.FormulaeExpression.printSource(w, v)
 
-	if a.AssignmentType != AssignmentNone && a.AssignmentExpression != nil {
+	if a.AssignmentType != AssignmentNone && a.Expression != nil {
 		if v {
 			io.WriteString(w, " ")
 			a.Comments[0].printSource(w, v)
@@ -138,7 +138,7 @@ func (a AssignmentExpression) printSource(w io.Writer, v bool) {
 			a.Comments[1].printSource(w, v)
 		}
 
-		a.AssignmentExpression.printSource(w, v)
+		a.Expression.printSource(w, v)
 	}
 }
 

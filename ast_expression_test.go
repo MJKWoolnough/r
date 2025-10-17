@@ -2039,24 +2039,30 @@ func TestAssignmentExpression(t *testing.T) {
 					Tokens: tk[:1],
 				},
 				AssignmentType: AssignmentEquals,
-				AssignmentExpression: &AssignmentExpression{
-					FormulaeExpression: FormulaeExpression{
-						OrExpression: &OrExpression{
-							AndExpression: AndExpression{
-								NotExpression: NotExpression{
-									RelationalExpression: RelationalExpression{
-										AdditionExpression: AdditionExpression{
-											MultiplicationExpression: MultiplicationExpression{
-												PipeOrSpecialExpression: PipeOrSpecialExpression{
-													SequenceExpression: SequenceExpression{
-														UnaryExpression: UnaryExpression{
-															ExponentiationExpression: ExponentiationExpression{
-																SubsetExpression: SubsetExpression{
-																	ScopeExpression: ScopeExpression{
-																		IndexOrCallExpression: IndexOrCallExpression{
-																			SimpleExpression: &SimpleExpression{
-																				Identifier: &tk[2],
-																				Tokens:     tk[2:3],
+				Expression: &Expression{
+					QueryExpression: &QueryExpression{
+						AssignmentExpression: &AssignmentExpression{
+							FormulaeExpression: FormulaeExpression{
+								OrExpression: &OrExpression{
+									AndExpression: AndExpression{
+										NotExpression: NotExpression{
+											RelationalExpression: RelationalExpression{
+												AdditionExpression: AdditionExpression{
+													MultiplicationExpression: MultiplicationExpression{
+														PipeOrSpecialExpression: PipeOrSpecialExpression{
+															SequenceExpression: SequenceExpression{
+																UnaryExpression: UnaryExpression{
+																	ExponentiationExpression: ExponentiationExpression{
+																		SubsetExpression: SubsetExpression{
+																			ScopeExpression: ScopeExpression{
+																				IndexOrCallExpression: IndexOrCallExpression{
+																					SimpleExpression: &SimpleExpression{
+																						Identifier: &tk[2],
+																						Tokens:     tk[2:3],
+																					},
+																					Tokens: tk[2:3],
+																				},
+																				Tokens: tk[2:3],
 																			},
 																			Tokens: tk[2:3],
 																		},
@@ -2140,24 +2146,30 @@ func TestAssignmentExpression(t *testing.T) {
 					Tokens: tk[:1],
 				},
 				AssignmentType: AssignmentEquals,
-				AssignmentExpression: &AssignmentExpression{
-					FormulaeExpression: FormulaeExpression{
-						OrExpression: &OrExpression{
-							AndExpression: AndExpression{
-								NotExpression: NotExpression{
-									RelationalExpression: RelationalExpression{
-										AdditionExpression: AdditionExpression{
-											MultiplicationExpression: MultiplicationExpression{
-												PipeOrSpecialExpression: PipeOrSpecialExpression{
-													SequenceExpression: SequenceExpression{
-														UnaryExpression: UnaryExpression{
-															ExponentiationExpression: ExponentiationExpression{
-																SubsetExpression: SubsetExpression{
-																	ScopeExpression: ScopeExpression{
-																		IndexOrCallExpression: IndexOrCallExpression{
-																			SimpleExpression: &SimpleExpression{
-																				Identifier: &tk[4],
-																				Tokens:     tk[4:5],
+				Expression: &Expression{
+					QueryExpression: &QueryExpression{
+						AssignmentExpression: &AssignmentExpression{
+							FormulaeExpression: FormulaeExpression{
+								OrExpression: &OrExpression{
+									AndExpression: AndExpression{
+										NotExpression: NotExpression{
+											RelationalExpression: RelationalExpression{
+												AdditionExpression: AdditionExpression{
+													MultiplicationExpression: MultiplicationExpression{
+														PipeOrSpecialExpression: PipeOrSpecialExpression{
+															SequenceExpression: SequenceExpression{
+																UnaryExpression: UnaryExpression{
+																	ExponentiationExpression: ExponentiationExpression{
+																		SubsetExpression: SubsetExpression{
+																			ScopeExpression: ScopeExpression{
+																				IndexOrCallExpression: IndexOrCallExpression{
+																					SimpleExpression: &SimpleExpression{
+																						Identifier: &tk[4],
+																						Tokens:     tk[4:5],
+																					},
+																					Tokens: tk[4:5],
+																				},
+																				Tokens: tk[4:5],
 																			},
 																			Tokens: tk[4:5],
 																		},
@@ -2241,24 +2253,30 @@ func TestAssignmentExpression(t *testing.T) {
 					Tokens: tk[:1],
 				},
 				AssignmentType: AssignmentLeftAssign,
-				AssignmentExpression: &AssignmentExpression{
-					FormulaeExpression: FormulaeExpression{
-						OrExpression: &OrExpression{
-							AndExpression: AndExpression{
-								NotExpression: NotExpression{
-									RelationalExpression: RelationalExpression{
-										AdditionExpression: AdditionExpression{
-											MultiplicationExpression: MultiplicationExpression{
-												PipeOrSpecialExpression: PipeOrSpecialExpression{
-													SequenceExpression: SequenceExpression{
-														UnaryExpression: UnaryExpression{
-															ExponentiationExpression: ExponentiationExpression{
-																SubsetExpression: SubsetExpression{
-																	ScopeExpression: ScopeExpression{
-																		IndexOrCallExpression: IndexOrCallExpression{
-																			SimpleExpression: &SimpleExpression{
-																				Identifier: &tk[2],
-																				Tokens:     tk[2:3],
+				Expression: &Expression{
+					QueryExpression: &QueryExpression{
+						AssignmentExpression: &AssignmentExpression{
+							FormulaeExpression: FormulaeExpression{
+								OrExpression: &OrExpression{
+									AndExpression: AndExpression{
+										NotExpression: NotExpression{
+											RelationalExpression: RelationalExpression{
+												AdditionExpression: AdditionExpression{
+													MultiplicationExpression: MultiplicationExpression{
+														PipeOrSpecialExpression: PipeOrSpecialExpression{
+															SequenceExpression: SequenceExpression{
+																UnaryExpression: UnaryExpression{
+																	ExponentiationExpression: ExponentiationExpression{
+																		SubsetExpression: SubsetExpression{
+																			ScopeExpression: ScopeExpression{
+																				IndexOrCallExpression: IndexOrCallExpression{
+																					SimpleExpression: &SimpleExpression{
+																						Identifier: &tk[2],
+																						Tokens:     tk[2:3],
+																					},
+																					Tokens: tk[2:3],
+																				},
+																				Tokens: tk[2:3],
 																			},
 																			Tokens: tk[2:3],
 																		},
@@ -2342,24 +2360,30 @@ func TestAssignmentExpression(t *testing.T) {
 					Tokens: tk[:1],
 				},
 				AssignmentType: AssignmentLeftAssign,
-				AssignmentExpression: &AssignmentExpression{
-					FormulaeExpression: FormulaeExpression{
-						OrExpression: &OrExpression{
-							AndExpression: AndExpression{
-								NotExpression: NotExpression{
-									RelationalExpression: RelationalExpression{
-										AdditionExpression: AdditionExpression{
-											MultiplicationExpression: MultiplicationExpression{
-												PipeOrSpecialExpression: PipeOrSpecialExpression{
-													SequenceExpression: SequenceExpression{
-														UnaryExpression: UnaryExpression{
-															ExponentiationExpression: ExponentiationExpression{
-																SubsetExpression: SubsetExpression{
-																	ScopeExpression: ScopeExpression{
-																		IndexOrCallExpression: IndexOrCallExpression{
-																			SimpleExpression: &SimpleExpression{
-																				Identifier: &tk[4],
-																				Tokens:     tk[4:5],
+				Expression: &Expression{
+					QueryExpression: &QueryExpression{
+						AssignmentExpression: &AssignmentExpression{
+							FormulaeExpression: FormulaeExpression{
+								OrExpression: &OrExpression{
+									AndExpression: AndExpression{
+										NotExpression: NotExpression{
+											RelationalExpression: RelationalExpression{
+												AdditionExpression: AdditionExpression{
+													MultiplicationExpression: MultiplicationExpression{
+														PipeOrSpecialExpression: PipeOrSpecialExpression{
+															SequenceExpression: SequenceExpression{
+																UnaryExpression: UnaryExpression{
+																	ExponentiationExpression: ExponentiationExpression{
+																		SubsetExpression: SubsetExpression{
+																			ScopeExpression: ScopeExpression{
+																				IndexOrCallExpression: IndexOrCallExpression{
+																					SimpleExpression: &SimpleExpression{
+																						Identifier: &tk[4],
+																						Tokens:     tk[4:5],
+																					},
+																					Tokens: tk[4:5],
+																				},
+																				Tokens: tk[4:5],
 																			},
 																			Tokens: tk[4:5],
 																		},
@@ -2443,24 +2467,30 @@ func TestAssignmentExpression(t *testing.T) {
 					Tokens: tk[:1],
 				},
 				AssignmentType: AssignmentRightAssign,
-				AssignmentExpression: &AssignmentExpression{
-					FormulaeExpression: FormulaeExpression{
-						OrExpression: &OrExpression{
-							AndExpression: AndExpression{
-								NotExpression: NotExpression{
-									RelationalExpression: RelationalExpression{
-										AdditionExpression: AdditionExpression{
-											MultiplicationExpression: MultiplicationExpression{
-												PipeOrSpecialExpression: PipeOrSpecialExpression{
-													SequenceExpression: SequenceExpression{
-														UnaryExpression: UnaryExpression{
-															ExponentiationExpression: ExponentiationExpression{
-																SubsetExpression: SubsetExpression{
-																	ScopeExpression: ScopeExpression{
-																		IndexOrCallExpression: IndexOrCallExpression{
-																			SimpleExpression: &SimpleExpression{
-																				Identifier: &tk[2],
-																				Tokens:     tk[2:3],
+				Expression: &Expression{
+					QueryExpression: &QueryExpression{
+						AssignmentExpression: &AssignmentExpression{
+							FormulaeExpression: FormulaeExpression{
+								OrExpression: &OrExpression{
+									AndExpression: AndExpression{
+										NotExpression: NotExpression{
+											RelationalExpression: RelationalExpression{
+												AdditionExpression: AdditionExpression{
+													MultiplicationExpression: MultiplicationExpression{
+														PipeOrSpecialExpression: PipeOrSpecialExpression{
+															SequenceExpression: SequenceExpression{
+																UnaryExpression: UnaryExpression{
+																	ExponentiationExpression: ExponentiationExpression{
+																		SubsetExpression: SubsetExpression{
+																			ScopeExpression: ScopeExpression{
+																				IndexOrCallExpression: IndexOrCallExpression{
+																					SimpleExpression: &SimpleExpression{
+																						Identifier: &tk[2],
+																						Tokens:     tk[2:3],
+																					},
+																					Tokens: tk[2:3],
+																				},
+																				Tokens: tk[2:3],
 																			},
 																			Tokens: tk[2:3],
 																		},
@@ -2544,24 +2574,30 @@ func TestAssignmentExpression(t *testing.T) {
 					Tokens: tk[:1],
 				},
 				AssignmentType: AssignmentRightAssign,
-				AssignmentExpression: &AssignmentExpression{
-					FormulaeExpression: FormulaeExpression{
-						OrExpression: &OrExpression{
-							AndExpression: AndExpression{
-								NotExpression: NotExpression{
-									RelationalExpression: RelationalExpression{
-										AdditionExpression: AdditionExpression{
-											MultiplicationExpression: MultiplicationExpression{
-												PipeOrSpecialExpression: PipeOrSpecialExpression{
-													SequenceExpression: SequenceExpression{
-														UnaryExpression: UnaryExpression{
-															ExponentiationExpression: ExponentiationExpression{
-																SubsetExpression: SubsetExpression{
-																	ScopeExpression: ScopeExpression{
-																		IndexOrCallExpression: IndexOrCallExpression{
-																			SimpleExpression: &SimpleExpression{
-																				Identifier: &tk[4],
-																				Tokens:     tk[4:5],
+				Expression: &Expression{
+					QueryExpression: &QueryExpression{
+						AssignmentExpression: &AssignmentExpression{
+							FormulaeExpression: FormulaeExpression{
+								OrExpression: &OrExpression{
+									AndExpression: AndExpression{
+										NotExpression: NotExpression{
+											RelationalExpression: RelationalExpression{
+												AdditionExpression: AdditionExpression{
+													MultiplicationExpression: MultiplicationExpression{
+														PipeOrSpecialExpression: PipeOrSpecialExpression{
+															SequenceExpression: SequenceExpression{
+																UnaryExpression: UnaryExpression{
+																	ExponentiationExpression: ExponentiationExpression{
+																		SubsetExpression: SubsetExpression{
+																			ScopeExpression: ScopeExpression{
+																				IndexOrCallExpression: IndexOrCallExpression{
+																					SimpleExpression: &SimpleExpression{
+																						Identifier: &tk[4],
+																						Tokens:     tk[4:5],
+																					},
+																					Tokens: tk[4:5],
+																				},
+																				Tokens: tk[4:5],
 																			},
 																			Tokens: tk[4:5],
 																		},
@@ -2645,24 +2681,30 @@ func TestAssignmentExpression(t *testing.T) {
 					Tokens: tk[:1],
 				},
 				AssignmentType: AssignmentLeftParentAssign,
-				AssignmentExpression: &AssignmentExpression{
-					FormulaeExpression: FormulaeExpression{
-						OrExpression: &OrExpression{
-							AndExpression: AndExpression{
-								NotExpression: NotExpression{
-									RelationalExpression: RelationalExpression{
-										AdditionExpression: AdditionExpression{
-											MultiplicationExpression: MultiplicationExpression{
-												PipeOrSpecialExpression: PipeOrSpecialExpression{
-													SequenceExpression: SequenceExpression{
-														UnaryExpression: UnaryExpression{
-															ExponentiationExpression: ExponentiationExpression{
-																SubsetExpression: SubsetExpression{
-																	ScopeExpression: ScopeExpression{
-																		IndexOrCallExpression: IndexOrCallExpression{
-																			SimpleExpression: &SimpleExpression{
-																				Identifier: &tk[2],
-																				Tokens:     tk[2:3],
+				Expression: &Expression{
+					QueryExpression: &QueryExpression{
+						AssignmentExpression: &AssignmentExpression{
+							FormulaeExpression: FormulaeExpression{
+								OrExpression: &OrExpression{
+									AndExpression: AndExpression{
+										NotExpression: NotExpression{
+											RelationalExpression: RelationalExpression{
+												AdditionExpression: AdditionExpression{
+													MultiplicationExpression: MultiplicationExpression{
+														PipeOrSpecialExpression: PipeOrSpecialExpression{
+															SequenceExpression: SequenceExpression{
+																UnaryExpression: UnaryExpression{
+																	ExponentiationExpression: ExponentiationExpression{
+																		SubsetExpression: SubsetExpression{
+																			ScopeExpression: ScopeExpression{
+																				IndexOrCallExpression: IndexOrCallExpression{
+																					SimpleExpression: &SimpleExpression{
+																						Identifier: &tk[2],
+																						Tokens:     tk[2:3],
+																					},
+																					Tokens: tk[2:3],
+																				},
+																				Tokens: tk[2:3],
 																			},
 																			Tokens: tk[2:3],
 																		},
@@ -2746,24 +2788,30 @@ func TestAssignmentExpression(t *testing.T) {
 					Tokens: tk[:1],
 				},
 				AssignmentType: AssignmentLeftParentAssign,
-				AssignmentExpression: &AssignmentExpression{
-					FormulaeExpression: FormulaeExpression{
-						OrExpression: &OrExpression{
-							AndExpression: AndExpression{
-								NotExpression: NotExpression{
-									RelationalExpression: RelationalExpression{
-										AdditionExpression: AdditionExpression{
-											MultiplicationExpression: MultiplicationExpression{
-												PipeOrSpecialExpression: PipeOrSpecialExpression{
-													SequenceExpression: SequenceExpression{
-														UnaryExpression: UnaryExpression{
-															ExponentiationExpression: ExponentiationExpression{
-																SubsetExpression: SubsetExpression{
-																	ScopeExpression: ScopeExpression{
-																		IndexOrCallExpression: IndexOrCallExpression{
-																			SimpleExpression: &SimpleExpression{
-																				Identifier: &tk[4],
-																				Tokens:     tk[4:5],
+				Expression: &Expression{
+					QueryExpression: &QueryExpression{
+						AssignmentExpression: &AssignmentExpression{
+							FormulaeExpression: FormulaeExpression{
+								OrExpression: &OrExpression{
+									AndExpression: AndExpression{
+										NotExpression: NotExpression{
+											RelationalExpression: RelationalExpression{
+												AdditionExpression: AdditionExpression{
+													MultiplicationExpression: MultiplicationExpression{
+														PipeOrSpecialExpression: PipeOrSpecialExpression{
+															SequenceExpression: SequenceExpression{
+																UnaryExpression: UnaryExpression{
+																	ExponentiationExpression: ExponentiationExpression{
+																		SubsetExpression: SubsetExpression{
+																			ScopeExpression: ScopeExpression{
+																				IndexOrCallExpression: IndexOrCallExpression{
+																					SimpleExpression: &SimpleExpression{
+																						Identifier: &tk[4],
+																						Tokens:     tk[4:5],
+																					},
+																					Tokens: tk[4:5],
+																				},
+																				Tokens: tk[4:5],
 																			},
 																			Tokens: tk[4:5],
 																		},
@@ -2847,24 +2895,30 @@ func TestAssignmentExpression(t *testing.T) {
 					Tokens: tk[:1],
 				},
 				AssignmentType: AssignmentRightParentAssign,
-				AssignmentExpression: &AssignmentExpression{
-					FormulaeExpression: FormulaeExpression{
-						OrExpression: &OrExpression{
-							AndExpression: AndExpression{
-								NotExpression: NotExpression{
-									RelationalExpression: RelationalExpression{
-										AdditionExpression: AdditionExpression{
-											MultiplicationExpression: MultiplicationExpression{
-												PipeOrSpecialExpression: PipeOrSpecialExpression{
-													SequenceExpression: SequenceExpression{
-														UnaryExpression: UnaryExpression{
-															ExponentiationExpression: ExponentiationExpression{
-																SubsetExpression: SubsetExpression{
-																	ScopeExpression: ScopeExpression{
-																		IndexOrCallExpression: IndexOrCallExpression{
-																			SimpleExpression: &SimpleExpression{
-																				Identifier: &tk[2],
-																				Tokens:     tk[2:3],
+				Expression: &Expression{
+					QueryExpression: &QueryExpression{
+						AssignmentExpression: &AssignmentExpression{
+							FormulaeExpression: FormulaeExpression{
+								OrExpression: &OrExpression{
+									AndExpression: AndExpression{
+										NotExpression: NotExpression{
+											RelationalExpression: RelationalExpression{
+												AdditionExpression: AdditionExpression{
+													MultiplicationExpression: MultiplicationExpression{
+														PipeOrSpecialExpression: PipeOrSpecialExpression{
+															SequenceExpression: SequenceExpression{
+																UnaryExpression: UnaryExpression{
+																	ExponentiationExpression: ExponentiationExpression{
+																		SubsetExpression: SubsetExpression{
+																			ScopeExpression: ScopeExpression{
+																				IndexOrCallExpression: IndexOrCallExpression{
+																					SimpleExpression: &SimpleExpression{
+																						Identifier: &tk[2],
+																						Tokens:     tk[2:3],
+																					},
+																					Tokens: tk[2:3],
+																				},
+																				Tokens: tk[2:3],
 																			},
 																			Tokens: tk[2:3],
 																		},
@@ -2948,24 +3002,30 @@ func TestAssignmentExpression(t *testing.T) {
 					Tokens: tk[:1],
 				},
 				AssignmentType: AssignmentRightParentAssign,
-				AssignmentExpression: &AssignmentExpression{
-					FormulaeExpression: FormulaeExpression{
-						OrExpression: &OrExpression{
-							AndExpression: AndExpression{
-								NotExpression: NotExpression{
-									RelationalExpression: RelationalExpression{
-										AdditionExpression: AdditionExpression{
-											MultiplicationExpression: MultiplicationExpression{
-												PipeOrSpecialExpression: PipeOrSpecialExpression{
-													SequenceExpression: SequenceExpression{
-														UnaryExpression: UnaryExpression{
-															ExponentiationExpression: ExponentiationExpression{
-																SubsetExpression: SubsetExpression{
-																	ScopeExpression: ScopeExpression{
-																		IndexOrCallExpression: IndexOrCallExpression{
-																			SimpleExpression: &SimpleExpression{
-																				Identifier: &tk[4],
-																				Tokens:     tk[4:5],
+				Expression: &Expression{
+					QueryExpression: &QueryExpression{
+						AssignmentExpression: &AssignmentExpression{
+							FormulaeExpression: FormulaeExpression{
+								OrExpression: &OrExpression{
+									AndExpression: AndExpression{
+										NotExpression: NotExpression{
+											RelationalExpression: RelationalExpression{
+												AdditionExpression: AdditionExpression{
+													MultiplicationExpression: MultiplicationExpression{
+														PipeOrSpecialExpression: PipeOrSpecialExpression{
+															SequenceExpression: SequenceExpression{
+																UnaryExpression: UnaryExpression{
+																	ExponentiationExpression: ExponentiationExpression{
+																		SubsetExpression: SubsetExpression{
+																			ScopeExpression: ScopeExpression{
+																				IndexOrCallExpression: IndexOrCallExpression{
+																					SimpleExpression: &SimpleExpression{
+																						Identifier: &tk[4],
+																						Tokens:     tk[4:5],
+																					},
+																					Tokens: tk[4:5],
+																				},
+																				Tokens: tk[4:5],
 																			},
 																			Tokens: tk[4:5],
 																		},
@@ -3085,53 +3145,61 @@ func TestAssignmentExpression(t *testing.T) {
 																	Err: Error{
 																		Err: Error{
 																			Err: Error{
-																				Err:     ErrInvalidSimpleExpression,
-																				Parsing: "SimpleExpression",
+																				Err: Error{
+																					Err: Error{
+																						Err:     ErrInvalidSimpleExpression,
+																						Parsing: "SimpleExpression",
+																						Token:   tk[2],
+																					},
+																					Parsing: "IndexOrCallExpression",
+																					Token:   tk[2],
+																				},
+																				Parsing: "ScopeExpression",
 																				Token:   tk[2],
 																			},
-																			Parsing: "IndexOrCallExpression",
+																			Parsing: "SubsetExpression",
 																			Token:   tk[2],
 																		},
-																		Parsing: "ScopeExpression",
+																		Parsing: "ExponentiationExpression",
 																		Token:   tk[2],
 																	},
-																	Parsing: "SubsetExpression",
+																	Parsing: "UnaryExpression",
 																	Token:   tk[2],
 																},
-																Parsing: "ExponentiationExpression",
+																Parsing: "SequenceExpression",
 																Token:   tk[2],
 															},
-															Parsing: "UnaryExpression",
+															Parsing: "PipeOrSpecialExpression",
 															Token:   tk[2],
 														},
-														Parsing: "SequenceExpression",
+														Parsing: "MultiplicationExpression",
 														Token:   tk[2],
 													},
-													Parsing: "PipeOrSpecialExpression",
+													Parsing: "AdditionExpression",
 													Token:   tk[2],
 												},
-												Parsing: "MultiplicationExpression",
+												Parsing: "RelationalExpression",
 												Token:   tk[2],
 											},
-											Parsing: "AdditionExpression",
+											Parsing: "NotExpression",
 											Token:   tk[2],
 										},
-										Parsing: "RelationalExpression",
+										Parsing: "AndExpression",
 										Token:   tk[2],
 									},
-									Parsing: "NotExpression",
+									Parsing: "OrExpression",
 									Token:   tk[2],
 								},
-								Parsing: "AndExpression",
+								Parsing: "FormulaeExpression",
 								Token:   tk[2],
 							},
-							Parsing: "OrExpression",
+							Parsing: "AssignmentExpression",
 							Token:   tk[2],
 						},
-						Parsing: "FormulaeExpression",
+						Parsing: "QueryExpression",
 						Token:   tk[2],
 					},
-					Parsing: "AssignmentExpression",
+					Parsing: "Expression",
 					Token:   tk[2],
 				},
 				Parsing: "AssignmentExpression",
@@ -3145,10 +3213,13 @@ func TestAssignmentExpression(t *testing.T) {
 					Tokens:     tk[:1],
 				}).AssignmentExpression.FormulaeExpression,
 				AssignmentType: AssignmentEquals,
-				AssignmentExpression: WrapQuery(&SimpleExpression{
-					Identifier: &tk[4],
-					Tokens:     tk[4:5],
-				}).AssignmentExpression,
+				Expression: &Expression{
+					QueryExpression: WrapQuery(&SimpleExpression{
+						Identifier: &tk[4],
+						Tokens:     tk[4:5],
+					}),
+					Tokens: tk[4:5],
+				},
 				Comments: [2]Comments{nil, {tk[2]}},
 				Tokens:   tk[:5],
 			}
@@ -8441,10 +8512,13 @@ func TestParenthesizedExpression(t *testing.T) {
 								Tokens:     tk[1:2],
 							}).AssignmentExpression.FormulaeExpression,
 							AssignmentType: AssignmentEquals,
-							AssignmentExpression: WrapQuery(&SimpleExpression{
-								Identifier: &tk[7],
-								Tokens:     tk[7:8],
-							}).AssignmentExpression,
+							Expression: &Expression{
+								QueryExpression: WrapQuery(&SimpleExpression{
+									Identifier: &tk[7],
+									Tokens:     tk[7:8],
+								}),
+								Tokens: tk[7:8],
+							},
 							Comments: [2]Comments{{tk[2]}, {tk[5]}},
 							Tokens:   tk[1:8],
 						},

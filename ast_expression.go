@@ -601,11 +601,11 @@ const (
 
 // AssignmentExpression represents a binding of an expression value.
 type AssignmentExpression struct {
-	FormulaeExpression   FormulaeExpression
-	AssignmentType       AssignmentType
-	AssignmentExpression *AssignmentExpression
-	Comments             [2]Comments
-	Tokens               Tokens
+	FormulaeExpression FormulaeExpression
+	AssignmentType     AssignmentType
+	Expression         *Expression
+	Comments           [2]Comments
+	Tokens             Tokens
 }
 
 func (a *AssignmentExpression) parse(r *rParser) error {
@@ -644,9 +644,9 @@ func (a *AssignmentExpression) parse(r *rParser) error {
 		r.AcceptRunWhitespace()
 
 		s = r.NewGoal()
-		a.AssignmentExpression = new(AssignmentExpression)
+		a.Expression = new(Expression)
 
-		if err := a.AssignmentExpression.parse(&s); err != nil {
+		if err := a.Expression.parse(&s); err != nil {
 			return r.Error("AssignmentExpression", err)
 		}
 

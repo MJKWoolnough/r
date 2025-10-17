@@ -1857,24 +1857,30 @@ func TestUnwrapQuery(t *testing.T) {
 				},
 				Tokens: tks[:1],
 			},
-			AssignmentExpression: &AssignmentExpression{
-				FormulaeExpression: FormulaeExpression{
-					OrExpression: &OrExpression{
-						AndExpression: AndExpression{
-							NotExpression: NotExpression{
-								RelationalExpression: RelationalExpression{
-									AdditionExpression: AdditionExpression{
-										MultiplicationExpression: MultiplicationExpression{
-											PipeOrSpecialExpression: PipeOrSpecialExpression{
-												SequenceExpression: SequenceExpression{
-													UnaryExpression: UnaryExpression{
-														ExponentiationExpression: ExponentiationExpression{
-															SubsetExpression: SubsetExpression{
-																ScopeExpression: ScopeExpression{
-																	IndexOrCallExpression: IndexOrCallExpression{
-																		SimpleExpression: &SimpleExpression{
-																			Identifier: identB,
-																			Tokens:     tks[1:2],
+			Expression: &Expression{
+				QueryExpression: &QueryExpression{
+					AssignmentExpression: &AssignmentExpression{
+						FormulaeExpression: FormulaeExpression{
+							OrExpression: &OrExpression{
+								AndExpression: AndExpression{
+									NotExpression: NotExpression{
+										RelationalExpression: RelationalExpression{
+											AdditionExpression: AdditionExpression{
+												MultiplicationExpression: MultiplicationExpression{
+													PipeOrSpecialExpression: PipeOrSpecialExpression{
+														SequenceExpression: SequenceExpression{
+															UnaryExpression: UnaryExpression{
+																ExponentiationExpression: ExponentiationExpression{
+																	SubsetExpression: SubsetExpression{
+																		ScopeExpression: ScopeExpression{
+																			IndexOrCallExpression: IndexOrCallExpression{
+																				SimpleExpression: &SimpleExpression{
+																					Identifier: identB,
+																					Tokens:     tks[1:2],
+																				},
+																				Tokens: tks[1:2],
+																			},
+																			Tokens: tks[1:2],
 																		},
 																		Tokens: tks[1:2],
 																	},

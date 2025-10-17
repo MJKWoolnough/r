@@ -270,7 +270,7 @@ func UnwrapQuery(q *QueryExpression) QueryWrappable {
 		return nil
 	} else if q.QueryExpression != nil {
 		return q
-	} else if q.AssignmentExpression.AssignmentExpression != nil {
+	} else if q.AssignmentExpression.Expression != nil {
 		return q.AssignmentExpression
 	} else if q.AssignmentExpression.FormulaeExpression.FormulaeExpression != nil {
 		return &q.AssignmentExpression.FormulaeExpression
