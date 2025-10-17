@@ -179,8 +179,8 @@ func walkAssignmentExpression(t *r.AssignmentExpression, fn Handler) error {
 		return err
 	}
 
-	if t.AssignmentExpression != nil {
-		return fn.Handle(t.AssignmentExpression)
+	if t.Expression != nil {
+		return fn.Handle(t.Expression)
 	}
 
 	return nil
