@@ -3060,7 +3060,74 @@ func TestAssignmentExpression(t *testing.T) {
 				Tokens: tk[:5],
 			}
 		}},
-		{"in", func(t *test, tk Tokens) { // 12
+		{"a <- function(){}", func(t *test, tk Tokens) { // 12
+			t.Output = AssignmentExpression{
+				FormulaeExpression: FormulaeExpression{
+					OrExpression: &OrExpression{
+						AndExpression: AndExpression{
+							NotExpression: NotExpression{
+								RelationalExpression: RelationalExpression{
+									AdditionExpression: AdditionExpression{
+										MultiplicationExpression: MultiplicationExpression{
+											PipeOrSpecialExpression: PipeOrSpecialExpression{
+												SequenceExpression: SequenceExpression{
+													UnaryExpression: UnaryExpression{
+														ExponentiationExpression: ExponentiationExpression{
+															SubsetExpression: SubsetExpression{
+																ScopeExpression: ScopeExpression{
+																	IndexOrCallExpression: IndexOrCallExpression{
+																		SimpleExpression: &SimpleExpression{
+																			Identifier: &tk[0],
+																			Tokens:     tk[:1],
+																		},
+																		Tokens: tk[:1],
+																	},
+																	Tokens: tk[:1],
+																},
+																Tokens: tk[:1],
+															},
+															Tokens: tk[:1],
+														},
+														Tokens: tk[:1],
+													},
+													Tokens: tk[:1],
+												},
+												Tokens: tk[:1],
+											},
+											Tokens: tk[:1],
+										},
+										Tokens: tk[:1],
+									},
+									Tokens: tk[:1],
+								},
+								Tokens: tk[:1],
+							},
+							Tokens: tk[:1],
+						},
+						Tokens: tk[:1],
+					},
+					Tokens: tk[:1],
+				},
+				AssignmentType: AssignmentLeftAssign,
+				Expression: &Expression{
+					FunctionDefinition: &FunctionDefinition{
+						ArgList: ArgList{
+							Tokens: tk[6:6],
+						},
+						Body: Expression{
+							QueryExpression: WrapQuery(&CompoundExpression{
+								Tokens: tk[7:9],
+							}),
+							Tokens: tk[7:9],
+						},
+						Tokens: tk[4:9],
+					},
+					Tokens: tk[4:9],
+				},
+				Tokens: tk[:9],
+			}
+		}},
+		{"in", func(t *test, tk Tokens) { // 13
 			t.Err = Error{
 				Err: Error{
 					Err: Error{
@@ -3127,7 +3194,7 @@ func TestAssignmentExpression(t *testing.T) {
 				Token:   tk[0],
 			}
 		}},
-		{"a=in", func(t *test, tk Tokens) { // 13
+		{"a=in", func(t *test, tk Tokens) { // 14
 			t.Err = Error{
 				Err: Error{
 					Err: Error{
@@ -3206,7 +3273,7 @@ func TestAssignmentExpression(t *testing.T) {
 				Token:   tk[2],
 			}
 		}},
-		{"a=#abc\nb", func(t *test, tk Tokens) { // 14
+		{"a=#abc\nb", func(t *test, tk Tokens) { // 15
 			t.Output = AssignmentExpression{
 				FormulaeExpression: WrapQuery(&SimpleExpression{
 					Identifier: &tk[0],
@@ -3224,7 +3291,7 @@ func TestAssignmentExpression(t *testing.T) {
 				Tokens:   tk[:5],
 			}
 		}},
-		{"a#abc\n=#def\nb", func(t *test, tk Tokens) { // 15
+		{"a#abc\n=#def\nb", func(t *test, tk Tokens) { // 16
 			t.Output = AssignmentExpression{
 				FormulaeExpression: WrapQuery(&SimpleExpression{
 					Identifier: &tk[0],
