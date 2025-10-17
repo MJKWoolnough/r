@@ -96,536 +96,541 @@ func TestPrintSource(t *testing.T) {
 			"a <- b\n",
 		},
 		{ // 18
+			"a<-function(){}",
+			"a<-function(){}\n",
+			"a <- function() {}\n",
+		},
+		{ // 19
 			"a<<-b",
 			"a<<-b\n",
 			"a <<- b\n",
 		},
-		{ // 19
+		{ // 20
 			"a->b",
 			"a->b\n",
 			"a -> b\n",
 		},
-		{ // 20
+		{ // 21
 			"a->>b",
 			"a->>b\n",
 			"a ->> b\n",
 		},
-		{ // 21
+		{ // 22
 			"{}",
 			"{}\n",
 			"{}\n",
 		},
-		{ // 22
+		{ // 23
 			"{a}",
 			"{\n\ta\n}\n",
 			"{\n\ta\n}\n",
 		},
-		{ // 23
+		{ // 24
 			"{a;b}",
 			"{\n\ta\n\tb\n}\n",
 			"{\n\ta\n\tb\n}\n",
 		},
-		{ // 24
+		{ // 25
 			"a^b",
 			"a^b\n",
 			"a^b\n",
 		},
-		{ // 25
+		{ // 26
 			"a;b",
 			"a\nb\n",
 			"a\nb\n",
 		},
-		{ // 26
+		{ // 27
 			"a\nb",
 			"a\nb\n",
 			"a\nb\n",
 		},
-		{ // 27
+		{ // 28
 			"for(a in b) c",
 			"for(a in b)c\n",
 			"for (a in b) c\n",
 		},
-		{ // 28
+		{ // 29
 			"~a",
 			"~a\n",
 			"~ a\n",
 		},
-		{ // 29
+		{ // 30
 			"a~b",
 			"a~b\n",
 			"a ~ b\n",
 		},
-		{ // 30
+		{ // 31
 			"if(a)b",
 			"if(a)b\n",
 			"if (a) b\n",
 		},
-		{ // 31
+		{ // 32
 			"if(a)b else c",
 			"if(a)b else c\n",
 			"if (a) b else c\n",
 		},
-		{ // 32
+		{ // 33
 			"a[0]",
 			"a[0]\n",
 			"a[0]\n",
 		},
-		{ // 33
+		{ // 34
 			"a[b,c]",
 			"a[b,c]\n",
 			"a[b, c]\n",
 		},
-		{ // 34
+		{ // 35
 			"a[[0]]",
 			"a[[0]]\n",
 			"a[[0]]\n",
 		},
-		{ // 35
+		{ // 36
 			"a*b",
 			"a*b\n",
 			"a * b\n",
 		},
-		{ // 36
+		{ // 37
 			"a/b",
 			"a/b\n",
 			"a / b\n",
 		},
-		{ // 37
+		{ // 38
 			"a * b/c",
 			"a*b/c\n",
 			"a * b / c\n",
 		},
-		{ // 38
+		{ // 39
 			"!a",
 			"!a\n",
 			"!a\n",
 		},
-		{ // 39
+		{ // 40
 			"!!!!a",
 			"!!!!a\n",
 			"!!!!a\n",
 		},
-		{ // 40
+		{ // 41
 			"a|b",
 			"a|b\n",
 			"a | b\n",
 		},
-		{ // 41
+		{ // 42
 			"a||b",
 			"a||b\n",
 			"a || b\n",
 		},
-		{ // 42
+		{ // 43
 			"a | b||c",
 			"a|b||c\n",
 			"a | b || c\n",
 		},
-		{ // 43
+		{ // 44
 			"a|>b",
 			"a|>b\n",
 			"a |> b\n",
 		},
-		{ // 44
+		{ // 45
 			"a%%b",
 			"a%%b\n",
 			"a %% b\n",
 		},
-		{ // 45
+		{ // 46
 			"a%b%c",
 			"a%b%c\n",
 			"a %b% c\n",
 		},
-		{ // 46
+		{ // 47
 			"a?b",
 			"a?b\n",
 			"a ? b\n",
 		},
-		{ // 47
+		{ // 48
 			"a??b",
 			"a??b\n",
 			"a ?? b\n",
 		},
-		{ // 48
+		{ // 49
 			"?a",
 			"?a\n",
 			"? a\n",
 		},
-		{ // 49
+		{ // 50
 			"??a",
 			"??a\n",
 			"?? a\n",
 		},
-		{ // 50
+		{ // 51
 			"???a",
 			"???a\n",
 			"??? a\n",
 		},
-		{ // 51
+		{ // 52
 			"a>b",
 			"a>b\n",
 			"a > b\n",
 		},
-		{ // 52
+		{ // 53
 			"a>=b",
 			"a>=b\n",
 			"a >= b\n",
 		},
-		{ // 53
+		{ // 54
 			"a<b",
 			"a<b\n",
 			"a < b\n",
 		},
-		{ // 54
+		{ // 55
 			"a<=b",
 			"a<=b\n",
 			"a <= b\n",
 		},
-		{ // 55
+		{ // 56
 			"a==b",
 			"a==b\n",
 			"a == b\n",
 		},
-		{ // 56
+		{ // 57
 			"a!=b",
 			"a!=b\n",
 			"a != b\n",
 		},
-		{ // 57
+		{ // 58
 			"repeat a",
 			"repeat a\n",
 			"repeat a\n",
 		},
-		{ // 58
+		{ // 59
 			"a::b",
 			"a::b\n",
 			"a::b\n",
 		},
-		{ // 59
+		{ // 60
 			"a:b",
 			"a:b\n",
 			"a:b\n",
 		},
-		{ // 60
+		{ // 61
 			"...",
 			"...\n",
 			"...\n",
 		},
-		{ // 61
+		{ // 62
 			"..1",
 			"..1\n",
 			"..1\n",
 		},
-		{ // 62
+		{ // 63
 			"(a)",
 			"(a)\n",
 			"(a)\n",
 		},
-		{ // 63
+		{ // 64
 			"(a + b) * c",
 			"(a+b)*c\n",
 			"(a + b) * c\n",
 		},
-		{ // 64
+		{ // 65
 			"a$b",
 			"a$b\n",
 			"a$b\n",
 		},
-		{ // 65
+		{ // 66
 			"a@b",
 			"a@b\n",
 			"a@b\n",
 		},
-		{ // 66
+		{ // 67
 			"+a",
 			"+a\n",
 			"+a\n",
 		},
-		{ // 67
+		{ // 68
 			"-a",
 			"-a\n",
 			"-a\n",
 		},
-		{ // 68
+		{ // 69
 			"while(a)b",
 			"while(a)b\n",
 			"while (a) b\n",
 		},
-		{ // 69
+		{ // 70
 			"# abc\na",
 			"a\n",
 			"# abc\na\n",
 		},
-		{ // 70
+		{ // 71
 			"# abc\n# def\na",
 			"a\n",
 			"# abc\n# def\na\n",
 		},
-		{ // 71
+		{ // 72
 			"# abc\n# def\na\n#ghi\nb",
 			"a\nb\n",
 			"# abc\n# def\na\n#ghi\nb\n",
 		},
-		{ // 72
+		{ // 73
 			"# abc\na #ghi",
 			"a\n",
 			"# abc\na #ghi\n",
 		},
-		{ // 73
+		{ // 74
 			"# abc\n\n\n# def\na #ghi",
 			"a\n",
 			"# abc\n\n# def\na #ghi\n",
 		},
-		{ // 74
+		{ // 75
 			"# abc\n\n\n# def\na #ghi\n\n#123",
 			"a\n",
 			"# abc\n\n# def\na #ghi\n\n#123\n",
 		},
-		{ // 75
+		{ // 76
 			"{\n# abc\n\t# def\na #ghi\n\n#123\n}",
 			"{\n\ta\n}\n",
 			"{\n\t# abc\n\t# def\n\ta #ghi\n\n\t#123\n}\n",
 		},
-		{ // 76
+		{ // 77
 			"(a\n#abc\n)",
 			"(a)\n",
 			"(a #abc\n)\n",
 		},
-		{ // 77
+		{ // 78
 			"(a #abc\n#def\n\n#ghi\n)",
 			"(a)\n",
 			"(a #abc\n#def\n\n#ghi\n)\n",
 		},
-		{ // 78
+		{ // 79
 			"a(b#a comment\n)",
 			"a(b)\n",
 			"a(b #a comment\n)\n",
 		},
-		{ // 79
+		{ // 80
 			"a(#abc\nb#def\n#ghi\n\n#jkl\n)",
 			"a(b)\n",
 			"a(#abc\nb #def\n#ghi\n\n#jkl\n)\n",
 		},
-		{ // 80
+		{ // 81
 			"a(#abc\nb#def\n,#ghi\nc\n#jkl\n)",
 			"a(b,c)\n",
 			"a(#abc\nb #def\n, #ghi\nc #jkl\n)\n",
 		},
-		{ // 81
+		{ // 82
 			"a(#abc\n)",
 			"a()\n",
 			"a(\n\t#abc\n)\n",
 		},
-		{ // 82
+		{ // 83
 			"function (#abc\n)a",
 			"function()a\n",
 			"function(\n\t#abc\n) a\n",
 		},
-		{ // 83
+		{ // 84
 			"function (#abc\na #def\n, #ghi\nb #jkl\n)c",
 			"function(a,b)c\n",
 			"function(#abc\n\ta #def\n\t, #ghi\n\tb #jkl\n) c\n",
 		},
-		{ // 84
+		{ // 85
 			"function (#abc\na#def\n=b)c",
 			"function(a=b)c\n",
 			"function(#abc\n\ta #def\n\t= b) c\n",
 		},
-		{ // 85
+		{ // 86
 			"function #abc\n()a",
 			"function()a\n",
 			"function #abc\n() a\n",
 		},
-		{ // 86
+		{ // 87
 			"if#abc\n(#def\na#ghi\n)#jkl\nb",
 			"if(a)b\n",
 			"if #abc\n(#def\n\ta#ghi\n) #jkl\nb\n",
 		},
-		{ // 87
+		{ // 88
 			"if#abc\n(#def\na#ghi\n)#jkl\nb#mno\n\n#pqr\nelse#stu\nc#vwx",
 			"if(a)b else c\n",
 			"if #abc\n(#def\n\ta#ghi\n) #jkl\nb #mno\n\n#pqr\nelse #stu\nc #vwx\n",
 		},
-		{ // 88
+		{ // 89
 			"while#abc\n(#def\na#ghi\n)#jkl\nb#mno",
 			"while(a)b\n",
 			"while #abc\n(#def\n\ta #ghi\n) #jkl\nb #mno\n",
 		},
-		{ // 89
+		{ // 90
 			"for#abc\n(#def\na#ghi\nin#jkl\nb#mno\n)#pqr\nc#stu",
 			"for(a in b)c\n",
 			"for #abc\n(#def\n\ta #ghi\n\tin #jkl\n\tb #mno\n) #pqr\nc #stu\n",
 		},
-		{ // 90
+		{ // 91
 			"repeat#abc\na#def",
 			"repeat a\n",
 			"repeat #abc\na #def\n",
 		},
-		{ // 91
+		{ // 92
 			"?#abc\na",
 			"?a\n",
 			"? #abc\na\n",
 		},
-		{ // 92
+		{ // 93
 			"a?#abc\nb",
 			"a?b\n",
 			"a ? #abc\nb\n",
 		},
-		{ // 93
+		{ // 94
 			"(a#abc\n?#def\nb)",
 			"(a?b)\n",
 			"(a #abc\n? #def\nb)\n",
 		},
-		{ // 94
+		{ // 95
 			"a=#abc\nb",
 			"a=b\n",
 			"a = #abc\nb\n",
 		},
-		{ // 95
+		{ // 96
 			"(a#abc\n=#def\nb)",
 			"(a=b)\n",
 			"(a #abc\n= #def\nb)\n",
 		},
-		{ // 96
+		{ // 97
 			"~#abc\na",
 			"~a\n",
 			"~ #abc\na\n",
 		},
-		{ // 97
+		{ // 98
 			"a|#abc\nb",
 			"a|b\n",
 			"a | #abc\nb\n",
 		},
-		{ // 98
+		{ // 99
 			"(a#abc\n|#def\nb)",
 			"(a|b)\n",
 			"(a #abc\n| #def\nb)\n",
 		},
-		{ // 99
+		{ // 100
 			"a&#abc\nb",
 			"a&b\n",
 			"a & #abc\nb\n",
 		},
-		{ // 100
+		{ // 101
 			"(a#abc\n&#def\nb)",
 			"(a&b)\n",
 			"(a #abc\n& #def\nb)\n",
 		},
-		{ // 101
+		{ // 102
 			"!#abc\na",
 			"!a\n",
 			"! #abc\na\n",
 		},
-		{ // 102
+		{ // 103
 			"!!#abc\na",
 			"!!a\n",
 			"!! #abc\na\n",
 		},
-		{ // 103
+		{ // 104
 			"!#abc\n!a",
 			"!!a\n",
 			"! #abc\n!a\n",
 		},
-		{ // 104
+		{ // 105
 			"!#abc\n!#def\na",
 			"!!a\n",
 			"! #abc\n! #def\na\n",
 		},
-		{ // 105
+		{ // 106
 			"a>#abc\nb",
 			"a>b\n",
 			"a > #abc\nb\n",
 		},
-		{ // 106
+		{ // 107
 			"(a#abc\n>#def\nb)",
 			"(a>b)\n",
 			"(a #abc\n> #def\nb)\n",
 		},
-		{ // 107
+		{ // 108
 			"a+#abc\nb",
 			"a+b\n",
 			"a + #abc\nb\n",
 		},
-		{ // 108
+		{ // 109
 			"(a#abc\n+#def\nb)",
 			"(a+b)\n",
 			"(a #abc\n+ #def\nb)\n",
 		},
-		{ // 109
+		{ // 110
 			"a*#abc\nb",
 			"a*b\n",
 			"a * #abc\nb\n",
 		},
-		{ // 110
+		{ // 111
 			"(a#abc\n*#def\nb)",
 			"(a*b)\n",
 			"(a #abc\n* #def\nb)\n",
 		},
-		{ // 111
+		{ // 112
 			"a|>#abc\nb",
 			"a|>b\n",
 			"a |> #abc\nb\n",
 		},
-		{ // 112
+		{ // 113
 			"(a#abc\n|>#def\nb)",
 			"(a|>b)\n",
 			"(a #abc\n|> #def\nb)\n",
 		},
-		{ // 113
+		{ // 114
 			"a:#abc\nb",
 			"a:b\n",
 			"a: #abc\nb\n",
 		},
-		{ // 114
+		{ // 115
 			"(a#abc\n:#def\nb)",
 			"(a:b)\n",
 			"(a #abc\n: #def\nb)\n",
 		},
-		{ // 115
+		{ // 116
 			"+#abc\na",
 			"+a\n",
 			"+ #abc\na\n",
 		},
-		{ // 116
+		{ // 117
 			"+#abc\n-#def\na",
 			"+-a\n",
 			"+ #abc\n- #def\na\n",
 		},
-		{ // 117
+		{ // 118
 			"a^#abc\nb",
 			"a^b\n",
 			"a^ #abc\nb\n",
 		},
-		{ // 118
+		{ // 119
 			"(a#abc\n^#def\nb)",
 			"(a^b)\n",
 			"(a #abc\n^ #def\nb)\n",
 		},
-		{ // 119
+		{ // 120
 			"a$#abc\nb",
 			"a$b\n",
 			"a$ #abc\nb\n",
 		},
-		{ // 120
+		{ // 121
 			"(a#abc\n$#def\nb)",
 			"(a$b)\n",
 			"(a #abc\n$ #def\nb)\n",
 		},
-		{ // 121
+		{ // 122
 			"a::#abc\nb",
 			"a::b\n",
 			"a:: #abc\nb\n",
 		},
-		{ // 122
+		{ // 123
 			"(a#abc\n::#def\nb)",
 			"(a::b)\n",
 			"(a #abc\n:: #def\nb)\n",
 		},
-		{ // 123
+		{ // 124
 			"(a#abc\n[b])",
 			"(a[b])\n",
 			"(a #abc\n[b])\n",
 		},
-		{ // 124
+		{ // 125
 			"a[ #abc\n#def\nb #ghi\n\n#jkl\n, c #mno\n]",
 			"a[b,c]\n",
 			"a[#abc\n#def\nb #ghi\n\n#jkl\n, c #mno\n]\n",
