@@ -13,7 +13,7 @@ Package r implements an R tokeniser and parser.
 
  - Parse R into AST.
  - Modify parsed code.
- - Consistant R formatting.
+ - Consistent R formatting.
 
 ## Usage
 
