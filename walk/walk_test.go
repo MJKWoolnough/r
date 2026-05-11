@@ -50,6 +50,21 @@ func TestWalk(t *testing.T) {
 			nilRet,
 			nil,
 		},
+		{ // 2
+			"a;b",
+			func(r *r.File) r.Type { return r },
+			[]string{"File"},
+		},
+		{ // 3
+			"a;b",
+			func(r *r.File) r.Type { return &r.Statements[0] },
+			[]string{"File", "Expression"},
+		},
+		{ // 4
+			"a;b",
+			func(r *r.File) r.Type { return &r.Statements[1] },
+			[]string{"File", "Expression"},
+		},
 	} {
 		tk := parser.NewStringTokeniser(test.Input)
 
