@@ -120,6 +120,16 @@ func TestWalk(t *testing.T) {
 			func(r *r.File) r.Type { return r.Statements[0].FlowControl.IfControl.Else },
 			nil,
 		},
+		{ // 16
+			"while (a) b",
+			func(r *r.File) r.Type { return &r.Statements[0].FlowControl.WhileControl.Cond },
+			[]string{"File", "Expression", "FlowControl", "WhileControl", "FormulaeExpression"},
+		},
+		{ // 17
+			"while (a) b",
+			func(r *r.File) r.Type { return &r.Statements[0].FlowControl.WhileControl.Expr },
+			[]string{"File", "Expression", "FlowControl", "WhileControl", "Expression"},
+		},
 	} {
 		tk := parser.NewStringTokeniser(test.Input)
 
