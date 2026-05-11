@@ -65,6 +65,21 @@ func TestWalk(t *testing.T) {
 			func(r *r.File) r.Type { return &r.Statements[1] },
 			[]string{"File", "Expression"},
 		},
+		{ // 5
+			"repeat {}",
+			func(r *r.File) r.Type { return r.Statements[0].FlowControl },
+			[]string{"File", "Expression", "FlowControl"},
+		},
+		{ // 6
+			"function() a",
+			func(r *r.File) r.Type { return r.Statements[0].FunctionDefinition },
+			[]string{"File", "Expression", "FunctionDefinition"},
+		},
+		{ // 7
+			"a",
+			func(r *r.File) r.Type { return r.Statements[0].QueryExpression },
+			[]string{"File", "Expression", "QueryExpression"},
+		},
 	} {
 		tk := parser.NewStringTokeniser(test.Input)
 
