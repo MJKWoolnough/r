@@ -100,6 +100,26 @@ func TestWalk(t *testing.T) {
 			func(r *r.File) r.Type { return r.Statements[0].FlowControl.ForControl },
 			[]string{"File", "Expression", "FlowControl", "ForControl"},
 		},
+		{ // 12
+			"if(a) b\nelse c",
+			func(r *r.File) r.Type { return &r.Statements[0].FlowControl.IfControl.Cond },
+			[]string{"File", "Expression", "FlowControl", "IfControl", "FormulaeExpression"},
+		},
+		{ // 13
+			"if(a) b\nelse c",
+			func(r *r.File) r.Type { return &r.Statements[0].FlowControl.IfControl.Expr },
+			[]string{"File", "Expression", "FlowControl", "IfControl", "Expression"},
+		},
+		{ // 14
+			"if(a) b\nelse c",
+			func(r *r.File) r.Type { return r.Statements[0].FlowControl.IfControl.Else },
+			[]string{"File", "Expression", "FlowControl", "IfControl", "Expression"},
+		},
+		{ // 15
+			"if(a) b",
+			func(r *r.File) r.Type { return r.Statements[0].FlowControl.IfControl.Else },
+			nil,
+		},
 	} {
 		tk := parser.NewStringTokeniser(test.Input)
 
