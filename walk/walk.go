@@ -119,6 +119,10 @@ func Walk(t r.Type, fn Handler) error {
 		return walkQueryExpression(&t, fn)
 	case *r.QueryExpression:
 		return walkQueryExpression(t, fn)
+	case r.WhileControl:
+		return walkWhileControl(&t, fn)
+	case *r.WhileControl:
+		return walkWhileControl(t, fn)
 	}
 
 	return nil
@@ -391,4 +395,12 @@ func walkQueryExpression(t *r.QueryExpression, fn Handler) error {
 	}
 
 	return nil
+}
+
+func walkWhileControl(t *r.WhileControl, fn Handler) error {
+	if err := fn.Handle(&t.Cond); err != nil {
+		return err
+	}
+
+	return fn.Handle(&t.Expr)
 }
