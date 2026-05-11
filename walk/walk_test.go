@@ -135,6 +135,16 @@ func TestWalk(t *testing.T) {
 			func(r *r.File) r.Type { return &r.Statements[0].FlowControl.RepeatControl.Expr },
 			[]string{"File", "Expression", "FlowControl", "RepeatControl", "Expression"},
 		},
+		{ // 19
+			"for (a in b) c",
+			func(r *r.File) r.Type { return &r.Statements[0].FlowControl.ForControl.List },
+			[]string{"File", "Expression", "FlowControl", "ForControl", "FormulaeExpression"},
+		},
+		{ // 19
+			"for (a in b) c",
+			func(r *r.File) r.Type { return &r.Statements[0].FlowControl.ForControl.Expr },
+			[]string{"File", "Expression", "FlowControl", "ForControl", "Expression"},
+		},
 	} {
 		tk := parser.NewStringTokeniser(test.Input)
 
