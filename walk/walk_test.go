@@ -175,6 +175,21 @@ func TestWalk(t *testing.T) {
 			func(r *r.File) r.Type { return r.Statements[0].FunctionDefinition.ArgList.Args[0].Default },
 			nil,
 		},
+		{ // 27
+			"a",
+			func(r *r.File) r.Type { return r.Statements[0].QueryExpression.AssignmentExpression },
+			[]string{"File", "Expression", "QueryExpression", "AssignmentExpression"},
+		},
+		{ // 28
+			"?a",
+			func(r *r.File) r.Type { return r.Statements[0].QueryExpression.QueryExpression },
+			[]string{"File", "Expression", "QueryExpression", "QueryExpression"},
+		},
+		{ // 29
+			"?a",
+			func(r *r.File) r.Type { return r.Statements[0].QueryExpression.AssignmentExpression },
+			nil,
+		},
 	} {
 		tk := parser.NewStringTokeniser(test.Input)
 
