@@ -2,6 +2,7 @@ package r
 
 import (
 	"fmt"
+	"slices"
 
 	"vimagination.zapto.org/parser"
 )
@@ -95,10 +96,8 @@ func (r *rParser) Peek() parser.Token {
 func (r *rParser) Accept(ts ...parser.TokenType) bool {
 	tt := r.Next().Type
 
-	for _, pt := range ts {
-		if pt == tt {
-			return true
-		}
+	if slices.Contains(ts, tt) {
+		return true
 	}
 
 	r.backup()
