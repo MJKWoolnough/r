@@ -140,10 +140,20 @@ func TestWalk(t *testing.T) {
 			func(r *r.File) r.Type { return &r.Statements[0].FlowControl.ForControl.List },
 			[]string{"File", "Expression", "FlowControl", "ForControl", "FormulaeExpression"},
 		},
-		{ // 19
+		{ // 20
 			"for (a in b) c",
 			func(r *r.File) r.Type { return &r.Statements[0].FlowControl.ForControl.Expr },
 			[]string{"File", "Expression", "FlowControl", "ForControl", "Expression"},
+		},
+		{ // 21
+			"function() a",
+			func(r *r.File) r.Type { return &r.Statements[0].FunctionDefinition.ArgList },
+			[]string{"File", "Expression", "FunctionDefinition", "ArgList"},
+		},
+		{ // 22
+			"function() a",
+			func(r *r.File) r.Type { return &r.Statements[0].FunctionDefinition.Body },
+			[]string{"File", "Expression", "FunctionDefinition", "Expression"},
 		},
 	} {
 		tk := parser.NewStringTokeniser(test.Input)
