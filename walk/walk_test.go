@@ -165,6 +165,16 @@ func TestWalk(t *testing.T) {
 			func(r *r.File) r.Type { return &r.Statements[0].FunctionDefinition.ArgList.Args[1] },
 			[]string{"File", "Expression", "FunctionDefinition", "ArgList", "Argument"},
 		},
+		{ // 25
+			"function(a = b) c",
+			func(r *r.File) r.Type { return r.Statements[0].FunctionDefinition.ArgList.Args[0].Default },
+			[]string{"File", "Expression", "FunctionDefinition", "ArgList", "Argument", "Expression"},
+		},
+		{ // 26
+			"function(a) c",
+			func(r *r.File) r.Type { return r.Statements[0].FunctionDefinition.ArgList.Args[0].Default },
+			nil,
+		},
 	} {
 		tk := parser.NewStringTokeniser(test.Input)
 
