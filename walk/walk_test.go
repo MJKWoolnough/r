@@ -202,6 +202,34 @@ func TestWalk(t *testing.T) {
 			func(r *r.File) r.Type { return r.Statements[0].QueryExpression.AssignmentExpression.Expression },
 			[]string{"File", "Expression", "QueryExpression", "AssignmentExpression", "Expression"},
 		},
+		{ // 32
+			"a",
+			func(r *r.File) r.Type {
+				return r.Statements[0].QueryExpression.AssignmentExpression.FormulaeExpression.OrExpression
+			},
+			[]string{"File", "Expression", "QueryExpression", "AssignmentExpression", "FormulaeExpression", "OrExpression"},
+		},
+		{ // 33
+			"~a",
+			func(r *r.File) r.Type {
+				return r.Statements[0].QueryExpression.AssignmentExpression.FormulaeExpression.FormulaeExpression
+			},
+			[]string{"File", "Expression", "QueryExpression", "AssignmentExpression", "FormulaeExpression", "FormulaeExpression"},
+		},
+		{ // 34
+			"a~b",
+			func(r *r.File) r.Type {
+				return r.Statements[0].QueryExpression.AssignmentExpression.FormulaeExpression.OrExpression
+			},
+			[]string{"File", "Expression", "QueryExpression", "AssignmentExpression", "FormulaeExpression", "OrExpression"},
+		},
+		{ // 35
+			"a~b",
+			func(r *r.File) r.Type {
+				return r.Statements[0].QueryExpression.AssignmentExpression.FormulaeExpression.FormulaeExpression
+			},
+			[]string{"File", "Expression", "QueryExpression", "AssignmentExpression", "FormulaeExpression", "FormulaeExpression"},
+		},
 	} {
 		tk := parser.NewStringTokeniser(test.Input)
 
