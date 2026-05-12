@@ -267,11 +267,7 @@ func walkForControl(t *r.ForControl, fn Handler) error {
 		return err
 	}
 
-	if err := fn.Handle(&t.Expr); err != nil {
-		return err
-	}
-
-	return nil
+	return fn.Handle(&t.Expr)
 }
 
 func walkFormulaeExpression(t *r.FormulaeExpression, fn Handler) error {
