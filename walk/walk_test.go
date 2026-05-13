@@ -314,6 +314,20 @@ func TestWalk(t *testing.T) {
 			},
 			[]string{"File", "Expression", "QueryExpression", "AssignmentExpression", "FormulaeExpression", "OrExpression", "AndExpression", "NotExpression", "RelationalExpression", "AdditionExpression", "MultiplicationExpression", "PipeOrSpecialExpression", "PipeOrSpecialExpression"},
 		},
+		{ // 48
+			"a:b",
+			func(r *r.File) r.Type {
+				return &r.Statements[0].QueryExpression.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression
+			},
+			[]string{"File", "Expression", "QueryExpression", "AssignmentExpression", "FormulaeExpression", "OrExpression", "AndExpression", "NotExpression", "RelationalExpression", "AdditionExpression", "MultiplicationExpression", "PipeOrSpecialExpression", "SequenceExpression", "UnaryExpression"},
+		},
+		{ // 49
+			"a:b",
+			func(r *r.File) r.Type {
+				return r.Statements[0].QueryExpression.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.SequenceExpression
+			},
+			[]string{"File", "Expression", "QueryExpression", "AssignmentExpression", "FormulaeExpression", "OrExpression", "AndExpression", "NotExpression", "RelationalExpression", "AdditionExpression", "MultiplicationExpression", "PipeOrSpecialExpression", "SequenceExpression", "SequenceExpression"},
+		},
 	} {
 		tk := parser.NewStringTokeniser(test.Input)
 
