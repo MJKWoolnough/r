@@ -119,6 +119,10 @@ func Walk(t r.Type, fn Handler) error {
 		return walkQueryExpression(&t, fn)
 	case *r.QueryExpression:
 		return walkQueryExpression(t, fn)
+	case r.RelationalExpression:
+		return walkRelationalExpression(&t, fn)
+	case *r.RelationalExpression:
+		return walkRelationalExpression(t, fn)
 	case r.RepeatControl:
 		return walkRepeatControl(&t, fn)
 	case *r.RepeatControl:
@@ -399,6 +403,18 @@ func walkQueryExpression(t *r.QueryExpression, fn Handler) error {
 
 func walkRepeatControl(t *r.RepeatControl, fn Handler) error {
 	return fn.Handle(&t.Expr)
+}
+
+func walkRelationalExpression(t *r.RelationalExpression, fn Handler) error {
+	if err := fn.Handle(&t.AdditionExpression); err != nil {
+		return err
+	}
+
+	if t.RelationalExpression != nil {
+		return fn.Handle(t.RelationalExpression)
+	}
+
+	return nil
 }
 
 func walkWhileControl(t *r.WhileControl, fn Handler) error {
