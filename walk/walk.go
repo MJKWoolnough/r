@@ -131,6 +131,10 @@ func Walk(t r.Type, fn Handler) error {
 		return walkSequenceExpression(&t, fn)
 	case *r.SequenceExpression:
 		return walkSequenceExpression(t, fn)
+	case r.UnaryExpression:
+		return walkUnaryExpression(&t, fn)
+	case *r.UnaryExpression:
+		return walkUnaryExpression(t, fn)
 	case r.WhileControl:
 		return walkWhileControl(&t, fn)
 	case *r.WhileControl:
@@ -431,6 +435,10 @@ func walkSequenceExpression(t *r.SequenceExpression, fn Handler) error {
 	}
 
 	return nil
+}
+
+func walkUnaryExpression(t *r.UnaryExpression, fn Handler) error {
+	return fn.Handle(&t.ExponentiationExpression)
 }
 
 func walkWhileControl(t *r.WhileControl, fn Handler) error {
