@@ -356,6 +356,7 @@ func walkIndexOrCallExpression(t *r.IndexOrCallExpression, fn Handler) error {
 			return fn.Handle(t.Call)
 		}
 	}
+
 	return nil
 }
 
