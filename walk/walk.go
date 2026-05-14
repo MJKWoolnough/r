@@ -127,6 +127,10 @@ func Walk(t r.Type, fn Handler) error {
 		return walkRepeatControl(&t, fn)
 	case *r.RepeatControl:
 		return walkRepeatControl(t, fn)
+	case r.ScopeExpression:
+		return walkScopeExpression(&t, fn)
+	case *r.ScopeExpression:
+		return walkScopeExpression(t, fn)
 	case r.SequenceExpression:
 		return walkSequenceExpression(&t, fn)
 	case *r.SequenceExpression:
@@ -424,6 +428,18 @@ func walkRelationalExpression(t *r.RelationalExpression, fn Handler) error {
 
 	if t.RelationalExpression != nil {
 		return fn.Handle(t.RelationalExpression)
+	}
+
+	return nil
+}
+
+func walkScopeExpression(t *r.ScopeExpression, fn Handler) error {
+	if err := fn.Handle(&t.IndexOrCallExpression); err != nil {
+		return err
+	}
+
+	if t.ScopeExpression != nil {
+		return fn.Handle(t.ScopeExpression)
 	}
 
 	return nil
