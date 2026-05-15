@@ -412,6 +412,34 @@ func TestWalk(t *testing.T) {
 			},
 			nil,
 		},
+		{ // 62
+			"(a)",
+			func(r *r.File) r.Type {
+				return r.Statements[0].QueryExpression.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression.ExponentiationExpression.SubsetExpression.ScopeExpression.IndexOrCallExpression.SimpleExpression.ParenthesizedExpression
+			},
+			[]string{"File", "Expression", "QueryExpression", "AssignmentExpression", "FormulaeExpression", "OrExpression", "AndExpression", "NotExpression", "RelationalExpression", "AdditionExpression", "MultiplicationExpression", "PipeOrSpecialExpression", "SequenceExpression", "UnaryExpression", "ExponentiationExpression", "SubsetExpression", "ScopeExpression", "IndexOrCallExpression", "SimpleExpression", "ParenthesizedExpression"},
+		},
+		{ // 63
+			"a",
+			func(r *r.File) r.Type {
+				return r.Statements[0].QueryExpression.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression.ExponentiationExpression.SubsetExpression.ScopeExpression.IndexOrCallExpression.SimpleExpression.ParenthesizedExpression
+			},
+			nil,
+		},
+		{ // 64
+			"{a}",
+			func(r *r.File) r.Type {
+				return r.Statements[0].QueryExpression.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression.ExponentiationExpression.SubsetExpression.ScopeExpression.IndexOrCallExpression.SimpleExpression.CompoundExpression
+			},
+			[]string{"File", "Expression", "QueryExpression", "AssignmentExpression", "FormulaeExpression", "OrExpression", "AndExpression", "NotExpression", "RelationalExpression", "AdditionExpression", "MultiplicationExpression", "PipeOrSpecialExpression", "SequenceExpression", "UnaryExpression", "ExponentiationExpression", "SubsetExpression", "ScopeExpression", "IndexOrCallExpression", "SimpleExpression", "CompoundExpression"},
+		},
+		{ // 65
+			"a",
+			func(r *r.File) r.Type {
+				return r.Statements[0].QueryExpression.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression.ExponentiationExpression.SubsetExpression.ScopeExpression.IndexOrCallExpression.SimpleExpression.CompoundExpression
+			},
+			nil,
+		},
 	} {
 		tk := parser.NewStringTokeniser(test.Input)
 
