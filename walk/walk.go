@@ -135,6 +135,10 @@ func Walk(t r.Type, fn Handler) error {
 		return walkSequenceExpression(&t, fn)
 	case *r.SequenceExpression:
 		return walkSequenceExpression(t, fn)
+	case r.SimpleExpression:
+		return walkSimpleExpression(&t, fn)
+	case *r.SimpleExpression:
+		return walkSimpleExpression(t, fn)
 	case r.SubsetExpression:
 		return walkSubsetExpression(&t, fn)
 	case *r.SubsetExpression:
@@ -453,6 +457,16 @@ func walkSequenceExpression(t *r.SequenceExpression, fn Handler) error {
 
 	if t.SequenceExpression != nil {
 		return fn.Handle(t.SequenceExpression)
+	}
+
+	return nil
+}
+
+func walkSimpleExpression(t *r.SimpleExpression, fn Handler) error {
+	if t.ParenthesizedExpression != nil {
+		return fn.Handle(t.ParenthesizedExpression)
+	} else if t.CompoundExpression != nil {
+		return fn.Handle(t.CompoundExpression)
 	}
 
 	return nil
