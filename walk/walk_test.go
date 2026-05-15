@@ -492,6 +492,25 @@ func TestWalk(t *testing.T) {
 			},
 			[]string{"File", "Expression", "QueryExpression", "AssignmentExpression", "FormulaeExpression", "OrExpression", "AndExpression", "NotExpression", "RelationalExpression", "AdditionExpression", "MultiplicationExpression", "PipeOrSpecialExpression", "SequenceExpression", "UnaryExpression", "ExponentiationExpression", "SubsetExpression", "ScopeExpression", "IndexOrCallExpression", "Call", "Arg", "QueryExpression"},
 		},
+		{ // 74
+			"a[b,c]",
+			nilRet,
+			nil,
+		},
+		{ // 75
+			"a[b,c]",
+			func(r *r.File) r.Type {
+				return &r.Statements[0].QueryExpression.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression.ExponentiationExpression.SubsetExpression.ScopeExpression.IndexOrCallExpression.Index.Args[0]
+			},
+			[]string{"File", "Expression", "QueryExpression", "AssignmentExpression", "FormulaeExpression", "OrExpression", "AndExpression", "NotExpression", "RelationalExpression", "AdditionExpression", "MultiplicationExpression", "PipeOrSpecialExpression", "SequenceExpression", "UnaryExpression", "ExponentiationExpression", "SubsetExpression", "ScopeExpression", "IndexOrCallExpression", "Index", "IndexExpression"},
+		},
+		{ // 76
+			"a[b,c]",
+			func(r *r.File) r.Type {
+				return &r.Statements[0].QueryExpression.AssignmentExpression.FormulaeExpression.OrExpression.AndExpression.NotExpression.RelationalExpression.AdditionExpression.MultiplicationExpression.PipeOrSpecialExpression.SequenceExpression.UnaryExpression.ExponentiationExpression.SubsetExpression.ScopeExpression.IndexOrCallExpression.Index.Args[1]
+			},
+			[]string{"File", "Expression", "QueryExpression", "AssignmentExpression", "FormulaeExpression", "OrExpression", "AndExpression", "NotExpression", "RelationalExpression", "AdditionExpression", "MultiplicationExpression", "PipeOrSpecialExpression", "SequenceExpression", "UnaryExpression", "ExponentiationExpression", "SubsetExpression", "ScopeExpression", "IndexOrCallExpression", "Index", "IndexExpression"},
+		},
 	} {
 		tk := parser.NewStringTokeniser(test.Input)
 
