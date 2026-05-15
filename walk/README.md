@@ -1,40 +1,26 @@
 # walk
+
+[![CI](https://github.com/MJKWoolnough/r/actions/workflows/go-checks.yml/badge.svg)](https://github.com/MJKWoolnough/r/actions)
+[![Go Reference](https://pkg.go.dev/badge/vimagination.zapto.org/r.svg)](https://pkg.go.dev/vimagination.zapto.org/r/walk)
+[![Go Report Card](https://goreportcard.com/badge/vimagination.zapto.org/r)](https://goreportcard.com/report/vimagination.zapto.org/r)
+
 --
     import "vimagination.zapto.org/r/walk"
 
-Package walk provides a R type walker.
+Package walk provides an R type walker.
+
+## Highlights
+
+ - Simple interface to allow control over walking through parsed R.
+ - Allows modification to the tree as it's being walked.
 
 ## Usage
 
-#### func  Walk
-
 ```go
-func Walk(t r.Type, fn Handler) error
-```
-Walk calls the Handle function on the given interface for each non-nil,
-non-Token field of the given R type.
-
-#### type Handler
-
-```go
-type Handler interface {
-	Handle(r.Type) error
-}
 ```
 
-Handler is used to process R types.
+## Documentation
 
-#### type HandlerFunc
+Full API docs can be found at:
 
-```go
-type HandlerFunc func(r.Type) error
-```
-
-HandlerFunc wraps a func to implement Handler interface.
-
-#### func (HandlerFunc) Handle
-
-```go
-func (h HandlerFunc) Handle(t r.Type) error
-```
-Handle implements the Handler interface.
+https://pkg.go.dev/vimagination.zapto.org/r/walk
