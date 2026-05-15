@@ -220,7 +220,7 @@ func walkAssignmentExpression(t *r.AssignmentExpression, fn Handler) error {
 
 func walkCall(t *r.Call, fn Handler) error {
 	for n := range t.Args {
-		if err := fn.Handle(t.Args[n]); err != nil {
+		if err := fn.Handle(&t.Args[n]); err != nil {
 			return err
 		}
 	}
